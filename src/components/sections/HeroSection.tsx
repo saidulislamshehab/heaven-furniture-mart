@@ -17,7 +17,7 @@ export function HeroSection({ onOpenConsultation }: HeroSectionProps) {
         className="absolute inset-0 z-0"
       >
         <VideoPlaceholder
-          videoSrc="/Luxury_furniture_advertisement_v…_202609012258.mp4"
+          videoSrc="/hero-luxury-furniture.mp4"
           title="Heaven Furniture Mart — Luxury Bespoke Furniture"
           subtitle="Cinematic living space and master woodwork craftsmanship"
         />
