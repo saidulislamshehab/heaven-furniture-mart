@@ -1,0 +1,35 @@
+import { HeroSection } from '@/components/sections/HeroSection'
+import { IntroSection } from '@/components/sections/IntroSection'
+import { BespokeSection } from '@/components/sections/BespokeSection'
+import { CollectionsSection } from '@/components/sections/CollectionsSection'
+import { CraftSection } from '@/components/sections/CraftSection'
+import { WhyHeavenSection } from '@/components/sections/WhyHeavenSection'
+import { FounderSection } from '@/components/sections/FounderSection'
+import { SignatureSection } from '@/components/sections/SignatureSection'
+import { ProofSection } from '@/components/sections/ProofSection'
+import { VisitTeaserSection } from '@/components/sections/VisitTeaserSection'
+import { FinalCTASection } from '@/components/sections/FinalCTASection'
+import { usePageMeta } from '@/lib/usePageMeta'
+
+export function HomePage({ introDone }: { introDone: boolean }) {
+  usePageMeta(
+    'Heaven Furniture Mart — Bespoke Furniture & Interior Styling, Chattogram',
+    'Premium bespoke furniture and interior styling from Chattogram. Designed around your space, crafted in-house, installed in your home. Free design consultation.'
+  )
+
+  return (
+    <>
+      <HeroSection introDone={introDone} />
+      <IntroSection />
+      <BespokeSection />
+      <CollectionsSection />
+      <CraftSection />
+      <WhyHeavenSection />
+      <FounderSection />
+      <SignatureSection />
+      <ProofSection />
+      <VisitTeaserSection />
+      <FinalCTASection />
+    </>
+  )
+}

@@ -1,139 +1,86 @@
-import { motion } from 'motion/react'
-import { SectionLabel } from '@/components/common/SectionLabel'
-import { EditorialHeading } from '@/components/common/EditorialHeading'
-import { ImagePlaceholder } from '@/components/common/ImagePlaceholder'
+import { Link } from 'react-router'
 import { ArrowUpRight } from 'lucide-react'
+import { Reveal, RevealImage, SplitWords } from '@/components/common/Reveal'
+import { SectionLabel } from '@/components/common/SectionLabel'
+import { Button } from '@/components/ui/button'
+import { categories, type Category } from '@/data/catalog'
+import { cn } from '@/lib/utils'
 
-interface CollectionsSectionProps {
-  onOpenConsultation: () => void
+function CollectionTile({ c, className, aspect, sizes, delay = 0 }: { c: Category; className?: string; aspect: string; sizes: string; delay?: number }) {
+  return (
+    <Link
+      to={`/shop?category=${c.id}`}
+      className={cn('group relative block focus-visible:outline-offset-4', className)}
+      aria-label={`Explore the ${c.name} collection`}
+    >
+      <div className={cn('relative overflow-hidden bg-brand-ivory-deep', aspect)}>
+        <RevealImage
+          src={c.image}
+          alt=""
+          className="h-full w-full"
+          imgClassName="h-full w-full object-cover object-[50%_65%] transition-transform duration-[1200ms] ease-[var(--ease-luxury)] group-hover:scale-[1.04]"
+          sizes={sizes}
+          delay={delay}
+        />
+        <span className="eyebrow absolute top-4 left-4 text-brand-ivory drop-shadow sm:top-5 sm:left-5">{c.index}</span>
+      </div>
+      <div className="mt-4 flex items-start justify-between gap-4">
+        <div>
+          <h3 className="font-serif text-2xl leading-none sm:text-3xl">{c.name}</h3>
+          <p className="mt-2 text-sm text-brand-stone">{c.items}</p>
+        </div>
+        <span className="mt-1 flex size-9 shrink-0 items-center justify-center rounded-full border border-brand-brown/15 text-brand-brown transition-all duration-500 group-hover:border-brand-brown group-hover:bg-brand-brown group-hover:text-brand-ivory">
+          <ArrowUpRight className="size-4" />
+        </span>
+      </div>
+    </Link>
+  )
 }
 
-export function CollectionsSection({ onOpenConsultation }: CollectionsSectionProps) {
-  const environments = [
-    {
-      id: '01',
-      title: 'Living Environments',
-      subtitle: 'Sofas • Sculptural Coffee Tables • Media Consoles • Accent Seating',
-      aspectRatio: 'wide' as const,
-      dimensions: 'Custom Spatial Planning',
-      description:
-        'Sculpted for deep relaxation and elevated hosting. Engineered frame geometries with tailored Italian fabrics and natural wood grains.',
-      colSpan: 'lg:col-span-8',
-      placeholderLabel: 'LIVING ROOM & ARCHITECTURAL LOUNGE',
-    },
-    {
-      id: '02',
-      title: 'Sanctuary Suites',
-      subtitle: 'Platform Beds • Integrated Nightstands • Dressing Suites • Wardrobes',
-      aspectRatio: 'portrait' as const,
-      dimensions: 'Bespoke Headboard Millwork',
-      description:
-        'Peaceful proportions crafted for restorative sleep and timeless bedroom serenity.',
-      colSpan: 'lg:col-span-4',
-      placeholderLabel: 'MASTER BEDROOM SUITE',
-    },
-    {
-      id: '03',
-      title: 'Dining & Gathering',
-      subtitle: 'Monolithic Dining Tables • Ergonomic Chairs • Buffet Credenzas',
-      aspectRatio: 'square' as const,
-      dimensions: 'Solid Teak & Natural Stone',
-      description:
-        'The centerpiece of hospitality. Handcrafted tables built to host generations of conversation.',
-      colSpan: 'lg:col-span-5',
-      placeholderLabel: 'DINING & HOSTING SPACE',
-    },
-    {
-      id: '04',
-      title: 'Executive & Library',
-      subtitle: 'Executive Desks • Modular Bookcases • Integrated Power Workstations',
-      aspectRatio: 'landscape' as const,
-      dimensions: 'Ergonomic Precision',
-      description:
-        'Commanding study furniture balancing intellectual focus with tactile craftsmanship.',
-      colSpan: 'lg:col-span-7',
-      placeholderLabel: 'EXECUTIVE STUDY & BOOKSHELF ATELIER',
-    },
-  ]
+export function CollectionsSection() {
+  const [living, bedroom, dining, office, bespoke] = categories
 
   return (
-    <section
-      id="collections"
-      className="relative w-full bg-[#1F2E2D] py-24 sm:py-32 lg:py-44 text-[#F5F1E8]"
-    >
-      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
-        {/* Section Header */}
-        <div className="flex flex-col justify-between gap-6 border-b border-white/10 pb-12 sm:flex-row sm:items-end">
-          <div className="space-y-4 max-w-2xl">
-            <SectionLabel number="02" darkTheme>
-              Spatial Environments
-            </SectionLabel>
-            <EditorialHeading level={2} size="display" darkTheme italicAccent="Spaces.">
-              Curated for Living
-            </EditorialHeading>
+    <section id="collections" className="section-pad bg-brand-ivory text-brand-brown">
+      <div className="container-x mx-auto max-w-[1600px]">
+        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <div>
+            <Reveal>
+              <SectionLabel number="03">Collections</SectionLabel>
+            </Reveal>
+            <h2 className="mt-6 max-w-[14ch] display-2 text-balance">
+              <SplitWords text="Furniture for every room you live in." />
+            </h2>
           </div>
-
-          <p className="max-w-md font-sans text-sm text-stone-300">
-            Explore our signature architectural collections—each crafted to be
-            customized in dimension, wood species, and textile finishes.
-          </p>
+          <Reveal delay={0.2}>
+            <Button asChild variant="text-link">
+              <Link to="/shop">
+                View the full collection <ArrowUpRight />
+              </Link>
+            </Button>
+          </Reveal>
         </div>
 
-        {/* Asymmetrical Editorial Grid */}
-        <div className="mt-16 grid gap-12 lg:grid-cols-12 lg:gap-16">
-          {environments.map((env, index) => (
-            <motion.div
-              key={env.id}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-80px' }}
-              transition={{
-                duration: 0.8,
-                delay: index * 0.1,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className={`group flex flex-col justify-between space-y-6 ${env.colSpan}`}
-            >
-              {/* Image Container with Custom Aspect Ratio */}
-              <div className="relative overflow-hidden">
-                <ImagePlaceholder
-                  label={env.placeholderLabel}
-                  sublabel={env.subtitle}
-                  aspectRatio={env.aspectRatio}
-                  dimensions={env.dimensions}
-                  accentNumber={env.id}
-                  darkTheme
-                  className="w-full"
-                />
-              </div>
+        <div className="mt-14 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:mt-20 lg:grid-cols-12 lg:gap-y-20">
+          <CollectionTile c={living} className="sm:col-span-2 lg:col-span-7" aspect="aspect-[4/3]" sizes="(min-width:1024px) 55vw, 100vw" />
+          <CollectionTile c={bedroom} className="lg:col-span-5 lg:mt-24" aspect="aspect-[4/5]" sizes="(min-width:1024px) 38vw, 50vw" delay={0.1} />
+          <CollectionTile c={dining} className="lg:col-span-5" aspect="aspect-square" sizes="(min-width:1024px) 38vw, 50vw" />
+          <CollectionTile c={office} className="lg:col-span-4 lg:mt-20" aspect="aspect-[4/5]" sizes="(min-width:1024px) 30vw, 50vw" delay={0.1} />
 
-              {/* Minimal Editorial Details */}
-              <div className="flex flex-col justify-between gap-4 border-t border-white/10 pt-4 sm:flex-row sm:items-baseline">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-3">
-                    <span className="font-sans text-xs font-semibold text-[#B08A45]">
-                      [{env.id}]
-                    </span>
-                    <h3 className="font-serif text-2xl text-stone-100 sm:text-3xl">
-                      {env.title}
-                    </h3>
-                  </div>
-                  <p className="font-sans text-xs text-stone-400">
-                    {env.subtitle}
-                  </p>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={onOpenConsultation}
-                  className="inline-flex items-center gap-1.5 font-sans text-xs font-semibold tracking-wider text-[#B08A45] uppercase transition-all hover:text-white"
-                >
-                  <span>Inquire Space</span>
-                  <ArrowUpRight className="h-3.5 w-3.5" />
-                </button>
-              </div>
-            </motion.div>
-          ))}
+          <Link
+            to={`/shop?category=${bespoke.id}`}
+            className="group relative flex flex-col justify-between bg-brand-teal-deep p-8 text-brand-ivory sm:col-span-2 lg:col-span-3 lg:mt-20 lg:min-h-[28rem]"
+          >
+            <div>
+              <span className="eyebrow text-brand-gold">{bespoke.index}</span>
+              <h3 className="mt-6 font-serif text-4xl leading-none">Bespoke</h3>
+              <p className="mt-5 text-[0.95rem] leading-relaxed text-brand-ivory/70">{bespoke.body}</p>
+            </div>
+            <span className="eyebrow mt-10 inline-flex items-center gap-2 text-brand-gold-soft">
+              Made to your measure
+              <ArrowUpRight className="size-4 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1" />
+            </span>
+          </Link>
         </div>
       </div>
     </section>

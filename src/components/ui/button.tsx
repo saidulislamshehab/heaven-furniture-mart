@@ -19,6 +19,19 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
         link: "text-primary underline-offset-4 hover:underline",
+        // Brand CTAs — used on both ivory and teal surfaces
+        gold:
+          "rounded-full bg-brand-gold text-brand-teal-deep font-sans text-[0.75rem] font-semibold tracking-[0.18em] uppercase hover:bg-brand-gold-soft [&_svg]:transition-transform [&_svg]:duration-500 hover:[&_svg]:translate-x-1",
+        ink:
+          "rounded-full bg-brand-teal-deep text-brand-ivory font-sans text-[0.75rem] font-semibold tracking-[0.18em] uppercase hover:bg-brand-teal [&_svg]:transition-transform [&_svg]:duration-500 hover:[&_svg]:translate-x-1",
+        ivory:
+          "rounded-full bg-brand-ivory text-brand-teal-deep font-sans text-[0.75rem] font-semibold tracking-[0.18em] uppercase hover:bg-white [&_svg]:transition-transform [&_svg]:duration-500 hover:[&_svg]:translate-x-1",
+        "outline-light":
+          "rounded-full border-brand-ivory/50 bg-transparent text-brand-ivory font-sans text-[0.75rem] font-semibold tracking-[0.18em] uppercase hover:border-brand-ivory hover:bg-brand-ivory hover:text-brand-teal-deep [&_svg]:transition-transform [&_svg]:duration-500 hover:[&_svg]:translate-x-1",
+        "outline-dark":
+          "rounded-full border-brand-teal-deep/40 bg-transparent text-brand-teal-deep font-sans text-[0.75rem] font-semibold tracking-[0.18em] uppercase hover:border-brand-teal-deep hover:bg-brand-teal-deep hover:text-brand-ivory [&_svg]:transition-transform [&_svg]:duration-500 hover:[&_svg]:translate-x-1",
+        "text-link":
+          "rounded-none border-0 bg-transparent p-0 h-auto font-sans text-[0.75rem] font-semibold tracking-[0.18em] uppercase underline decoration-brand-gold/60 underline-offset-[6px] hover:decoration-brand-gold [&_svg]:transition-transform [&_svg]:duration-500 hover:[&_svg]:translate-x-1",
       },
       size: {
         default:
@@ -32,6 +45,8 @@ const buttonVariants = cva(
         "icon-sm":
           "size-7 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg",
         "icon-lg": "size-9",
+        pill: "h-12 gap-3 px-7 sm:h-13 sm:px-8",
+        "pill-sm": "h-10 gap-2 px-5",
       },
     },
     defaultVariants: {

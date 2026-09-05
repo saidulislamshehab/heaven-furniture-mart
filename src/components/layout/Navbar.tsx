@@ -1,150 +1,217 @@
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'motion/react'
-import { Menu, X, Search } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Link, NavLink } from 'react-router'
+import { Dialog as DialogPrimitive } from 'radix-ui'
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import { ArrowUpRight, Menu, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import { useConsultation } from '@/components/common/ConsultationProvider'
+import { luxuryEase } from '@/components/common/Reveal'
+import { brandImages } from '@/data/assets'
+import { site } from '@/data/site'
+import { lockScroll } from '@/lib/scroll'
 
-interface NavbarProps {
-  onOpenConsultation: () => void
+const navLinks = [
+  { label: 'Home', to: '/' },
+  { label: 'Shop', to: '/shop' },
+  { label: 'Visit', to: '/visit' },
+  { label: 'About', to: '/about' },
+]
+
+function Wordmark({ dark }: { dark: boolean }) {
+  return (
+    <Link to="/" className="group flex items-center gap-3" aria-label="Heaven Furniture Mart — home">
+      <img src={brandImages.logo} alt="" width={36} height={36} className="h-8 w-auto object-contain sm:h-9" />
+      <span className="flex flex-col leading-none">
+        <span className={cn('font-serif text-[1.35rem] tracking-[0.14em]', dark ? 'text-brand-teal-deep' : 'text-brand-ivory')}>
+          HEAVEN
+        </span>
+        <span className={cn('eyebrow mt-0.5 text-[0.55rem] tracking-[0.3em]', dark ? 'text-brand-stone' : 'text-brand-ivory/70')}>
+          Furniture Mart
+        </span>
+      </span>
+    </Link>
+  )
 }
 
-export function Navbar({ onOpenConsultation }: NavbarProps) {
+export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const { open } = useConsultation()
+  const reduce = useReducedMotion()
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50)
-    }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+    const onScroll = () => setScrolled(window.scrollY > 40)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const navLinks = [
-    { label: 'Home', href: '#' },
-    { label: 'Collections', href: '#collections' },
-    { label: 'Bespoke', href: '#bespoke' },
-    { label: 'Materials', href: '#materials' },
-    { label: 'Our Story', href: '#legacy' },
-    { label: 'Contact', href: '#contact' },
-  ]
+  useEffect(() => {
+    lockScroll(menuOpen)
+  }, [menuOpen])
+
+  const dark = scrolled
 
   return (
     <>
       <header
         className={cn(
-          'fixed left-0 right-0 top-0 z-50 transition-all duration-700',
-          scrolled
-            ? 'border-b border-white/10 bg-[#121B1A]/95 py-3.5 backdrop-blur-md shadow-2xl'
-            : 'bg-gradient-to-b from-black/50 via-black/10 to-transparent py-5 sm:py-6'
+          'fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow,padding] duration-500',
+          dark
+            ? 'bg-brand-ivory/90 py-3 shadow-[0_1px_0_0_rgba(43,33,28,0.08)] backdrop-blur-md supports-backdrop-filter:bg-brand-ivory/80'
+            : 'bg-transparent py-5 sm:py-6'
         )}
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 sm:px-8 lg:px-12">
-          {/* Left: Brand Logo */}
-          <a
-            href="#"
-            className="group flex items-center transition-opacity hover:opacity-90"
-          >
-            <img
-              src="/logo.png"
-              alt="Heaven Furniture Mart Logo"
-              className="h-9 sm:h-11 w-auto object-contain"
-            />
-          </a>
+        <div className="container-x mx-auto flex max-w-[1600px] items-center justify-between">
+          <Wordmark dark={dark} />
 
-          {/* Center: Minimal Uppercase Navigation Links */}
-          <nav className="hidden items-center gap-7 lg:flex">
-            {navLinks.map((link, idx) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className={cn(
-                  'font-sans text-[11px] font-medium tracking-[0.22em] uppercase transition-all duration-300',
-                  idx === 0
-                    ? 'text-white'
-                    : 'text-stone-300 hover:text-[#C49A4E]'
-                )}
-              >
-                {link.label}
-              </a>
-            ))}
+          <nav aria-label="Primary" className="hidden lg:block">
+            <ul className="flex items-center gap-9">
+              {navLinks.map((l) => (
+                <li key={l.to}>
+                  <NavLink
+                    to={l.to}
+                    end={l.to === '/'}
+                    className={({ isActive }) =>
+                      cn(
+                        'eyebrow relative py-2 transition-colors duration-300',
+                        'after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-brand-gold after:transition-transform after:duration-500 after:ease-[var(--ease-luxury)] hover:after:scale-x-100',
+                        dark ? 'text-brand-teal-deep/70 hover:text-brand-teal-deep' : 'text-brand-ivory/75 hover:text-brand-ivory',
+                        isActive && (dark ? 'text-brand-teal-deep after:scale-x-100' : 'text-brand-ivory after:scale-x-100')
+                      )
+                    }
+                  >
+                    {l.label}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
           </nav>
 
-          {/* Right: Search Utility & Outlined Pill Action */}
-          <div className="hidden items-center gap-5 sm:flex">
-            <button
-              type="button"
-              aria-label="Search"
-              onClick={onOpenConsultation}
-              className="flex h-8 w-8 items-center justify-center rounded-full text-stone-300 transition-colors hover:text-white"
+          <div className="flex items-center gap-3">
+            <Button
+              variant={dark ? 'ink' : 'outline-light'}
+              size="pill-sm"
+              className="hidden sm:inline-flex"
+              onClick={() => open()}
             >
-              <Search className="h-4 w-4" />
-            </button>
+              Request a Consultation <ArrowUpRight />
+            </Button>
 
-            <button
-              type="button"
-              onClick={onOpenConsultation}
-              className="rounded-full border border-white/50 bg-white/5 px-5 py-1.5 font-sans text-[11px] font-semibold tracking-[0.2em] text-white uppercase backdrop-blur-xs transition-all duration-300 hover:border-white hover:bg-white hover:text-[#121B1A]"
-            >
-              Inquire
-            </button>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            type="button"
-            aria-label="Toggle Navigation Menu"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="flex h-9 w-9 items-center justify-center rounded-sm border border-white/20 text-white lg:hidden"
-          >
-            {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-          </button>
-        </div>
-      </header>
-
-      {/* Mobile Menu Drawer */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-x-0 top-[70px] z-40 border-b border-white/10 bg-[#121B1A]/98 p-6 backdrop-blur-xl lg:hidden"
-          >
-            <div className="flex flex-col gap-4">
-              <div className="pb-2 border-b border-white/10">
-                <img
-                  src="/logo.png"
-                  alt="Heaven Furniture Mart Logo"
-                  className="h-8 w-auto object-contain"
-                />
-              </div>
-              {navLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="font-serif text-lg tracking-wide text-stone-200 transition-colors hover:text-[#C49A4E]"
-                >
-                  {link.label}
-                </a>
-              ))}
-              <div className="pt-3">
+            <DialogPrimitive.Root open={menuOpen} onOpenChange={setMenuOpen}>
+              <DialogPrimitive.Trigger asChild>
                 <button
                   type="button"
-                  onClick={() => {
-                    setMobileMenuOpen(false)
-                    onOpenConsultation()
-                  }}
-                  className="w-full rounded-full border border-[#B08A45] bg-[#B08A45] py-2.5 font-sans text-xs font-semibold tracking-[0.2em] text-[#121B1A] uppercase"
+                  aria-label="Open menu"
+                  className={cn(
+                    'flex size-11 items-center justify-center rounded-full border transition-colors lg:hidden',
+                    dark
+                      ? 'border-brand-teal-deep/20 text-brand-teal-deep hover:bg-brand-teal-deep/5'
+                      : 'border-brand-ivory/30 text-brand-ivory hover:bg-brand-ivory/10'
+                  )}
                 >
-                  Request a Consultation
+                  <Menu className="size-5" strokeWidth={1.5} />
                 </button>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              </DialogPrimitive.Trigger>
+
+              <AnimatePresence>
+                {menuOpen && (
+                  <DialogPrimitive.Portal forceMount>
+                    <DialogPrimitive.Overlay asChild forceMount>
+                      <motion.div
+                        className="fixed inset-0 z-[60] bg-brand-ink/60"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.4 }}
+                      />
+                    </DialogPrimitive.Overlay>
+                    <DialogPrimitive.Content asChild forceMount aria-describedby={undefined}>
+                      <motion.div
+                        className="fixed inset-0 z-[70] flex flex-col bg-brand-teal-deep text-brand-ivory outline-none"
+                        initial={reduce ? { opacity: 0 } : { clipPath: 'inset(0 0 100% 0)' }}
+                        animate={reduce ? { opacity: 1 } : { clipPath: 'inset(0 0 0% 0)' }}
+                        exit={reduce ? { opacity: 0 } : { clipPath: 'inset(0 0 100% 0)' }}
+                        transition={{ duration: 0.7, ease: luxuryEase }}
+                      >
+                        <DialogPrimitive.Title className="sr-only">Menu</DialogPrimitive.Title>
+                        <div className="container-x flex items-center justify-between py-5 sm:py-6">
+                          <Wordmark dark={false} />
+                          <DialogPrimitive.Close asChild>
+                            <button
+                              type="button"
+                              aria-label="Close menu"
+                              className="flex size-11 items-center justify-center rounded-full border border-brand-ivory/30 text-brand-ivory hover:bg-brand-ivory/10"
+                            >
+                              <X className="size-5" strokeWidth={1.5} />
+                            </button>
+                          </DialogPrimitive.Close>
+                        </div>
+
+                        <nav aria-label="Mobile" className="container-x flex flex-1 flex-col justify-center">
+                          <ul className="space-y-2">
+                            {navLinks.map((l, i) => (
+                              <motion.li
+                                key={l.to}
+                                initial={{ opacity: 0, y: 24 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, delay: 0.25 + i * 0.07, ease: luxuryEase }}
+                              >
+                                <NavLink
+                                  to={l.to}
+                                  end={l.to === '/'}
+                                  onClick={() => setMenuOpen(false)}
+                                  className={({ isActive }) =>
+                                    cn(
+                                      'group flex items-baseline gap-4 py-2 font-serif text-[clamp(2.5rem,10vw,4.5rem)] leading-none tracking-tight transition-colors',
+                                      isActive ? 'text-brand-ivory' : 'text-brand-ivory/55 hover:text-brand-ivory'
+                                    )
+                                  }
+                                >
+                                  <span className="eyebrow text-brand-gold">0{i + 1}</span>
+                                  {l.label}
+                                </NavLink>
+                              </motion.li>
+                            ))}
+                          </ul>
+                        </nav>
+
+                        <motion.div
+                          className="container-x border-t border-brand-ivory/10 py-6"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ duration: 0.8, delay: 0.6 }}
+                        >
+                          <Button
+                            variant="gold"
+                            size="pill"
+                            className="w-full"
+                            onClick={() => {
+                              setMenuOpen(false)
+                              open()
+                            }}
+                          >
+                            Request a Consultation <ArrowUpRight />
+                          </Button>
+                          <div className="mt-5 flex flex-col gap-1 text-sm text-brand-ivory/60">
+                            <a href={`tel:${site.phoneE164}`} className="hover:text-brand-ivory">
+                              {site.phoneDisplay}
+                            </a>
+                            <span>
+                              {site.address.line1}, {site.address.city}
+                            </span>
+                          </div>
+                        </motion.div>
+                      </motion.div>
+                    </DialogPrimitive.Content>
+                  </DialogPrimitive.Portal>
+                )}
+              </AnimatePresence>
+            </DialogPrimitive.Root>
+          </div>
+        </div>
+      </header>
     </>
   )
 }

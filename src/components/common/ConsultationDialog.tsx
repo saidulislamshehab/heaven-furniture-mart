@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import { useId, useState, type FormEvent } from 'react'
+import { ArrowUpRight, CheckCircle2, MessageCircle, Phone } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -8,201 +9,221 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { CheckCircle2, Phone, MapPin } from 'lucide-react'
+import { categories } from '@/data/catalog'
+import { site, whatsappUrl } from '@/data/site'
+
+export interface ConsultationPrefill {
+  room?: string
+  piece?: string
+}
 
 interface ConsultationDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
+  prefill?: ConsultationPrefill
 }
 
-export function ConsultationDialog({
-  open,
-  onOpenChange,
-}: ConsultationDialogProps) {
-  const [submitted, setSubmitted] = useState(false)
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    spaceType: 'Living Room',
-    notes: '',
-  })
+interface FormState {
+  name: string
+  phone: string
+  room: string
+  message: string
+}
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setSubmitted(true)
-    setTimeout(() => {
-      // Auto close after 3 seconds on submit
-      // onOpenChange(false)
-    }, 3000)
+const emptyForm: FormState = { name: '', phone: '', room: categories[0].name, message: '' }
+
+const fieldClass =
+  'h-11 rounded-none border-0 border-b border-brand-ivory/25 bg-transparent px-0 text-base text-brand-ivory placeholder:text-brand-ivory/35 focus-visible:border-brand-gold focus-visible:ring-0 md:text-[0.95rem]'
+
+function buildMessage(f: FormState) {
+  const lines = [
+    `Hello Heaven Furniture Mart, I'd like a free design consultation.`,
+    `Name: ${f.name.trim()}`,
+    `Phone: ${f.phone.trim()}`,
+    `Room: ${f.room}`,
+  ]
+  if (f.message.trim()) lines.push(`Notes: ${f.message.trim()}`)
+  return lines.join('\n')
+}
+
+export function ConsultationDialog({ open, onOpenChange, prefill }: ConsultationDialogProps) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent
+        showCloseButton
+        className="max-h-[92dvh] w-[calc(100%-1.5rem)] max-w-lg overflow-y-auto rounded-sm border border-brand-gold/25 bg-brand-teal-deep p-7 text-brand-ivory shadow-2xl sm:max-w-lg sm:p-10 [&>button]:text-brand-ivory/60 [&>button:hover]:text-brand-ivory"
+      >
+        <ConsultationBody prefill={prefill} />
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+/** Mounted only while the dialog is open, so state naturally resets per opening. */
+function ConsultationBody({ prefill }: { prefill?: ConsultationPrefill }) {
+  const [form, setForm] = useState<FormState>(() => ({
+    ...emptyForm,
+    room: prefill?.room ?? emptyForm.room,
+    message: prefill?.piece ? `I'm interested in the ${prefill.piece}.` : '',
+  }))
+  const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({})
+  const [sent, setSent] = useState<string | null>(null)
+  const id = useId()
+
+  const update = (key: keyof FormState) => (value: string) => {
+    setForm((f) => ({ ...f, [key]: value }))
+    if (errors[key]) setErrors((e) => ({ ...e, [key]: undefined }))
   }
 
-  const handleReset = () => {
-    setSubmitted(false)
-    setFormData({
-      name: '',
-      phone: '',
-      email: '',
-      spaceType: 'Living Room',
-      notes: '',
-    })
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault()
+    const next: typeof errors = {}
+    if (form.name.trim().length < 2) next.name = 'Please enter your name.'
+    if (!/^[+\d][\d\s-]{7,}$/.test(form.phone.trim())) next.phone = 'Enter a phone number we can reach you on.'
+    if (Object.keys(next).length) {
+      setErrors(next)
+      return
+    }
+    const url = whatsappUrl(buildMessage(form))
+    window.open(url, '_blank', 'noopener,noreferrer')
+    setSent(url)
   }
 
   return (
-    <Dialog
-      open={open}
-      onOpenChange={(val) => {
-        onOpenChange(val)
-        if (!val) setSubmitted(false)
-      }}
-    >
-      <DialogContent className="max-w-xl border-[#B08A45]/30 bg-[#172322] text-[#F5F1E8] p-8 shadow-2xl">
-        {submitted ? (
-          <div className="flex flex-col items-center py-8 text-center">
-            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full border border-[#B08A45] bg-[#1F2E2D]">
-              <CheckCircle2 className="h-8 w-8 text-[#B08A45]" />
+    <>
+      {sent ? (
+          <div className="flex flex-col items-start gap-5 py-2">
+            <CheckCircle2 className="size-9 text-brand-gold" strokeWidth={1.25} />
+            <DialogHeader className="space-y-3 text-left">
+              <DialogTitle className="font-serif text-3xl leading-tight sm:text-4xl">
+                Your message is ready.
+              </DialogTitle>
+              <DialogDescription className="text-base leading-relaxed text-brand-ivory/70">
+                We opened WhatsApp with your details filled in. If it didn't appear, use the button
+                below — or call us directly. We reply during showroom hours.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="flex w-full flex-col gap-3 sm:flex-row">
+              <Button asChild variant="gold" size="pill" className="flex-1">
+                <a href={sent} target="_blank" rel="noopener noreferrer">
+                  <MessageCircle /> Open WhatsApp
+                </a>
+              </Button>
+              <Button asChild variant="outline-light" size="pill" className="flex-1">
+                <a href={`tel:${site.phoneE164}`}>
+                  <Phone /> {site.phoneDisplay}
+                </a>
+              </Button>
             </div>
-            <h3 className="font-serif text-3xl text-stone-100">
-              Consultation Requested
-            </h3>
-            <p className="mt-2 max-w-md font-sans text-sm text-stone-300">
-              Thank you for connecting with Heaven Furniture Mart. Our senior
-              interior styling director will reach out within 24 hours to begin
-              shaping your bespoke space.
-            </p>
-            <div className="mt-6 flex flex-col gap-2 rounded-sm border border-white/10 bg-black/20 p-4 text-xs text-stone-400">
-              <span className="flex items-center gap-2">
-                <Phone className="h-3.5 w-3.5 text-[#B08A45]" /> +880 1960-481983
-              </span>
-              <span className="flex items-center gap-2">
-                <MapPin className="h-3.5 w-3.5 text-[#B08A45]" /> Agrabad Access Road, Chattogram
-              </span>
-            </div>
-            <Button
-              variant="outline"
-              onClick={handleReset}
-              className="mt-6 border-[#B08A45]/50 text-[#F5F1E8] hover:bg-[#B08A45]/20"
-            >
-              Submit Another Inquiry
-            </Button>
           </div>
         ) : (
           <>
             <DialogHeader className="space-y-3 text-left">
-              <div className="flex items-center gap-3">
-                <img
-                  src="/logo.png"
-                  alt="Heaven Furniture Mart"
-                  className="h-8 w-auto object-contain"
-                />
-              </div>
-              <DialogTitle className="font-serif text-3xl text-stone-100 sm:text-4xl">
-                Start Your Design Journey
+              <p className="eyebrow text-brand-gold">Free design consultation</p>
+              <DialogTitle className="font-serif text-3xl leading-tight sm:text-4xl">
+                Tell us about your room.
               </DialogTitle>
-              <DialogDescription className="font-sans text-sm text-stone-300">
-                Share your space requirements and vision. We will prepare an
-                exclusive design consultation tailored to your taste and dimensions.
+              <DialogDescription className="text-[0.95rem] leading-relaxed text-brand-ivory/70">
+                A few details and we'll continue on WhatsApp — measurements, references and ideas
+                are all welcome.
               </DialogDescription>
             </DialogHeader>
 
-            <form onSubmit={handleSubmit} className="mt-4 space-y-4 text-left">
-              <div className="grid gap-4 sm:grid-cols-2">
+            <form onSubmit={handleSubmit} noValidate className="mt-6 space-y-6">
+              <div className="grid gap-6 sm:grid-cols-2">
                 <div className="space-y-1.5">
-                  <label className="font-sans text-xs font-medium tracking-wider text-stone-300 uppercase">
-                    Your Full Name *
+                  <label htmlFor={`${id}-name`} className="eyebrow text-brand-ivory/60">
+                    Name
                   </label>
                   <Input
-                    required
-                    placeholder="e.g. Tariq Rahman"
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
-                    className="border-white/15 bg-black/30 text-stone-100 placeholder:text-stone-500 focus:border-[#B08A45]"
+                    id={`${id}-name`}
+                    autoComplete="name"
+                    value={form.name}
+                    onChange={(e) => update('name')(e.target.value)}
+                    aria-invalid={Boolean(errors.name)}
+                    aria-describedby={errors.name ? `${id}-name-err` : undefined}
+                    className={fieldClass}
+                    placeholder="Your name"
                   />
+                  {errors.name && (
+                    <p id={`${id}-name-err`} role="alert" className="text-xs text-brand-gold-soft">
+                      {errors.name}
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-1.5">
-                  <label className="font-sans text-xs font-medium tracking-wider text-stone-300 uppercase">
-                    Phone Number *
+                  <label htmlFor={`${id}-phone`} className="eyebrow text-brand-ivory/60">
+                    Phone
                   </label>
                   <Input
-                    required
+                    id={`${id}-phone`}
                     type="tel"
-                    placeholder="+880 1..."
-                    value={formData.phone}
-                    onChange={(e) =>
-                      setFormData({ ...formData, phone: e.target.value })
-                    }
-                    className="border-white/15 bg-black/30 text-stone-100 placeholder:text-stone-500 focus:border-[#B08A45]"
+                    inputMode="tel"
+                    autoComplete="tel"
+                    value={form.phone}
+                    onChange={(e) => update('phone')(e.target.value)}
+                    aria-invalid={Boolean(errors.phone)}
+                    aria-describedby={errors.phone ? `${id}-phone-err` : undefined}
+                    className={fieldClass}
+                    placeholder="+880 1…"
                   />
-                </div>
-              </div>
-
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-1.5">
-                  <label className="font-sans text-xs font-medium tracking-wider text-stone-300 uppercase">
-                    Email Address
-                  </label>
-                  <Input
-                    type="email"
-                    placeholder="name@domain.com"
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
-                    className="border-white/15 bg-black/30 text-stone-100 placeholder:text-stone-500 focus:border-[#B08A45]"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="font-sans text-xs font-medium tracking-wider text-stone-300 uppercase">
-                    Space / Environment
-                  </label>
-                  <select
-                    value={formData.spaceType}
-                    onChange={(e) =>
-                      setFormData({ ...formData, spaceType: e.target.value })
-                    }
-                    className="w-full h-9 rounded-md border border-white/15 bg-black/30 px-3 py-1 text-sm text-stone-100 focus:border-[#B08A45] focus:outline-none"
-                  >
-                    <option value="Living Room" className="bg-[#172322]">Living Room & Lounge</option>
-                    <option value="Master Bedroom" className="bg-[#172322]">Master Bedroom Suite</option>
-                    <option value="Dining Room" className="bg-[#172322]">Dining & Hosting Space</option>
-                    <option value="Executive Office" className="bg-[#172322]">Executive Office & Study</option>
-                    <option value="Full Residence Bespoke" className="bg-[#172322]">Full Residence Bespoke Interior</option>
-                  </select>
+                  {errors.phone && (
+                    <p id={`${id}-phone-err`} role="alert" className="text-xs text-brand-gold-soft">
+                      {errors.phone}
+                    </p>
+                  )}
                 </div>
               </div>
 
               <div className="space-y-1.5">
-                <label className="font-sans text-xs font-medium tracking-wider text-stone-300 uppercase">
-                  Tell us about your space or vision
+                <label htmlFor={`${id}-room`} className="eyebrow text-brand-ivory/60">
+                  Which room?
+                </label>
+                <select
+                  id={`${id}-room`}
+                  value={form.room}
+                  onChange={(e) => update('room')(e.target.value)}
+                  className="h-11 w-full appearance-none border-0 border-b border-brand-ivory/25 bg-transparent px-0 text-[0.95rem] text-brand-ivory outline-none focus-visible:border-brand-gold"
+                >
+                  {categories.map((c) => (
+                    <option key={c.id} value={c.name} className="bg-brand-teal-deep text-brand-ivory">
+                      {c.name}
+                    </option>
+                  ))}
+                  <option value="Full residence" className="bg-brand-teal-deep text-brand-ivory">
+                    Full residence
+                  </option>
+                </select>
+              </div>
+
+              <div className="space-y-1.5">
+                <label htmlFor={`${id}-msg`} className="eyebrow text-brand-ivory/60">
+                  Notes <span className="normal-case tracking-normal opacity-60">(optional)</span>
                 </label>
                 <textarea
+                  id={`${id}-msg`}
                   rows={3}
-                  placeholder="Dimensions, preferred wood tones, or specific requirements..."
-                  value={formData.notes}
-                  onChange={(e) =>
-                    setFormData({ ...formData, notes: e.target.value })
-                  }
-                  className="w-full rounded-md border border-white/15 bg-black/30 p-3 text-sm text-stone-100 placeholder:text-stone-500 focus:border-[#B08A45] focus:outline-none"
+                  value={form.message}
+                  onChange={(e) => update('message')(e.target.value)}
+                  placeholder="Room size, the piece you have in mind, a finish you love…"
+                  className="w-full resize-none border-0 border-b border-brand-ivory/25 bg-transparent px-0 py-2 text-[0.95rem] leading-relaxed text-brand-ivory outline-none placeholder:text-brand-ivory/35 focus-visible:border-brand-gold"
                 />
               </div>
 
-              <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
-                <span className="text-[11px] text-stone-400">
-                  Showroom: Agrabad Access Road, Chattogram
-                </span>
-                <Button
-                  type="submit"
-                  className="w-full sm:w-auto bg-[#B08A45] hover:bg-[#977334] text-[#141F1E] font-medium tracking-wider uppercase px-6"
-                >
-                  Request Consultation
+              <div className="flex flex-col gap-4 pt-1 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-xs leading-relaxed text-brand-ivory/50">
+                  Prefer to talk?{' '}
+                  <a href={`tel:${site.phoneE164}`} className="text-brand-ivory/80 underline-offset-4 hover:underline">
+                    {site.phoneDisplay}
+                  </a>
+                </p>
+                <Button type="submit" variant="gold" size="pill" className="w-full sm:w-auto">
+                  Continue on WhatsApp <ArrowUpRight />
                 </Button>
               </div>
             </form>
           </>
         )}
-      </DialogContent>
-    </Dialog>
+    </>
   )
 }

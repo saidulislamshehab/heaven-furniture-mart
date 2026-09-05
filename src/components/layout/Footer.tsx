@@ -1,169 +1,127 @@
+import { Link } from 'react-router'
+import { ArrowUpRight } from 'lucide-react'
+import { site } from '@/data/site'
+import { brandImages } from '@/data/assets'
+import { categories } from '@/data/catalog'
+import { scrollToTop } from '@/lib/scroll'
+
+const pages = [
+  { label: 'Home', to: '/' },
+  { label: 'Shop', to: '/shop' },
+  { label: 'Visit the showroom', to: '/visit' },
+  { label: 'Our story', to: '/about' },
+]
+
+const socials = [
+  { label: 'Facebook', href: site.social.facebook },
+  { label: 'Instagram', href: site.social.instagram },
+  { label: 'YouTube', href: site.social.youtube },
+]
+
 export function Footer() {
   return (
-    <footer className="relative w-full overflow-hidden bg-[#0A0D0C] pt-20 pb-12 text-[#9A9E9D]">
-      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
-        {/* Top Grid */}
-        <div className="grid grid-cols-2 gap-10 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-12 lg:gap-8 pb-16">
-          {/* Brand & Mission (Spans 5 columns on desktop) */}
-          <div className="col-span-2 sm:col-span-2 md:col-span-4 lg:col-span-5 space-y-6">
-            <a href="#" className="inline-block transition-opacity hover:opacity-85">
-              <img
-                src="/logo.png"
-                alt="Heaven Furniture Mart"
-                className="h-10 sm:h-12 w-auto object-contain"
-              />
-            </a>
-            <p className="max-w-sm font-sans text-sm sm:text-base leading-relaxed text-[#808785]">
-              We shape architectural blueprints into bespoke luxury furniture and
-              masterpiece interiors crafted by master artisans in Chattogram.
+    <footer className="relative overflow-hidden bg-brand-ink text-brand-ivory">
+      <div className="container-x mx-auto max-w-[1600px] pt-20 pb-10 sm:pt-28">
+        <div className="grid gap-14 lg:grid-cols-12">
+          <div className="lg:col-span-5">
+            <div className="flex items-center gap-3">
+              <img src={brandImages.logo} alt="" width={40} height={40} className="h-10 w-auto" />
+              <span className="flex flex-col leading-none">
+                <span className="font-serif text-2xl tracking-[0.14em]">HEAVEN</span>
+                <span className="eyebrow mt-1 text-[0.55rem] tracking-[0.3em] text-brand-ivory/60">Furniture Mart</span>
+              </span>
+            </div>
+            <p className="mt-8 max-w-sm font-serif text-2xl leading-snug text-brand-ivory/85 sm:text-3xl">
+              Bespoke furniture and interior styling, designed around the way you live.
             </p>
+            <p className="eyebrow mt-6 text-brand-gold">{site.tagline}</p>
           </div>
 
-          {/* Spacer on large screens */}
-          <div className="hidden lg:block lg:col-span-1" />
-
-          {/* Menu Column */}
-          <div className="col-span-1 lg:col-span-2 space-y-4">
-            <h4 className="font-sans text-xs font-semibold tracking-wider text-[#D8B676] uppercase">
-              Menu
-            </h4>
-            <ul className="space-y-3 font-sans text-sm text-[#9A9E9D]">
-              <li>
-                <a href="#" className="transition-colors hover:text-white">
-                  Home
-                </a>
-              </li>
-              <li>
-                <a href="#collections" className="transition-colors hover:text-white">
-                  Collections
-                </a>
-              </li>
-              <li>
-                <a href="#bespoke" className="transition-colors hover:text-white">
-                  Bespoke
-                </a>
-              </li>
-              <li>
-                <a href="#materials" className="transition-colors hover:text-white">
-                  Materials
-                </a>
-              </li>
-              <li>
-                <a href="#legacy" className="transition-colors hover:text-white">
-                  Our Story
-                </a>
-              </li>
-              <li>
-                <a href="#contact" className="transition-colors hover:text-white">
-                  Contact
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Atelier & Legal Column */}
-          <div className="col-span-1 lg:col-span-2 space-y-4">
-            <h4 className="font-sans text-xs font-semibold tracking-wider text-[#D8B676] uppercase">
-              Atelier
-            </h4>
-            <ul className="space-y-3 font-sans text-sm text-[#9A9E9D]">
-              <li>
-                <span className="text-[#808785]">Agrabad Access Road</span>
-              </li>
-              <li>
-                <span className="text-[#808785]">Chattogram, Bangladesh</span>
-              </li>
-              <li>
-                <a
-                  href="tel:+8801960481983"
-                  className="transition-colors hover:text-white"
-                >
-                  +880 1960-481983
-                </a>
-              </li>
-              <li className="pt-2">
-                <a href="#" className="transition-colors hover:text-white">
-                  Privacy Policy
-                </a>
-              </li>
-              <li>
-                <a href="#" className="transition-colors hover:text-white">
-                  Commission Terms
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Social Column */}
-          <div className="col-span-1 lg:col-span-2 space-y-4">
-            <h4 className="font-sans text-xs font-semibold tracking-wider text-[#D8B676] uppercase">
-              Social
-            </h4>
-            <ul className="space-y-3 font-sans text-sm text-[#9A9E9D]">
-              <li>
-                <a
-                  href="https://instagram.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="transition-colors hover:text-white"
-                >
-                  Instagram
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://facebook.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="transition-colors hover:text-white"
-                >
-                  Facebook
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://wa.me/8801960481983"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="transition-colors hover:text-white"
-                >
-                  WhatsApp
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://youtube.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="transition-colors hover:text-white"
-                >
-                  YouTube
-                </a>
-              </li>
-            </ul>
+          <div className="grid gap-10 sm:grid-cols-3 lg:col-span-7">
+            <div>
+              <h3 className="eyebrow text-brand-ivory/50">Pages</h3>
+              <ul className="mt-5 space-y-3">
+                {pages.map((p) => (
+                  <li key={p.to}>
+                    <Link to={p.to} className="text-[0.95rem] text-brand-ivory/85 transition-colors hover:text-brand-gold-soft">
+                      {p.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="eyebrow text-brand-ivory/50">Collections</h3>
+              <ul className="mt-5 space-y-3">
+                {categories.map((c) => (
+                  <li key={c.id}>
+                    <Link
+                      to={`/shop?category=${c.id}`}
+                      className="text-[0.95rem] text-brand-ivory/85 transition-colors hover:text-brand-gold-soft"
+                    >
+                      {c.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="eyebrow text-brand-ivory/50">Showroom</h3>
+              <address className="mt-5 space-y-3 text-[0.95rem] not-italic text-brand-ivory/85">
+                <p>
+                  {site.address.line1}
+                  <br />
+                  {site.address.city}, {site.address.country}
+                </p>
+                <p>
+                  <a href={`tel:${site.phoneE164}`} className="transition-colors hover:text-brand-gold-soft">
+                    {site.phoneDisplay}
+                  </a>
+                </p>
+                <p>
+                  <a href={`mailto:${site.email}`} className="break-all transition-colors hover:text-brand-gold-soft">
+                    {site.email}
+                  </a>
+                </p>
+              </address>
+              <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2">
+                {socials.map((s) => (
+                  <li key={s.label}>
+                    <a
+                      href={s.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="eyebrow inline-flex items-center gap-1 text-brand-ivory/60 transition-colors hover:text-brand-gold-soft"
+                    >
+                      {s.label} <ArrowUpRight className="size-3" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
 
-        {/* Massive Bold Embossed Watermark (HEAVEN + FURNITURE MART together in middle) */}
-        <div className="relative my-8 sm:my-14 flex flex-col items-center justify-center overflow-hidden select-none pointer-events-none text-center">
-          <h2 className="font-serif text-[11vw] sm:text-[12vw] font-bold tracking-[-0.02em] leading-none uppercase text-[#151C1B] transition-all duration-700 drop-shadow-[0_1px_1px_rgba(255,255,255,0.04)] [text-shadow:0_-1px_1px_rgba(0,0,0,0.85),0_1px_1px_rgba(255,255,255,0.06)]">
-            HEAVEN
-          </h2>
-          <p className="mt-2 sm:mt-3 font-serif text-[3.2vw] sm:text-[3.5vw] md:text-[2.8vw] font-bold tracking-[0.2em] sm:tracking-[0.25em] leading-none uppercase text-[#141A19] [text-shadow:0_-1px_1px_rgba(0,0,0,0.85),0_1px_1px_rgba(255,255,255,0.05)]">
-            FURNITURE MART
+        <div className="mt-20 flex flex-col gap-4 border-t border-brand-ivory/10 pt-6 text-xs text-brand-ivory/45 sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            © {new Date().getFullYear()} {site.name}. Est. {site.founded}, {site.address.city}.
           </p>
-        </div>
-
-        {/* Bottom Bar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/5 pt-8 text-xs font-sans tracking-wide text-[#656C6A]">
-          <div>
-            2026 © Heaven Furniture Mart.
-          </div>
-          <div>
-            Designed & Crafted in Chattogram
-          </div>
+          <button
+            type="button"
+            onClick={() => scrollToTop(false)}
+            className="eyebrow self-start text-brand-ivory/60 transition-colors hover:text-brand-gold-soft sm:self-auto"
+          >
+            Back to top ↑
+          </button>
         </div>
       </div>
+
+      <p
+        aria-hidden
+        className="pointer-events-none select-none px-2 pb-2 text-center font-serif text-[16vw] leading-[0.8] tracking-[0.06em] text-brand-ivory/[0.035]"
+      >
+        HEAVEN
+      </p>
     </footer>
   )
 }

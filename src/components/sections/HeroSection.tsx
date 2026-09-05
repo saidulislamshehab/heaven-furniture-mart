@@ -1,103 +1,177 @@
-import { motion } from 'motion/react'
-import { VideoPlaceholder } from '@/components/common/VideoPlaceholder'
-import { ArrowDown } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { motion, useReducedMotion } from 'motion/react'
+import { ArrowDown, ArrowUpRight } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { useConsultation } from '@/components/common/ConsultationProvider'
+import { luxuryEase } from '@/components/common/Reveal'
+import { heroVideos } from '@/data/assets'
+import { site } from '@/data/site'
+import { scrollToHash } from '@/lib/scroll'
+import { cn } from '@/lib/utils'
 
 interface HeroSectionProps {
-  onOpenConsultation: () => void
+  introDone: boolean
 }
 
-export function HeroSection({ onOpenConsultation }: HeroSectionProps) {
+function useStillMedia() {
+  const [still] = useState(() => {
+    if (typeof window === 'undefined') return true
+    const nav = navigator as Navigator & { connection?: { saveData?: boolean } }
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches || Boolean(nav.connection?.saveData)
+  })
+  return still
+}
+
+/** Plays the three hero films in sequence with a slow cross-fade; a single loop on small screens to save data. */
+function HeroFilm({ active, onAdvance }: { active: number; onAdvance: () => void }) {
+  const still = useStillMedia()
+  const [single] = useState(() => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches)
+  const refs = useRef<(HTMLVideoElement | null)[]>([])
+
+  useEffect(() => {
+    if (still) return
+    refs.current.forEach((v, i) => {
+      if (!v) return
+      if (i === active) {
+        v.currentTime = 0
+        v.play().catch(() => {})
+      } else if (!v.paused) {
+        v.pause()
+      }
+    })
+  }, [active, still])
+
+  if (still) {
+    return <img src={heroVideos[0].poster} alt="" className="absolute inset-0 h-full w-full object-cover" fetchPriority="high" />
+  }
+
+  const list = single ? heroVideos.slice(0, 1) : heroVideos
+
   return (
-    <section className="relative flex min-h-screen w-full flex-col justify-between items-center overflow-hidden bg-[#151D1C] text-stone-100">
-      {/* Background Cinematic Video / Ambient Showroom Container */}
-      <motion.div
-        initial={{ opacity: 0, scale: 1.04 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute inset-0 z-0"
-      >
-        <VideoPlaceholder
-          title="Heaven Furniture Mart — Luxury Bespoke Furniture"
-          subtitle="Cinematic living space and master woodwork craftsmanship"
+    <>
+      {list.map((v, i) => (
+        <video
+          key={v.src}
+          ref={(el) => {
+            refs.current[i] = el
+          }}
+          src={v.src}
+          poster={i === 0 ? v.poster : undefined}
+          muted
+          playsInline
+          autoPlay={i === 0}
+          loop={single}
+          preload={i === 0 ? 'auto' : i === (active + 1) % list.length ? 'auto' : 'none'}
+          onEnded={single ? undefined : onAdvance}
+          aria-hidden
+          tabIndex={-1}
+          className={cn(
+            'absolute inset-0 h-full w-full object-cover transition-opacity duration-[1400ms] ease-[var(--ease-luxury)]',
+            i === active ? 'opacity-100' : 'opacity-0'
+          )}
         />
+      ))}
+    </>
+  )
+}
+
+export function HeroSection({ introDone }: HeroSectionProps) {
+  const { open } = useConsultation()
+  const reduce = useReducedMotion()
+  const [active, setActive] = useState(0)
+  const ready = introDone
+
+  const fade = (delay: number) => ({
+    initial: reduce ? false : { opacity: 0, y: 30 },
+    animate: ready ? { opacity: 1, y: 0 } : {},
+    transition: { duration: 1.1, delay, ease: luxuryEase },
+  })
+
+  return (
+    <section className="relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-brand-teal-deep text-brand-ivory">
+      <motion.div
+        className="absolute inset-0 -z-10"
+        initial={reduce ? false : { scale: 1.08, opacity: 0 }}
+        animate={ready ? { scale: 1, opacity: 1 } : {}}
+        transition={{ duration: 2.2, ease: luxuryEase }}
+      >
+        <HeroFilm active={active} onAdvance={() => setActive((a) => (a + 1) % heroVideos.length)} />
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-ink/90 via-brand-ink/35 to-brand-ink/25" />
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-ink/50 via-transparent to-transparent" />
       </motion.div>
 
-      {/* Top Spacer for Transparent Navigation */}
-      <div className="h-28 sm:h-36 w-full pointer-events-none" />
+      <div className="container-x mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-end pt-32 pb-10 sm:pb-14">
+        <motion.p {...fade(0.15)} className="eyebrow text-brand-gold-soft">
+          Bespoke furniture &amp; interior styling · {site.address.city}
+        </motion.p>
 
-      {/* CENTER: Massive Bold Sans-Serif + Editorial Italic Serif Typography Layered Directly Over Scene */}
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col items-center justify-center px-6 py-6 text-center sm:px-8">
-        <div className="flex flex-col items-center select-none">
-          {/* Top Line: CRAFTED + for */}
-          <motion.div
-            initial={{ opacity: 0, y: 35 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="flex items-baseline justify-center gap-2 sm:gap-4 md:gap-6 flex-wrap"
-          >
-            <span className="font-sans font-black text-5xl sm:text-7xl md:text-8xl lg:text-[104px] xl:text-[120px] leading-[0.92] tracking-[-0.03em] uppercase text-white drop-shadow-md">
-              CRAFTED
-            </span>
-            <span className="font-serif italic font-light text-4xl sm:text-6xl md:text-7xl lg:text-[88px] xl:text-[100px] leading-[0.9] text-[#F3EAD8] drop-shadow-sm lowercase translate-y-1 sm:translate-y-2">
-              for
-            </span>
-          </motion.div>
+        <h1 className="mt-5 max-w-[14ch] display-1 text-balance">
+          <span className="block overflow-hidden">
+            <motion.span
+              className="block"
+              initial={reduce ? false : { y: '105%' }}
+              animate={ready ? { y: 0 } : {}}
+              transition={{ duration: 1.2, delay: 0.3, ease: luxuryEase }}
+            >
+              Furniture,
+            </motion.span>
+          </span>
+          <span className="block overflow-hidden">
+            <motion.span
+              className="block italic text-brand-ivory/90"
+              initial={reduce ? false : { y: '105%' }}
+              animate={ready ? { y: 0 } : {}}
+              transition={{ duration: 1.2, delay: 0.42, ease: luxuryEase }}
+            >
+              crafted around you.
+            </motion.span>
+          </span>
+        </h1>
 
-          {/* Bottom Line: LUXURY LIVING */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-1 sm:mt-2"
-          >
-            <span className="font-sans font-black text-5xl sm:text-7xl md:text-8xl lg:text-[108px] xl:text-[124px] leading-[0.92] tracking-[-0.03em] uppercase text-white drop-shadow-md">
-              LUXURY LIVING
-            </span>
+        <div className="mt-8 flex flex-col gap-8 md:mt-10 md:flex-row md:items-end md:justify-between">
+          <motion.p {...fade(0.65)} className="max-w-md text-[1.05rem] leading-relaxed text-brand-ivory/80 sm:text-lg">
+            Premium bespoke furniture and interior styling from Chattogram — designed around your
+            space, your taste and the way you live.
+          </motion.p>
+
+          <motion.div {...fade(0.8)} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
+            <Button variant="gold" size="pill" onClick={() => open()}>
+              Request a Consultation <ArrowUpRight />
+            </Button>
+            <button
+              type="button"
+              onClick={() => scrollToHash('#craft')}
+              className="group eyebrow inline-flex items-center gap-2 self-start py-2 text-brand-ivory/80 transition-colors hover:text-brand-ivory sm:self-auto"
+            >
+              Explore our craft
+              <ArrowDown className="size-3.5 transition-transform duration-500 group-hover:translate-y-1" />
+            </button>
           </motion.div>
         </div>
-      </div>
 
-      {/* BOTTOM CENTER: Primary Outlined Pill CTA Button & Subtle Scroll Indicator */}
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col items-center pb-8 sm:pb-12 px-6">
-        {/* Outlined Pill CTA Button */}
         <motion.div
-          initial={{ opacity: 0, y: 25 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.75, ease: [0.16, 1, 0.3, 1] }}
+          {...fade(1)}
+          className="mt-12 flex items-center justify-between border-t border-brand-ivory/15 pt-5 text-brand-ivory/55 sm:mt-16"
         >
-          <button
-            type="button"
-            onClick={onOpenConsultation}
-            className="group relative inline-flex items-center justify-center rounded-full border border-white/70 bg-black/15 px-8 sm:px-11 py-3.5 sm:py-4 font-sans text-xs sm:text-sm font-semibold tracking-[0.25em] text-white uppercase backdrop-blur-xs transition-all duration-400 hover:border-white hover:bg-white hover:text-[#121B1A] hover:shadow-[0_0_35px_rgba(255,255,255,0.3)]"
-          >
-            <span className="relative z-10 transition-colors">
-              Explore Collection
-            </span>
-          </button>
-        </motion.div>
-
-        {/* Subtle Decorative Star Accent & Scroll Down Indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1 }}
-          className="mt-6 sm:mt-8 flex flex-col items-center gap-2"
-        >
-          {/* Subtle 4-point diamond star accent inspired by luxury reference */}
-          <div className="h-2 w-2 rotate-45 border border-[#C49A4E]/60 bg-[#C49A4E]/20" />
-
-          <a
-            href="#manifesto"
-            className="group inline-flex items-center gap-2 font-sans text-[10px] font-medium tracking-[0.25em] text-stone-400 uppercase transition-colors hover:text-[#C49A4E]"
-          >
-            <span>Scroll</span>
-            <motion.div
-              animate={{ y: [0, 4, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              <ArrowDown className="h-3 w-3 text-[#C49A4E]" />
-            </motion.div>
-          </a>
+          <p className="eyebrow">
+            Est. {site.founded} · {site.address.line1}
+          </p>
+          <ol className="hidden items-center gap-3 md:flex" aria-label="Hero films">
+            {heroVideos.map((_, i) => (
+              <li key={i} className="flex items-center gap-2">
+                <span
+                  className={cn(
+                    'block h-px transition-all duration-700',
+                    i === active ? 'w-10 bg-brand-gold' : 'w-5 bg-brand-ivory/30'
+                  )}
+                />
+              </li>
+            ))}
+            <li className="eyebrow ml-1 tabular-nums">
+              0{active + 1} / 0{heroVideos.length}
+            </li>
+          </ol>
+          <p className="eyebrow md:hidden">{site.tagline}</p>
         </motion.div>
       </div>
     </section>
