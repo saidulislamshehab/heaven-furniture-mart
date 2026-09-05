@@ -22,7 +22,7 @@ function useStillMedia() {
   return still
 }
 
-/** Plays the three hero films in sequence with a slow cross-fade; a single loop on small screens to save data. */
+/** Plays the hero films in sequence with a slow cross-fade; a single loop on small screens to save data. */
 function HeroFilm({ active, onAdvance }: { active: number; onAdvance: () => void }) {
   const still = useStillMedia()
   const [single] = useState(() => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches)
@@ -182,12 +182,19 @@ export function HeroSection({ introDone }: HeroSectionProps) {
           <ol className="hidden items-center gap-3 md:flex" aria-label="Hero films">
             {heroVideos.map((_, i) => (
               <li key={i} className="flex items-center gap-2">
-                <span
-                  className={cn(
-                    'block h-px transition-all duration-700',
-                    i === active ? 'w-10 bg-brand-gold' : 'w-5 bg-brand-ivory/30'
-                  )}
-                />
+                <button
+                  type="button"
+                  onClick={() => setActive(i)}
+                  className="group flex items-center py-2 focus:outline-none"
+                  aria-label={`Switch to film ${i + 1}`}
+                >
+                  <span
+                    className={cn(
+                      'block h-px transition-all duration-700',
+                      i === active ? 'w-10 bg-brand-gold' : 'w-5 bg-brand-ivory/30 group-hover:bg-brand-ivory/70'
+                    )}
+                  />
+                </button>
               </li>
             ))}
             <li className="eyebrow ml-1 tabular-nums">
