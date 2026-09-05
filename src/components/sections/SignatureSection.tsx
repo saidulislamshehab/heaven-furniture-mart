@@ -5,9 +5,12 @@ import { SectionLabel } from '@/components/common/SectionLabel'
 import { Button } from '@/components/ui/button'
 import ImageGallery, { type GalleryItem } from '@/components/ui/image-gallery'
 import { useConsultation } from '@/components/common/ConsultationProvider'
-import { categoryById, featuredProducts } from '@/data/catalog'
+import { categoryById, featuredProducts, products } from '@/data/catalog'
 
-const galleryItems: GalleryItem[] = featuredProducts.slice(0, 6).map((p) => ({
+/* Featured first, then the rest of the studio pieces — twelve frames in the strip. */
+const picks = [...featuredProducts, ...products.filter((p) => !p.featured && p.category !== 'bespoke')].slice(0, 12)
+
+const galleryItems: GalleryItem[] = picks.map((p) => ({
   id: p.slug,
   src: p.image,
   alt: p.name,
@@ -31,7 +34,7 @@ export function SignatureSection() {
         </div>
         <Reveal delay={0.2} className="flex flex-col items-start gap-4 md:items-end">
           <p className="max-w-xs text-[0.98rem] leading-relaxed text-brand-stone md:text-right">
-            The open piece moves along on its own — hover to hold it. Every one can be re-sized, re-covered and re-finished for your room.
+            The strip drifts on its own — hover a frame to open it. Every piece can be re-sized, re-covered and re-finished for your room.
           </p>
           <Button asChild variant="text-link">
             <Link to="/shop">
@@ -41,11 +44,11 @@ export function SignatureSection() {
         </Reveal>
       </div>
 
-      <Reveal className="container-x mx-auto mt-12 max-w-[1600px] lg:mt-16">
+      <Reveal className="mt-12 lg:mt-16">
         <ImageGallery
           items={galleryItems}
           onSelect={(it) => {
-            const p = featuredProducts.find((f) => f.slug === it.id)
+            const p = picks.find((f) => f.slug === it.id)
             open({ room: p ? categoryById(p.category)?.name : undefined, piece: it.title })
           }}
           action={
