@@ -153,6 +153,13 @@
     display: block;
     max-width: 100%;
   }
+  /* Hide the page scrollbar; scrolling still works */
+  html {
+    scrollbar-width: none;
+  }
+  html::-webkit-scrollbar {
+    display: none;
+  }
   ::selection {
     background: var(--brand-gold);
     color: var(--brand-teal-deep);

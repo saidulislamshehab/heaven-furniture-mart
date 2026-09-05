@@ -1,128 +1,85 @@
-import { useEffect, useRef, useState } from 'react'
-import { Pause, Play } from 'lucide-react'
+import { useState } from 'react'
+import { Volume2, VolumeX } from 'lucide-react'
 import { Reveal, SplitWords } from '@/components/common/Reveal'
 import { SectionLabel } from '@/components/common/SectionLabel'
+import { SmartVideo } from '@/components/common/SmartVideo'
 import { workshopFilms } from '@/data/assets'
 import { cn } from '@/lib/utils'
 
 type Film = (typeof workshopFilms)[number]
 
-function FilmCard({ film, playing, onToggle, delay }: { film: Film; playing: boolean; onToggle: () => void; delay: number }) {
-  const ref = useRef<HTMLVideoElement>(null)
-  const [progress, setProgress] = useState(0)
-
-  useEffect(() => {
-    const v = ref.current
-    if (!v) return
-    if (playing) {
-      v.play().catch(() => {})
-    } else {
-      v.pause()
-    }
-  }, [playing])
-
+function FilmPanel({ film, unmuted, onToggleSound }: { film: Film; unmuted: boolean; onToggleSound: () => void }) {
   return (
-    <Reveal delay={delay} className="w-[78vw] max-w-sm shrink-0 snap-center sm:w-auto sm:max-w-none">
-      <article className="group relative flex flex-col">
-      <div className="relative aspect-[9/16] overflow-hidden bg-brand-teal">
-        <video
-          ref={ref}
-          src={film.video.src}
-          poster={film.video.poster}
-          muted
-          playsInline
-          loop
-          preload="none"
-          aria-label={`${film.label}: ${film.title}`}
-          onTimeUpdate={(e) => {
-            const v = e.currentTarget
-            if (v.duration) setProgress(v.currentTime / v.duration)
-          }}
-          className={cn(
-            'h-full w-full object-cover transition-transform duration-[1400ms] ease-[var(--ease-luxury)]',
-            playing ? 'scale-100' : 'scale-[1.03] group-hover:scale-100'
-          )}
-        />
-        <div
-          className={cn(
-            'pointer-events-none absolute inset-0 bg-brand-ink/30 transition-opacity duration-700',
-            playing ? 'opacity-0' : 'opacity-100'
-          )}
-        />
+    <article className="group relative aspect-[9/16] w-full overflow-hidden bg-brand-teal sm:aspect-auto sm:h-[100svh] lg:h-[100vh]">
+      <div className="absolute inset-0 [&_video]:transition-transform [&_video]:duration-[1600ms] [&_video]:ease-[var(--ease-luxury)] group-hover:[&_video]:scale-[1.03]">
+        <SmartVideo asset={film.video} lazy={false} muted={!unmuted} />
+      </div>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-brand-ink/80 via-brand-ink/10 to-brand-ink/55" />
+
+      {/* Top meta */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 flex items-center justify-end p-5 text-brand-ivory/85 sm:p-6">
+        <span className="eyebrow tabular-nums">
+          {film.index} — 00:{String(film.video.durationSec).padStart(2, '0')}
+        </span>
+      </div>
+
+      {/* Bottom copy + sound toggle */}
+      <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 sm:p-6 lg:p-8">
+        <div className="max-w-xs">
+          <p className="eyebrow text-brand-gold">
+            {film.index} / {film.label}
+          </p>
+          <h3 className="mt-3 font-serif text-3xl leading-tight text-brand-ivory sm:text-4xl">{film.title}</h3>
+          <p className="mt-3 hidden text-[0.95rem] leading-relaxed text-brand-ivory/70 md:block">{film.body}</p>
+        </div>
         <button
           type="button"
-          onClick={onToggle}
-          aria-pressed={playing}
-          aria-label={playing ? `Pause ${film.label} film` : `Play ${film.label} film`}
-          className="absolute inset-0 flex items-center justify-center focus-visible:outline-offset-[-4px]"
+          onClick={onToggleSound}
+          aria-pressed={unmuted}
+          aria-label={unmuted ? `Mute ${film.label} film` : `Unmute ${film.label} film`}
+          className={cn(
+            'flex size-12 shrink-0 items-center justify-center rounded-full border backdrop-blur-sm transition-colors',
+            unmuted
+              ? 'border-brand-gold bg-brand-gold text-brand-teal-deep'
+              : 'border-brand-ivory/50 bg-brand-ink/30 text-brand-ivory hover:border-brand-ivory hover:bg-brand-ivory hover:text-brand-teal-deep'
+          )}
         >
-          <span
-            className={cn(
-              'flex size-16 items-center justify-center rounded-full border border-brand-ivory/60 bg-brand-ink/30 text-brand-ivory backdrop-blur-sm transition-all duration-500',
-              playing ? 'scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100' : 'group-hover:scale-105'
-            )}
-          >
-            {playing ? <Pause className="size-5" strokeWidth={1.5} /> : <Play className="ml-0.5 size-5 fill-current" strokeWidth={1.5} />}
-          </span>
+          {unmuted ? <Volume2 className="size-5" strokeWidth={1.5} /> : <VolumeX className="size-5" strokeWidth={1.5} />}
         </button>
-        <div className="pointer-events-none absolute inset-x-0 top-0 flex items-center justify-between p-4 text-brand-ivory">
-          <span className="eyebrow">Heaven / Workshop</span>
-          <span className="eyebrow tabular-nums">
-            {film.index} — 00:{String(film.video.durationSec).padStart(2, '0')}
-          </span>
-        </div>
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-brand-ivory/20">
-          <div className="h-full origin-left bg-brand-gold" style={{ transform: `scaleX(${progress})` }} />
-        </div>
       </div>
-      <div className="mt-5">
-        <p className="eyebrow text-brand-gold">
-          {film.index} / {film.label}
-        </p>
-        <h3 className="mt-3 font-serif text-2xl leading-tight sm:text-3xl">{film.title}</h3>
-        <p className="mt-3 max-w-xs text-[0.95rem] leading-relaxed text-brand-ivory/65">{film.body}</p>
-      </div>
-      </article>
-    </Reveal>
+    </article>
   )
 }
 
 export function CraftSection() {
-  const [playing, setPlaying] = useState<string | null>(null)
+  const [unmuted, setUnmuted] = useState<string | null>(null)
 
   return (
-    <section id="craft" className="section-pad bg-brand-ink text-brand-ivory">
-      <div className="container-x mx-auto max-w-[1600px]">
-        <div className="grid gap-8 lg:grid-cols-12">
-          <div className="lg:col-span-7">
+    <section id="craft" className="relative bg-brand-ink text-brand-ivory">
+      {/* Section title floats over the films so the strip begins immediately after Collections */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-10 hidden sm:block">
+        <div className="container-x mx-auto flex max-w-[1600px] items-start justify-between pt-16 lg:pt-20">
+          <div>
             <Reveal>
               <SectionLabel number="04">Inside the workshop</SectionLabel>
             </Reveal>
-            <h2 className="mt-6 display-2 text-balance">
+            <h2 className="mt-5 max-w-[10ch] display-3 text-balance text-brand-ivory drop-shadow-[0_2px_24px_rgba(13,20,19,0.6)]">
               <SplitWords text="Made in three movements." />
             </h2>
           </div>
-          <Reveal delay={0.3} className="self-end lg:col-span-5">
-            <p className="max-w-md text-[1.05rem] leading-relaxed text-brand-ivory/65">
-              From a measured line to the final gilded edge — three short films of furniture becoming
-              personal. Choose one to begin.
-            </p>
-          </Reveal>
         </div>
       </div>
 
-      <div className="mt-14 lg:mt-20">
-        <div className="container-x mx-auto flex max-w-[1600px] snap-x snap-mandatory gap-5 overflow-x-auto pb-4 scrollbar-none sm:grid sm:grid-cols-3 sm:gap-8 sm:overflow-visible sm:pb-0">
-          {workshopFilms.map((film, i) => (
-            <FilmCard
-              key={film.id}
-              film={film}
-              delay={i * 0.12}
-              playing={playing === film.id}
-              onToggle={() => setPlaying((p) => (p === film.id ? null : film.id))}
-            />
-          ))}
-        </div>
+      {/* Full-bleed, gapless triptych */}
+      <div className="grid w-full grid-cols-1 sm:grid-cols-3">
+        {workshopFilms.map((film) => (
+          <FilmPanel
+            key={film.id}
+            film={film}
+            unmuted={unmuted === film.id}
+            onToggleSound={() => setUnmuted((u) => (u === film.id ? null : film.id))}
+          />
+        ))}
       </div>
     </section>
   )

@@ -36,12 +36,22 @@ function Wordmark({ dark }: { dark: boolean }) {
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
+  const [hidden, setHidden] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const { open } = useConsultation()
   const reduce = useReducedMotion()
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
+    let lastY = window.scrollY
+    const onScroll = () => {
+      const y = window.scrollY
+      setScrolled(y > 40)
+      // Ignore tiny jitter; always show near the top
+      if (Math.abs(y - lastY) > 6) {
+        setHidden(y > lastY && y > 120)
+        lastY = y
+      }
+    }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -57,10 +67,11 @@ export function Navbar() {
     <>
       <header
         className={cn(
-          'fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow,padding] duration-500',
+          'fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow,padding,translate] duration-500 ease-[var(--ease-luxury)] will-change-transform motion-reduce:transition-none',
           dark
             ? 'bg-brand-ivory/90 py-3 shadow-[0_1px_0_0_rgba(43,33,28,0.08)] backdrop-blur-md supports-backdrop-filter:bg-brand-ivory/80'
-            : 'bg-transparent py-5 sm:py-6'
+            : 'bg-transparent py-5 sm:py-6',
+          hidden && !menuOpen ? '-translate-y-full' : 'translate-y-0'
         )}
       >
         <div className="container-x mx-auto flex max-w-[1600px] items-center justify-between">

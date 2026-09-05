@@ -28,6 +28,7 @@ export function SmartVideo({
   lazy = true,
   pauseOffscreen = true,
   autoPlay = true,
+  muted = true,
   className,
   onReady,
   ...rest
@@ -72,7 +73,7 @@ export function SmartVideo({
       ref={ref}
       poster={asset.poster}
       src={attached ? asset.src : undefined}
-      muted
+      muted={muted}
       playsInline
       loop
       autoPlay={autoPlay}

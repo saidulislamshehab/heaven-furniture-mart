@@ -8,7 +8,7 @@ import { FounderSection } from '@/components/sections/FounderSection'
 import { SignatureSection } from '@/components/sections/SignatureSection'
 import { ProofSection } from '@/components/sections/ProofSection'
 import { VisitTeaserSection } from '@/components/sections/VisitTeaserSection'
-import { FinalCTASection } from '@/components/sections/FinalCTASection'
+import { SvgFollowScroll } from '@/components/ui/svg-follow-scroll'
 import { usePageMeta } from '@/lib/usePageMeta'
 
 export function HomePage({ introDone }: { introDone: boolean }) {
@@ -29,7 +29,7 @@ export function HomePage({ introDone }: { introDone: boolean }) {
       <SignatureSection />
       <ProofSection />
       <VisitTeaserSection />
-      <FinalCTASection />
+      <SvgFollowScroll />
     </>
   )
 }
