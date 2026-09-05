@@ -88,7 +88,7 @@ export function SignatureSection() {
         className="container-x mt-12 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-6 scrollbar-none select-none scroll-pl-[clamp(1.25rem,5vw,4.5rem)] lg:mt-16 lg:cursor-grab lg:active:cursor-grabbing [&>li:last-child]:mr-[clamp(1.25rem,5vw,4.5rem)]"
       >
         {featuredProducts.map((p, i) => (
-          <li key={p.slug} className="w-[72vw] shrink-0 snap-start sm:w-[44vw] lg:w-[26vw] xl:w-[22vw]">
+          <li key={p.slug} className="w-[80vw] shrink-0 snap-start sm:w-[52vw] lg:w-[34vw] xl:w-[28vw]">
             <Reveal delay={Math.min(i, 3) * 0.08}>
               <button
                 type="button"
@@ -96,14 +96,14 @@ export function SignatureSection() {
                 className="group block w-full text-left"
                 aria-label={`Request details for ${p.name}`}
               >
-                <div className="relative aspect-[4/5] overflow-hidden bg-brand-ivory-deep">
+                <div className="relative aspect-[4/3] overflow-hidden bg-brand-ivory-deep">
                   <img
                     src={p.image}
                     alt={p.name}
                     loading="lazy"
                     decoding="async"
                     draggable={false}
-                    sizes="(min-width:1280px) 22vw, (min-width:1024px) 26vw, (min-width:640px) 44vw, 72vw"
+                    sizes="(min-width:1280px) 28vw, (min-width:1024px) 34vw, (min-width:640px) 52vw, 80vw"
                     className="h-full w-full object-cover transition-transform duration-[1200ms] ease-[var(--ease-luxury)] group-hover:scale-[1.04]"
                   />
                   <span className="eyebrow absolute top-4 left-4 text-brand-ivory drop-shadow">0{i + 1}</span>

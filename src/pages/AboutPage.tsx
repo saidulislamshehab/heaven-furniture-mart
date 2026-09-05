@@ -38,8 +38,8 @@ export function AboutPage() {
         eyebrow={`Our story · Est. ${site.founded}`}
         title="Built around the way Chattogram lives."
         body="Heaven Furniture Mart began with a simple belief: furniture should be made for the room it lives in, and the people who live with it."
-        image={img.studioClassicLounge}
-        imageAlt="Classic lounge suite in the Heaven Furniture Mart studio"
+        image={img.creamClassicLounge}
+        imageAlt="Cream classic lounge set on the Heaven Furniture Mart showroom floor"
       />
 
       {/* Story */}
@@ -79,8 +79,8 @@ export function AboutPage() {
 
         <div className="container-x mx-auto mt-20 grid max-w-[1600px] grid-cols-2 gap-4 sm:gap-6 lg:mt-28 lg:grid-cols-12">
           <RevealImage
-            src={img.royalBlueSalon}
-            alt="Royal blue salon set on the showroom floor"
+            src={img.greenVelvetSet}
+            alt="Olive velvet sofa set with silver-leaf frames"
             className="col-span-2 aspect-[16/10] lg:col-span-7"
             sizes="(min-width:1024px) 58vw, 100vw"
           />
@@ -88,8 +88,8 @@ export function AboutPage() {
             <SmartVideo asset={showroomVideos.walkthrough} />
           </div>
           <RevealImage
-            src={img.greenVelvetSet}
-            alt="Olive velvet sofa set with silver-leaf frames"
+            src={img.blueModernSofa}
+            alt="Blue modern sofa with channel stitching"
             className="aspect-[4/5] lg:col-span-2"
             delay={0.15}
             sizes="(min-width:1024px) 16vw, 50vw"

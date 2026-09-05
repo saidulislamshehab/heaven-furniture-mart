@@ -34,7 +34,7 @@ export function IntroSection() {
             </Reveal>
           </div>
 
-          <div className="relative lg:col-span-5">
+          <div className="relative mb-12 lg:col-span-5 lg:mb-0">
             <RevealImage
               src={img.silverTuftedSofa}
               alt="Silver tufted sofa with a carved crest on the Heaven Furniture Mart showroom floor"

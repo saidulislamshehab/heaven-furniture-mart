@@ -102,7 +102,9 @@ export function HeroSection({ introDone }: HeroSectionProps) {
 
       <div className="container-x mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-end pt-32 pb-10 sm:pb-14">
         <motion.p {...fade(0.15)} className="eyebrow text-brand-gold-soft">
-          Bespoke furniture &amp; interior styling · {site.address.city}
+          <span className="hidden sm:inline">Bespoke furniture &amp; interior styling · </span>
+          <span className="sm:hidden">Bespoke furniture · </span>
+          {site.address.city}
         </motion.p>
 
         <h1 className="mt-5 max-w-[14ch] display-1 text-balance">
@@ -154,7 +156,8 @@ export function HeroSection({ introDone }: HeroSectionProps) {
           className="mt-12 flex items-center justify-between border-t border-brand-ivory/15 pt-5 text-brand-ivory/55 sm:mt-16"
         >
           <p className="eyebrow">
-            Est. {site.founded} · {site.address.line1}
+            Est. {site.founded}
+            <span className="hidden sm:inline"> · {site.address.line1}</span>
           </p>
           <ol className="hidden items-center gap-3 md:flex" aria-label="Hero films">
             {heroVideos.map((_, i) => (

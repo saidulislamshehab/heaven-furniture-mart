@@ -18,7 +18,7 @@ function CollectionTile({ c, className, aspect, sizes, delay = 0 }: { c: Categor
           src={c.image}
           alt=""
           className="h-full w-full"
-          imgClassName="h-full w-full object-cover object-[50%_65%] transition-transform duration-[1200ms] ease-[var(--ease-luxury)] group-hover:scale-[1.04]"
+          imgClassName="h-full w-full object-cover transition-transform duration-[1200ms] ease-[var(--ease-luxury)] group-hover:scale-[1.04]"
           sizes={sizes}
           delay={delay}
         />
@@ -62,9 +62,9 @@ export function CollectionsSection() {
         </div>
 
         <div className="mt-14 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:mt-20 lg:grid-cols-12 lg:gap-y-20">
-          <CollectionTile c={living} className="sm:col-span-2 lg:col-span-7" aspect="aspect-[4/3]" sizes="(min-width:1024px) 55vw, 100vw" />
-          <CollectionTile c={bedroom} className="lg:col-span-5 lg:mt-24" aspect="aspect-[4/5]" sizes="(min-width:1024px) 38vw, 50vw" delay={0.1} />
-          <CollectionTile c={dining} className="lg:col-span-5" aspect="aspect-square" sizes="(min-width:1024px) 38vw, 50vw" />
+          <CollectionTile c={living} className="sm:col-span-2 lg:col-span-7" aspect="aspect-[16/10]" sizes="(min-width:1024px) 55vw, 100vw" />
+          <CollectionTile c={bedroom} className="lg:col-span-5 lg:mt-24" aspect="aspect-[4/3]" sizes="(min-width:1024px) 38vw, 50vw" delay={0.1} />
+          <CollectionTile c={dining} className="lg:col-span-5" aspect="aspect-[4/3]" sizes="(min-width:1024px) 38vw, 50vw" />
           <CollectionTile c={office} className="lg:col-span-4 lg:mt-20" aspect="aspect-[4/5]" sizes="(min-width:1024px) 30vw, 50vw" delay={0.1} />
 
           <Link

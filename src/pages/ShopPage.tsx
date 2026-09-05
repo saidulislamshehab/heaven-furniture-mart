@@ -21,7 +21,7 @@ function ProductCard({ p, onOpen, index }: { p: Product; onOpen: () => void; ind
   return (
     <Reveal delay={Math.min(index % 3, 2) * 0.08} once>
       <button type="button" onClick={onOpen} className="group block w-full text-left" aria-label={`Quick view: ${p.name}`}>
-        <div className="relative aspect-[4/5] overflow-hidden bg-brand-ivory-deep">
+        <div className="relative aspect-[5/4] overflow-hidden bg-brand-ivory-deep">
           <img
             src={p.image}
             alt={p.name}
@@ -56,7 +56,7 @@ function QuickView({ product, onClose }: { product: Product | null; onClose: () 
       <DialogContent className="w-[calc(100%-1.5rem)] max-w-4xl gap-0 overflow-hidden rounded-sm border-0 bg-brand-ivory p-0 text-brand-brown sm:max-w-4xl [&>button]:top-3 [&>button]:right-3 [&>button]:bg-brand-ivory/80 [&>button]:text-brand-brown">
         {product && (
           <div className="grid max-h-[90dvh] overflow-y-auto sm:grid-cols-2 sm:overflow-hidden">
-            <div className="aspect-[4/5] bg-brand-ivory-deep sm:aspect-auto sm:max-h-[90dvh]">
+            <div className="aspect-[5/4] bg-brand-ivory-deep sm:aspect-auto sm:max-h-[90dvh]">
               <img src={product.image} alt={product.name} className="h-full w-full object-cover" />
             </div>
             <div className="flex flex-col p-7 sm:p-10">
@@ -74,11 +74,10 @@ function QuickView({ product, onClose }: { product: Product | null; onClose: () 
                   <li className="flex gap-3"><span className="text-brand-gold">—</span> Delivery &amp; installation included</li>
                 </ul>
               </div>
-              <div className="mt-auto flex flex-col gap-3 pt-10 sm:flex-row">
+              <div className="mt-auto flex flex-col gap-3 pt-10">
                 <Button
                   variant="ink"
                   size="pill"
-                  className="flex-1"
                   onClick={() => {
                     onClose()
                     open({ room: cat?.name, piece: product.name })
@@ -86,7 +85,7 @@ function QuickView({ product, onClose }: { product: Product | null; onClose: () 
                 >
                   Request details <ArrowUpRight />
                 </Button>
-                <Button asChild variant="outline-dark" size="pill" className="flex-1">
+                <Button asChild variant="outline-dark" size="pill">
                   <Link to="/visit">See it in the showroom</Link>
                 </Button>
               </div>
@@ -218,7 +217,7 @@ export function ShopPage() {
                 animate={{ opacity: 1 }}
                 exit={reduce ? undefined : { opacity: 0 }}
                 transition={{ duration: 0.35, ease: luxuryEase }}
-                className="mt-10 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 xl:grid-cols-3"
+                className="mt-10 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3"
               >
                 {list.map((p, i) => (
                   <li key={p.slug}>

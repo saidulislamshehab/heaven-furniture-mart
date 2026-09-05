@@ -29,7 +29,7 @@ export function FinalCTASection({
         alt=""
         loading="lazy"
         decoding="async"
-        className="absolute inset-0 -z-10 h-full w-full object-cover opacity-60"
+        className="absolute inset-0 -z-10 h-full w-full object-cover object-[50%_70%] opacity-60"
         initial={reduce ? false : { scale: 1.12 }}
         whileInView={{ scale: 1 }}
         viewport={{ once: true }}

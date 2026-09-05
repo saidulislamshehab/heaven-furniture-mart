@@ -90,7 +90,7 @@ export function BespokeSection() {
 
         <div className="mt-16 grid gap-10 lg:mt-24 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-6 lg:order-2">
-            <div className="sticky top-24 aspect-[4/5] overflow-hidden bg-brand-teal sm:aspect-[5/4] lg:aspect-[4/5]">
+            <div className="sticky top-24 aspect-[16/10] overflow-hidden bg-brand-teal sm:aspect-[5/4] lg:aspect-[4/5]">
               <AnimatePresence mode="sync" initial={false}>
                 <motion.img
                   key={steps[active].image}
@@ -124,7 +124,7 @@ export function BespokeSection() {
                 data-index={i}
                 className={cn(
                   'group border-t border-brand-ivory/10 py-9 transition-opacity duration-700 first:border-t-0 lg:py-14',
-                  active === i ? 'opacity-100' : 'opacity-40 lg:hover:opacity-70'
+                  active === i ? 'opacity-100' : 'lg:opacity-40 lg:hover:opacity-70'
                 )}
               >
                 <button
