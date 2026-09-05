@@ -164,7 +164,7 @@ export function Navbar() {
                                   onClick={() => setMenuOpen(false)}
                                   className={({ isActive }) =>
                                     cn(
-                                      'group flex items-baseline gap-4 py-2 font-serif text-[clamp(2.5rem,10vw,4.5rem)] leading-none tracking-tight transition-colors',
+                                      'group flex items-baseline gap-4 py-2 font-serif text-[length:clamp(2.5rem,10vw,4.5rem)] leading-none tracking-tight transition-colors',
                                       isActive ? 'text-brand-ivory' : 'text-brand-ivory/55 hover:text-brand-ivory'
                                     )
                                   }

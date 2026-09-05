@@ -34,7 +34,7 @@ export function FounderSection({ compact = false }: { compact?: boolean }) {
               <span aria-hidden className="block font-serif text-7xl leading-[0.5] text-brand-gold">
                 “
               </span>
-              <p className="mt-2 font-serif text-[clamp(1.6rem,2.6vw,2.5rem)] leading-[1.25] text-brand-ivory/95">
+              <p className="mt-2 font-serif text-[length:clamp(1.6rem,2.6vw,2.5rem)] leading-[1.25] text-brand-ivory/95">
                 {site.founderQuote}
               </p>
               <footer className="mt-8 flex flex-col gap-1">

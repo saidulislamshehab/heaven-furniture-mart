@@ -46,7 +46,7 @@ export function ProofSection() {
 
         <Reveal delay={0.15} className="flex flex-col justify-center lg:col-span-6 lg:col-start-7">
           <figure className="border-l border-brand-gold/60 pl-8 sm:pl-12">
-            <blockquote className="font-serif text-[clamp(1.75rem,3.2vw,3rem)] leading-[1.2] text-brand-ivory/95">
+            <blockquote className="font-serif text-[length:clamp(1.75rem,3.2vw,3rem)] leading-[1.2] text-brand-ivory/95">
               “{review.quote}”
             </blockquote>
             <figcaption className="mt-8">
