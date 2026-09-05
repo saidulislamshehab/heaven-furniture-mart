@@ -13,11 +13,13 @@ This document outlines the configured skills, libraries, animation routers, perf
 | `frontend-developer` | Core React 19 + TypeScript + Tailwind CSS v4 + shadcn/ui engineering, modular architecture, custom hooks, and type safety. | When building components, structuring props, state management, and assembling page sections. |
 | `design-system` | Multi-tiered design token architecture (primitive → semantic → component), CSS variables, and spacing rhythm. | When defining or refining CSS variables, typography tokens, or theme tokens. |
 | `web-animation-router` | Decision matrix between CSS transitions, Motion (`motion/react`), GSAP ScrollTrigger, and Lenis smooth scrolling. | When planning and implementing any motion, scroll reveal, pin animation, or micro-interaction. |
-| `image-optimization` | Media asset pipeline, aspect-ratio containers, zero CLS, WebP/AVIF formatting, responsive image sizes, and blur placeholders. | When embedding or optimizing photography, showroom visuals, and texture imagery. |
-| `web-performance-optimization` | Core Web Vitals (LCP < 1.8s, INP < 100ms, CLS = 0), bundle optimization, tree-shaking, and avoiding layout thrashing. | When evaluating page load speed, rendering budgets, and memory management. |
+| `web-performance-optimization` | Core Web Vitals (LCP < 1.8s, INP < 100ms, CLS = 0), image/media pipeline (AVIF/WebP, aspect-ratio, lazy loading, preload), bundle optimization, and avoiding layout thrashing. | When embedding media, evaluating page load speed, rendering budgets, and bundle size. |
+| `responsive-design` | Mobile-first breakpoints, fluid type, grids, mobile nav, touch targets, container queries. | When laying out sections or reviewing at 375/390/768/1440. |
+| `accessibility` | WCAG 2.2 AA: landmarks, keyboard, focus, dialogs, forms, contrast, reduced motion. | When building/reviewing any interactive component or auditing a11y. |
+| `ui-states-and-ux-writing` | Loading/empty/error/success/disabled states, form UX, button labels, error copy. | When building the consultation form, CTAs, dialogs, or any user-facing copy. |
 | `webapp-testing` | Playwright end-to-end testing, cross-breakpoint visual QA (Mobile 375px/390px, Tablet 768px, Desktop 1440px), and interaction testing. | When verifying button actions, navigation anchors, modal dialogs, and responsive viewports. |
 | `verification-before-completion` | Mandatory quality gate checklist ensuring type checks, lint checks, build checks, and design fidelity before task completion. | Before completing any feature, phase, or milestone. |
-| `ui-styling` | Styling patterns for shadcn/ui, Radix UI primitives, and Tailwind utility systems. | When styling atomic controls, states, and accessibility focus rings. |
+| `shadcn` | Official shadcn/ui skill: reads `components.json`, CLI (`search`, `add`, `docs`), composition rules, semantic colors, theming, Radix APIs. | When adding, styling, or composing shadcn components and variants. |
 | `brand` | Brand voice, messaging frameworks, and core tone consistency ("Designed. Crafted. Customized."). | When crafting copy, headlines, micro-copy, and brand identity elements. |
 
 ---
