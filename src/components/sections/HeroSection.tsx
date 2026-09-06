@@ -22,10 +22,9 @@ function useStillMedia() {
   return still
 }
 
-/** Plays the hero films in sequence with a slow cross-fade; a single loop on small screens to save data. */
+/** Plays the hero films in sequence with a slow cross-fade across all devices including mobile. */
 function HeroFilm({ active, onAdvance }: { active: number; onAdvance: () => void }) {
   const still = useStillMedia()
-  const [single] = useState(() => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches)
   const refs = useRef<(HTMLVideoElement | null)[]>([])
 
   useEffect(() => {
@@ -45,11 +44,9 @@ function HeroFilm({ active, onAdvance }: { active: number; onAdvance: () => void
     return <img src={heroVideos[0].poster} alt="" className="absolute inset-0 h-full w-full object-cover" fetchPriority="high" />
   }
 
-  const list = single ? heroVideos.slice(0, 1) : heroVideos
-
   return (
     <>
-      {list.map((v, i) => (
+      {heroVideos.map((v, i) => (
         <video
           key={v.src}
           ref={(el) => {
@@ -60,9 +57,8 @@ function HeroFilm({ active, onAdvance }: { active: number; onAdvance: () => void
           muted
           playsInline
           autoPlay={i === 0}
-          loop={single}
-          preload={i === 0 ? 'auto' : i === (active + 1) % list.length ? 'auto' : 'none'}
-          onEnded={single ? undefined : onAdvance}
+          preload={i === 0 || i === active || i === (active + 1) % heroVideos.length ? 'auto' : 'none'}
+          onEnded={onAdvance}
           aria-hidden
           tabIndex={-1}
           className={cn(
@@ -99,6 +95,15 @@ export function HeroSection({ introDone }: HeroSectionProps) {
   const { open } = useConsultation()
   const reduce = useReducedMotion()
   const [active, setActive] = useState(0)
+
+  useEffect(() => {
+    // Keep cycling all 5 films smoothly across mobile and desktop
+    const timer = setInterval(() => {
+      setActive((a) => (a + 1) % heroVideos.length)
+    }, 10_000)
+    return () => clearInterval(timer)
+  }, [active])
+
   const ref = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
   const textY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 120])
@@ -179,29 +184,28 @@ export function HeroSection({ introDone }: HeroSectionProps) {
             Est. {site.founded}
             <span className="hidden sm:inline"> · {site.address.line1}</span>
           </p>
-          <ol className="hidden items-center gap-3 md:flex" aria-label="Hero films">
+          <ol className="flex items-center gap-2 sm:gap-3" aria-label="Hero films">
             {heroVideos.map((_, i) => (
-              <li key={i} className="flex items-center gap-2">
+              <li key={i} className="flex items-center">
                 <button
                   type="button"
                   onClick={() => setActive(i)}
-                  className="group flex items-center py-2 focus:outline-none"
+                  className="group flex items-center py-2 px-1 focus:outline-none"
                   aria-label={`Switch to film ${i + 1}`}
                 >
                   <span
                     className={cn(
                       'block h-px transition-all duration-700',
-                      i === active ? 'w-10 bg-brand-gold' : 'w-5 bg-brand-ivory/30 group-hover:bg-brand-ivory/70'
+                      i === active ? 'w-7 sm:w-10 bg-brand-gold' : 'w-3.5 sm:w-5 bg-brand-ivory/30 group-hover:bg-brand-ivory/70'
                     )}
                   />
                 </button>
               </li>
             ))}
-            <li className="eyebrow ml-1 tabular-nums">
+            <li className="eyebrow ml-1 tabular-nums text-xs sm:text-sm">
               0{active + 1} / 0{heroVideos.length}
             </li>
           </ol>
-          <p className="eyebrow md:hidden">{site.tagline}</p>
         </motion.div>
       </motion.div>
 

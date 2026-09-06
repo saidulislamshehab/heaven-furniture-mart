@@ -1,4 +1,4 @@
-import { AssistantError, askAssistant, parseMessages } from './_lib/assistant.ts'
+import { AssistantError, askAssistant, parseMessages } from './_lib/assistant'
 
 const FRIENDLY_ERROR =
   "Sorry, I'm having trouble responding right now. Please try again in a moment or contact Heaven Furniture Mart directly at +880 1960-481983."
