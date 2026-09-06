@@ -1,10 +1,12 @@
-import { Suspense, useLayoutEffect } from 'react'
+import { Suspense, lazy, useLayoutEffect } from 'react'
 import { Outlet, useLocation } from 'react-router'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { luxuryEase } from '@/components/common/Reveal'
 import { scrollToHash, scrollToTop } from '@/lib/scroll'
+
+const AssistantWidget = lazy(() => import('@/components/assistant/AssistantWidget'))
 
 function ScrollManager() {
   const { pathname, hash } = useLocation()
@@ -54,6 +56,9 @@ export function RootLayout() {
           <Footer />
         </motion.div>
       </AnimatePresence>
+      <Suspense fallback={null}>
+        <AssistantWidget />
+      </Suspense>
     </div>
   )
 }
