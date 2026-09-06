@@ -147,7 +147,8 @@
   #root {
     width: 100%;
     min-height: 100vh;
-    overflow-x: hidden;
+    /* clip (not hidden) so #root never becomes a scroll container during page transitions */
+    overflow-x: clip;
     display: flex;
     flex-direction: column;
   }

@@ -9,6 +9,7 @@ const videos = [
   ['videos/hero/hero-penthouse.mp4', 'images/posters/hero-penthouse.jpg', 1.5],
   ['videos/hero/hero-dining-cabinet.mp4', 'images/posters/hero-dining-cabinet.jpg', 1.5],
   ['videos/hero/hero-penthouse2.mp4', 'images/posters/hero-penthouse2.jpg', 1.5],
+  ['videos/hero/hero-sofa.mp4', 'images/posters/hero-sofa.jpg', 1.5],
   ['videos/workshop/form-cnc-cut.mp4', 'images/posters/form-cnc-cut.jpg', 2],
   ['videos/workshop/craft-carving.mp4', 'images/posters/craft-carving.jpg', 3],
   ['videos/workshop/finish-gilded-detail.mp4', 'images/posters/finish-gilded-detail.jpg', 3],

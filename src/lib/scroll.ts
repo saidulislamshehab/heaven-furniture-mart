@@ -1,4 +1,5 @@
 import type Lenis from 'lenis'
+import type { MouseEvent } from 'react'
 
 let instance: Lenis | null = null
 
@@ -20,6 +21,13 @@ export function lockScroll(locked: boolean) {
 export function scrollToTop(immediate = true) {
   if (instance) instance.scrollTo(0, { immediate })
   else window.scrollTo({ top: 0, behavior: immediate ? 'auto' : 'smooth' })
+}
+
+/** Smoothly return to the top when a same-route link (Home/logo) is clicked. */
+export function scrollToTopIfSameRoute(e: MouseEvent, currentPath: string, to = '/') {
+  if (currentPath !== to) return
+  e.preventDefault()
+  scrollToTop(false)
 }
 
 export function scrollToHash(hash: string) {

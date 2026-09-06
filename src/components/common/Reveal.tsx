@@ -1,12 +1,21 @@
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { motion, useReducedMotion, type HTMLMotionProps } from 'motion/react'
 
 export const luxuryEase = [0.16, 1, 0.3, 1] as const
 
+/** Reveal travel scales down on phones so motion feels lighter, not like a shrunk desktop. */
+function useMotionScale() {
+  const [scale] = useState(() => {
+    if (typeof window === 'undefined') return 1
+    return window.matchMedia('(max-width: 767px)').matches ? 0.5 : 1
+  })
+  return scale
+}
+
 interface RevealProps extends HTMLMotionProps<'div'> {
   children: ReactNode
   delay?: number
-  /** vertical offset in px */
+  /** vertical offset in px (desktop); halved on mobile */
   y?: number
   once?: boolean
 }
@@ -14,9 +23,10 @@ interface RevealProps extends HTMLMotionProps<'div'> {
 /** Fade-up on scroll. Transform/opacity only; disabled for reduced motion. */
 export function Reveal({ children, delay = 0, y = 28, once = true, ...props }: RevealProps) {
   const reduce = useReducedMotion()
+  const scale = useMotionScale()
   return (
     <motion.div
-      initial={reduce ? false : { opacity: 0, y }}
+      initial={reduce ? false : { opacity: 0, y: y * scale }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once, margin: '0px 0px -12% 0px' }}
       transition={{ duration: 1, delay, ease: luxuryEase }}

@@ -1,4 +1,4 @@
-import { Suspense, lazy, useLayoutEffect } from 'react'
+import { Suspense, lazy, useLayoutEffect, useState } from 'react'
 import { Outlet, useLocation } from 'react-router'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { Navbar } from '@/components/layout/Navbar'
@@ -28,6 +28,12 @@ function RouteFallback() {
 export function RootLayout() {
   const location = useLocation()
   const reduce = useReducedMotion()
+  // `AnimatePresence initial={false}` would silence every descendant's `initial` (hero, reveals) on
+  // first load, so only the very first route mounts with `initial={false}` on the wrapper.
+  const [firstPath] = useState(location.pathname)
+  const [navigated, setNavigated] = useState(false)
+  if (!navigated && location.pathname !== firstPath) setNavigated(true)
+  const skipEnter = !navigated && location.pathname === firstPath
 
   return (
     <div className="relative flex min-h-screen w-full flex-col bg-brand-teal-deep font-sans text-brand-ivory antialiased">
@@ -39,11 +45,11 @@ export function RootLayout() {
       </a>
       <Navbar />
       <ScrollManager />
-      <AnimatePresence mode="wait" initial={false}>
+      <AnimatePresence mode="wait">
         <motion.div
           key={location.pathname}
           className="flex flex-1 flex-col"
-          initial={reduce ? false : { opacity: 0, y: 12 }}
+          initial={reduce || skipEnter ? false : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           exit={reduce ? undefined : { opacity: 0, y: -8 }}
           transition={{ duration: 0.45, ease: luxuryEase }}

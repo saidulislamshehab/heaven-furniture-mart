@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { Link, NavLink } from 'react-router'
+import { useEffect, useState, type MouseEvent } from 'react'
+import { Link, NavLink, useLocation } from 'react-router'
 import { Dialog as DialogPrimitive } from 'radix-ui'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { ArrowUpRight, Menu, X } from 'lucide-react'
@@ -9,7 +9,7 @@ import { useConsultation } from '@/components/common/ConsultationProvider'
 import { luxuryEase } from '@/components/common/Reveal'
 import { brandImages } from '@/data/assets'
 import { site } from '@/data/site'
-import { lockScroll } from '@/lib/scroll'
+import { lockScroll, scrollToTopIfSameRoute } from '@/lib/scroll'
 
 const navLinks = [
   { label: 'Home', to: '/' },
@@ -18,9 +18,9 @@ const navLinks = [
   { label: 'About', to: '/about' },
 ]
 
-function Wordmark({ dark }: { dark: boolean }) {
+function Wordmark({ dark, onHome }: { dark: boolean; onHome?: (e: MouseEvent) => void }) {
   return (
-    <Link to="/" className="group flex items-center gap-3" aria-label="Heaven Furniture Mart — home">
+    <Link to="/" onClick={onHome} className="group flex items-center gap-3" aria-label="Heaven Furniture Mart — home">
       <img src={brandImages.logo} alt="" width={36} height={36} className="h-8 w-auto object-contain sm:h-9" />
       <span className="flex flex-col leading-none">
         <span className={cn('font-serif text-[1.35rem] tracking-[0.14em]', dark ? 'text-brand-teal-deep' : 'text-brand-ivory')}>
@@ -40,6 +40,8 @@ export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const { open } = useConsultation()
   const reduce = useReducedMotion()
+  const { pathname } = useLocation()
+  const onHome = (e: MouseEvent) => scrollToTopIfSameRoute(e, pathname)
 
   useEffect(() => {
     let lastY = window.scrollY
@@ -80,7 +82,7 @@ export function Navbar() {
         )}
       >
         <div className="container-x mx-auto flex max-w-[1600px] items-center justify-between">
-          <Wordmark dark={dark} />
+          <Wordmark dark={dark} onHome={onHome} />
 
           <nav aria-label="Primary" className="hidden lg:block">
             <ul className="flex items-center gap-9">
@@ -89,6 +91,7 @@ export function Navbar() {
                   <NavLink
                     to={l.to}
                     end={l.to === '/'}
+                    onClick={l.to === '/' ? onHome : undefined}
                     className={({ isActive }) =>
                       cn(
                         'eyebrow relative py-2 transition-colors duration-300',
@@ -153,7 +156,13 @@ export function Navbar() {
                       >
                         <DialogPrimitive.Title className="sr-only">Menu</DialogPrimitive.Title>
                         <div className="container-x flex items-center justify-between py-5 sm:py-6">
-                          <Wordmark dark={false} />
+                          <Wordmark
+                            dark={false}
+                            onHome={(e) => {
+                              scrollToTopIfSameRoute(e, pathname)
+                              setMenuOpen(false)
+                            }}
+                          />
                           <DialogPrimitive.Close asChild>
                             <button
                               type="button"
@@ -177,7 +186,10 @@ export function Navbar() {
                                 <NavLink
                                   to={l.to}
                                   end={l.to === '/'}
-                                  onClick={() => setMenuOpen(false)}
+                                  onClick={(e) => {
+                                    if (l.to === '/') scrollToTopIfSameRoute(e, pathname)
+                                    setMenuOpen(false)
+                                  }}
                                   className={({ isActive }) =>
                                     cn(
                                       'group flex items-baseline gap-4 py-2 font-serif text-[length:clamp(2.5rem,10vw,4.5rem)] leading-none tracking-tight transition-colors',

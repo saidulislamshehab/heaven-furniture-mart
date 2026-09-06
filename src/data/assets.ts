@@ -11,6 +11,7 @@ export const heroVideos: VideoAsset[] = [
   { src: '/videos/hero/hero-penthouse.mp4', poster: '/images/posters/hero-penthouse.jpg', orientation: 'landscape', durationSec: 10 },
   { src: '/videos/hero/hero-dining-cabinet.mp4', poster: '/images/posters/hero-dining-cabinet.jpg', orientation: 'landscape', durationSec: 10 },
   { src: '/videos/hero/hero-penthouse2.mp4', poster: '/images/posters/hero-penthouse2.jpg', orientation: 'landscape', durationSec: 10 },
+  { src: '/videos/hero/hero-sofa.mp4', poster: '/images/posters/hero-sofa.jpg', orientation: 'landscape', durationSec: 10 },
 ]
 
 export const workshopFilms = [
