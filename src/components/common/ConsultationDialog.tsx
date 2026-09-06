@@ -33,7 +33,7 @@ interface FormState {
 const emptyForm: FormState = { name: '', phone: '', room: categories[0].name, message: '' }
 
 const fieldClass =
-  'h-11 rounded-none border-0 border-b border-brand-ivory/25 bg-transparent px-0 text-base text-brand-ivory placeholder:text-brand-ivory/35 focus-visible:border-brand-gold focus-visible:ring-0 md:text-[0.95rem]'
+  'h-11 rounded-none border-0 border-b border-brand-brown/20 bg-transparent px-0 text-base text-brand-brown placeholder:text-brand-stone/55 focus-visible:border-brand-gold focus-visible:ring-0 md:text-[0.95rem]'
 
 function buildMessage(f: FormState) {
   const lines = [
@@ -51,7 +51,7 @@ export function ConsultationDialog({ open, onOpenChange, prefill }: Consultation
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton
-        className="max-h-[92dvh] w-[calc(100%-1.5rem)] max-w-lg overflow-y-auto rounded-sm border border-brand-gold/25 bg-brand-teal-deep p-7 text-brand-ivory shadow-2xl sm:max-w-lg sm:p-10 [&>button]:text-brand-ivory/60 [&>button:hover]:text-brand-ivory"
+        className="max-h-[92dvh] w-[calc(100%-1.5rem)] max-w-lg overflow-y-auto rounded-sm border border-brand-gold/25 bg-brand-ivory p-7 text-brand-brown shadow-2xl sm:max-w-lg sm:p-10 [&>button]:text-brand-brown/50 [&>button:hover]:text-brand-brown"
       >
         <ConsultationBody prefill={prefill} />
       </DialogContent>
@@ -98,7 +98,7 @@ function ConsultationBody({ prefill }: { prefill?: ConsultationPrefill }) {
               <DialogTitle className="font-serif text-3xl leading-tight sm:text-4xl">
                 Your message is ready.
               </DialogTitle>
-              <DialogDescription className="text-base leading-relaxed text-brand-ivory/70">
+              <DialogDescription className="text-base leading-relaxed text-brand-stone">
                 We opened WhatsApp with your details filled in. If it didn't appear, use the button
                 below — or call us directly. We reply during showroom hours.
               </DialogDescription>
@@ -109,7 +109,7 @@ function ConsultationBody({ prefill }: { prefill?: ConsultationPrefill }) {
                   <MessageCircle /> Open WhatsApp
                 </a>
               </Button>
-              <Button asChild variant="outline-light" size="pill" className="flex-1">
+              <Button asChild variant="outline-dark" size="pill" className="flex-1">
                 <a href={`tel:${site.phoneE164}`}>
                   <Phone /> {site.phoneDisplay}
                 </a>
@@ -123,7 +123,7 @@ function ConsultationBody({ prefill }: { prefill?: ConsultationPrefill }) {
               <DialogTitle className="font-serif text-3xl leading-tight sm:text-4xl">
                 Tell us about your room.
               </DialogTitle>
-              <DialogDescription className="text-[0.95rem] leading-relaxed text-brand-ivory/70">
+              <DialogDescription className="text-[0.95rem] leading-relaxed text-brand-stone">
                 A few details and we'll continue on WhatsApp — measurements, references and ideas
                 are all welcome.
               </DialogDescription>
@@ -132,7 +132,7 @@ function ConsultationBody({ prefill }: { prefill?: ConsultationPrefill }) {
             <form onSubmit={handleSubmit} noValidate className="mt-6 space-y-6">
               <div className="grid gap-6 sm:grid-cols-2">
                 <div className="space-y-1.5">
-                  <label htmlFor={`${id}-name`} className="eyebrow text-brand-ivory/60">
+                  <label htmlFor={`${id}-name`} className="eyebrow text-brand-stone">
                     Name
                   </label>
                   <Input
@@ -146,13 +146,13 @@ function ConsultationBody({ prefill }: { prefill?: ConsultationPrefill }) {
                     placeholder="Your name"
                   />
                   {errors.name && (
-                    <p id={`${id}-name-err`} role="alert" className="text-xs text-brand-gold-soft">
+                    <p id={`${id}-name-err`} role="alert" className="text-xs text-brand-gold">
                       {errors.name}
                     </p>
                   )}
                 </div>
                 <div className="space-y-1.5">
-                  <label htmlFor={`${id}-phone`} className="eyebrow text-brand-ivory/60">
+                  <label htmlFor={`${id}-phone`} className="eyebrow text-brand-stone">
                     Phone
                   </label>
                   <Input
@@ -168,7 +168,7 @@ function ConsultationBody({ prefill }: { prefill?: ConsultationPrefill }) {
                     placeholder="+880 1…"
                   />
                   {errors.phone && (
-                    <p id={`${id}-phone-err`} role="alert" className="text-xs text-brand-gold-soft">
+                    <p id={`${id}-phone-err`} role="alert" className="text-xs text-brand-gold">
                       {errors.phone}
                     </p>
                   )}
@@ -176,28 +176,28 @@ function ConsultationBody({ prefill }: { prefill?: ConsultationPrefill }) {
               </div>
 
               <div className="space-y-1.5">
-                <label htmlFor={`${id}-room`} className="eyebrow text-brand-ivory/60">
+                <label htmlFor={`${id}-room`} className="eyebrow text-brand-stone">
                   Which room?
                 </label>
                 <select
                   id={`${id}-room`}
                   value={form.room}
                   onChange={(e) => update('room')(e.target.value)}
-                  className="h-11 w-full appearance-none border-0 border-b border-brand-ivory/25 bg-transparent px-0 text-[0.95rem] text-brand-ivory outline-none focus-visible:border-brand-gold"
+                  className="h-11 w-full appearance-none border-0 border-b border-brand-brown/20 bg-transparent px-0 text-[0.95rem] text-brand-brown outline-none focus-visible:border-brand-gold"
                 >
                   {categories.map((c) => (
-                    <option key={c.id} value={c.name} className="bg-brand-teal-deep text-brand-ivory">
+                    <option key={c.id} value={c.name} className="bg-brand-ivory text-brand-brown">
                       {c.name}
                     </option>
                   ))}
-                  <option value="Full residence" className="bg-brand-teal-deep text-brand-ivory">
+                  <option value="Full residence" className="bg-brand-ivory text-brand-brown">
                     Full residence
                   </option>
                 </select>
               </div>
 
               <div className="space-y-1.5">
-                <label htmlFor={`${id}-msg`} className="eyebrow text-brand-ivory/60">
+                <label htmlFor={`${id}-msg`} className="eyebrow text-brand-stone">
                   Notes <span className="normal-case tracking-normal opacity-60">(optional)</span>
                 </label>
                 <textarea
@@ -206,16 +206,16 @@ function ConsultationBody({ prefill }: { prefill?: ConsultationPrefill }) {
                   value={form.message}
                   onChange={(e) => update('message')(e.target.value)}
                   placeholder="Room size, the piece you have in mind, a finish you love…"
-                  className="w-full resize-none border-0 border-b border-brand-ivory/25 bg-transparent px-0 py-2 text-[0.95rem] leading-relaxed text-brand-ivory outline-none placeholder:text-brand-ivory/35 focus-visible:border-brand-gold"
+                  className="w-full resize-none border-0 border-b border-brand-brown/20 bg-transparent px-0 py-2 text-[0.95rem] leading-relaxed text-brand-brown outline-none placeholder:text-brand-stone/55 focus-visible:border-brand-gold"
                 />
               </div>
 
               <div className="flex flex-col gap-4 pt-1 sm:flex-row sm:items-center sm:justify-between">
-                <div className="text-xs text-brand-ivory/50">
+                <div className="text-xs text-brand-stone">
                   <span className="block leading-snug">Prefer to talk?</span>
                   <a
                     href={`tel:${site.phoneE164}`}
-                    className="mt-0.5 block font-medium text-brand-ivory/85 underline-offset-4 hover:text-brand-gold hover:underline whitespace-nowrap transition-colors"
+                    className="mt-0.5 block font-medium text-brand-brown underline-offset-4 hover:text-brand-gold hover:underline whitespace-nowrap transition-colors"
                   >
                     {site.phoneDisplay}
                   </a>

@@ -1,6 +1,7 @@
 import { Reveal, RevealImage, SplitWords } from '@/components/common/Reveal'
 import { SectionLabel } from '@/components/common/SectionLabel'
-import { img } from '@/data/assets'
+import { SmartVideo } from '@/components/common/SmartVideo'
+import { img, showroomVideos } from '@/data/assets'
 import { site } from '@/data/site'
 
 const pillars = [
@@ -35,12 +36,9 @@ export function IntroSection() {
           </div>
 
           <div className="relative mb-12 lg:col-span-5 lg:mb-0">
-            <RevealImage
-              src={img.silverTuftedSofa}
-              alt="Silver tufted sofa with a carved crest on the Heaven Furniture Mart showroom floor"
-              className="aspect-[4/5] w-[78%] lg:ml-auto"
-              sizes="(min-width:1024px) 34vw, 78vw"
-            />
+            <Reveal y={0} className="aspect-[4/5] w-[78%] overflow-hidden bg-brand-ivory-deep lg:ml-auto">
+              <SmartVideo asset={showroomVideos.luxuriousModernReel} muted />
+            </Reveal>
             <RevealImage
               src={img.oliveVelvetArmchair}
               alt="Olive velvet armchair with a silver-leaf carved frame"

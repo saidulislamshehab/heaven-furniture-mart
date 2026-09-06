@@ -15,7 +15,7 @@ for (const route of routes) {
 
 test('primary CTA opens the consultation dialog and validates', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: /request a consultation/i }).first().click();
+  await page.getByRole('button', { name: /start your design|request a consultation/i }).first().click();
   const dialog = page.getByRole('dialog');
   await expect(dialog).toBeVisible();
   await expect(dialog.getByRole('heading', { name: /tell us about your room/i })).toBeVisible();

@@ -48,37 +48,34 @@ export function BespokeSection() {
   const { open } = useConsultation()
 
   return (
-    <section id="bespoke" className="bg-brand-teal-deep pt-[clamp(4.5rem,10vw,10rem)] text-brand-ivory">
+    <section id="bespoke" className="bg-brand-ivory pt-[clamp(4.5rem,10vw,10rem)] text-brand-brown">
       <div className="container-x mx-auto max-w-[1600px]">
-        <div className="grid gap-8 lg:grid-cols-12">
-          <div className="lg:col-span-7">
-            <Reveal>
-              <SectionLabel number="02">The bespoke difference</SectionLabel>
-            </Reveal>
-            <h2 className="mt-6 display-1">
-              <SplitWords text="Not off the shelf." />
-            </h2>
-          </div>
-          <Reveal delay={0.3} className="self-end lg:col-span-5">
-            <p className="max-w-md text-[1.05rem] leading-relaxed text-brand-ivory/70">
+        <div className="max-w-4xl">
+          <Reveal>
+            <SectionLabel number="02">The bespoke difference</SectionLabel>
+          </Reveal>
+          <h2 className="mt-6 display-1">
+            <SplitWords text="Not off the shelf." />
+          </h2>
+          <Reveal delay={0.3}>
+            <p className="mt-8 max-w-md text-[1.05rem] leading-relaxed text-brand-stone">
               Every Heaven piece begins with a room, a need and a conversation. Five steps, one team —
               from the first measurement to the last adjustment in your home.
             </p>
           </Reveal>
         </div>
-
       </div>
 
       <div className="mt-12 lg:mt-6">
-        <CircularSplitRoll items={steps} radius={420} cardSize={380} sectionHeight={95} />
+        <CircularSplitRoll items={steps} radius={420} cardSize={380} sectionHeight={95} tone="light" />
       </div>
 
       <div className="container-x mx-auto max-w-[1600px] pb-[clamp(4.5rem,10vw,10rem)]">
-        <Reveal className="mt-16 flex flex-col items-start gap-6 border-t border-brand-ivory/10 pt-10 sm:flex-row sm:items-center sm:justify-between lg:mt-24">
-          <p className="max-w-md font-serif text-2xl leading-snug text-brand-ivory/85 sm:text-3xl">
+        <Reveal className="mt-16 flex flex-col items-start gap-6 border-t border-brand-brown/10 pt-10 sm:flex-row sm:items-center sm:justify-between lg:mt-24">
+          <p className="max-w-md font-serif text-2xl leading-snug text-brand-brown/85 sm:text-3xl">
             Free design consultation, delivery and installation are built in.
           </p>
-          <Button variant="ivory" size="pill" onClick={() => open()}>
+          <Button variant="ink" size="pill" onClick={() => open()}>
             Start a Free Consultation <ArrowUpRight />
           </Button>
         </Reveal>

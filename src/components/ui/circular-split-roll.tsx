@@ -33,6 +33,8 @@ export interface CircularSplitRollProps {
   imageSideOpacity?: number
   /** Called whenever the focused item changes (desktop only). */
   onFocusChange?: (index: number) => void
+  /** Surface the roll sits on; adjusts muted text, hairlines and card shadows. */
+  tone?: 'dark' | 'light'
 }
 
 const DESKTOP_WIDTH = 1200
@@ -80,12 +82,17 @@ export default function CircularSplitRoll({
   imageSideScale = 0.62,
   imageSideOpacity = 0.2,
   onFocusChange,
+  tone = 'dark',
 }: CircularSplitRollProps) {
   const rootRef = useRef<HTMLDivElement | null>(null)
   const stickyRef = useRef<HTMLDivElement | null>(null)
   const progressRef = useRef(0)
   const focusedRef = useRef(0)
   const reduce = usePrefersReducedMotion()
+  const light = tone === 'light'
+  const mutedText = light ? 'text-brand-stone' : 'text-brand-ivory/70'
+  const hairline = light ? 'border-brand-brown/10' : 'border-brand-ivory/10'
+  const cardShadow = light ? 'shadow-[0_40px_80px_-30px_rgba(43,33,28,0.35)]' : 'shadow-[0_40px_80px_-30px_rgba(13,20,19,0.8)]'
 
   const safeItems = useMemo(
     () =>
@@ -157,8 +164,6 @@ export default function CircularSplitRoll({
               xPercent: -50,
               yPercent: -50,
             })
-            const frame = node.querySelector<HTMLElement>('.csr-frame')
-            if (frame) gsap.set(frame, { opacity: s })
             const img = node.querySelector<HTMLElement>('img')
             if (img) gsap.set(img, { scale: gsap.utils.interpolate(1.12, 1, s) })
           })
@@ -226,7 +231,7 @@ export default function CircularSplitRoll({
                       {it.title}
                     </span>
                     {it.body && (
-                      <p className="csr-caption col-start-2 mt-5 w-[min(28rem,30vw)] whitespace-normal text-[0.98rem] leading-relaxed text-brand-ivory/70">
+                      <p className={cn('csr-caption col-start-2 mt-5 w-[min(28rem,30vw)] whitespace-normal text-[0.98rem] leading-relaxed', mutedText)}>
                         {it.body}
                       </p>
                     )}
@@ -243,7 +248,7 @@ export default function CircularSplitRoll({
                     key={it.id}
                     className="csr-card absolute top-0 left-0 h-(--csr-card-h) w-(--csr-card-w) opacity-0 will-change-[transform,opacity]"
                   >
-                    <div className="relative h-full w-full overflow-hidden bg-brand-teal shadow-[0_40px_80px_-30px_rgba(13,20,19,0.8)]">
+                    <div className={cn('relative h-full w-full overflow-hidden bg-brand-teal', cardShadow)}>
                       <img
                         src={it.image}
                         alt={it.alt}
@@ -257,8 +262,6 @@ export default function CircularSplitRoll({
                         {it.index} — {it.title}
                       </span>
                     </div>
-                    {/* Hairline frame that only shows at focus */}
-                    <span aria-hidden className="csr-frame pointer-events-none absolute -inset-3 border border-brand-gold/40 opacity-0" />
                   </div>
                 ))}
               </div>
@@ -272,7 +275,7 @@ export default function CircularSplitRoll({
         {safeItems.map((it, i) => (
           <li
             key={it.id}
-            className="grid gap-6 border-t border-brand-ivory/10 py-10 first:border-t-0 first:pt-0 sm:grid-cols-12 sm:gap-8"
+            className={cn('grid gap-6 border-t py-10 first:border-t-0 first:pt-0 sm:grid-cols-12 sm:gap-8', hairline)}
           >
             <div className="sm:col-span-5">
               <div className="relative aspect-[4/5] overflow-hidden bg-brand-teal">
@@ -285,7 +288,7 @@ export default function CircularSplitRoll({
                 <span className="font-serif text-2xl text-brand-gold">{it.index}</span>
                 <h3 className="font-serif text-4xl leading-none sm:text-5xl">{it.title}</h3>
               </div>
-              {it.body && <p className="mt-5 max-w-md text-[0.98rem] leading-relaxed text-brand-ivory/70">{it.body}</p>}
+              {it.body && <p className={cn('mt-5 max-w-md text-[0.98rem] leading-relaxed', mutedText)}>{it.body}</p>}
               {i === total - 1 ? null : <span aria-hidden className="mt-8 hidden h-px w-12 bg-brand-gold/50 sm:block" />}
             </div>
           </li>

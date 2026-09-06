@@ -8,6 +8,10 @@ interface SmartVideoProps extends Omit<VideoHTMLAttributes<HTMLVideoElement>, 's
   lazy?: boolean
   /** Pause when scrolled out of view (default true). */
   pauseOffscreen?: boolean
+  /** Playback volume 0–1 when unmuted. */
+  volume?: number
+  /** Fires if the browser refuses unmuted autoplay; the video falls back to muted playback. */
+  onAutoplayBlocked?: () => void
   /** Optional callback when the media is ready to play. */
   onReady?: () => void
 }
@@ -29,6 +33,8 @@ export function SmartVideo({
   pauseOffscreen = true,
   autoPlay = true,
   muted = true,
+  volume,
+  onAutoplayBlocked,
   className,
   onReady,
   ...rest
@@ -39,12 +45,24 @@ export function SmartVideo({
 
   useEffect(() => {
     const el = ref.current
+    if (el && volume !== undefined) el.volume = volume
+  }, [volume])
+
+  useEffect(() => {
+    const el = ref.current
     if (!el || still) return
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setAttached(true)
-          if (autoPlay) el.play().catch(() => {})
+          if (autoPlay) {
+            el.play().catch(() => {
+              if (el.muted) return
+              el.muted = true
+              el.play().catch(() => {})
+              onAutoplayBlocked?.()
+            })
+          }
         } else if (pauseOffscreen && !el.paused) {
           el.pause()
         }
@@ -53,7 +71,7 @@ export function SmartVideo({
     )
     io.observe(el)
     return () => io.disconnect()
-  }, [autoPlay, pauseOffscreen, still])
+  }, [autoPlay, pauseOffscreen, still, onAutoplayBlocked])
 
   if (still) {
     return (

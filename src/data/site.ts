@@ -13,8 +13,53 @@ export const site = {
   phoneE164: '+8801960481983',
   email: 'heavenfurnituremart@gmail.com',
   mapsUrl: 'https://maps.app.goo.gl/XnZzpdkLTNB9jhGP9f',
+  mapsEmbedUrl:
+    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3690.6354659037056!2d91.7930853!3d22.3296222!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30acd999401bf62b%3A0xcd9639571c8d5c27!2sHeaven%20Furniture%20Mart!5e0!3m2!1sen!2sbd!4v1788714688708!5m2!1sen!2sbd',
   mapsCoords: { lat: 22.3296222, lng: 91.7930853 },
-  googleRating: { score: 4.8, label: 'Google rating' },
+  googleRating: { score: 4.8, count: 30, label: 'Google rating' },
+  /* Public reviews from the Heaven Furniture Mart Google listing (longer ones excerpted). */
+  reviews: [
+    {
+      author: 'Jefranul Rakib',
+      rating: 5,
+      quote:
+        'I bought a living room set from Heaven Furniture, and honestly, the whole experience was amazing. The staff was incredibly helpful without being pushy, and everything arrived right on time without a single scratch.',
+    },
+    {
+      author: 'Rakibur Rahaman',
+      rating: 5,
+      quote:
+        'Now when I sit at the desk, the whole setup looks very premium and productive. The finishing, build quality, and detailing are amazing.',
+    },
+    {
+      author: 'Asraf Khan',
+      rating: 5,
+      quote:
+        'The materials are durable, the design is beautiful and the price is reasonable. The staff is friendly, helpful and delivered quickly as ordered.',
+    },
+    {
+      author: 'MRH',
+      rating: 5,
+      quote:
+        'Very good service, all the furniture has an extraordinary aesthetic design. Everyone should try buying furniture from here at least once.',
+    },
+    {
+      author: 'Sajibur Rahman',
+      rating: 5,
+      quote:
+        'The staff members are knowledgeable, friendly, and genuinely invested in helping customers find the perfect furniture for their homes.',
+    },
+    {
+      author: 'Al Mamun',
+      rating: 5,
+      quote: 'Product quality was good. And the staffs were very polite. Very recommended.',
+    },
+    {
+      author: 'Jamshed Ul',
+      rating: 5,
+      quote: 'Product was at competitive price. Satisfied with the service.',
+    },
+  ],
   social: {
     facebook: 'https://www.facebook.com/HeavenFurnitureMart',
     instagram: 'https://www.instagram.com/heaven_furniture_ltd',

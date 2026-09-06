@@ -22,17 +22,15 @@ const prep = [
 
 function MapFrame() {
   const [loaded, setLoaded] = useState(false)
-  const { lat, lng } = site.mapsCoords
-  const embed = `https://www.google.com/maps?q=${lat},${lng}&z=17&output=embed`
 
   return (
     <div className="relative aspect-[4/3] overflow-hidden bg-brand-teal sm:aspect-[16/9] lg:aspect-auto lg:h-full lg:min-h-[32rem]">
       {loaded ? (
         <iframe
           title="Map showing Heaven Furniture Mart on Agrabad Access Road, Chattogram"
-          src={embed}
+          src={site.mapsEmbedUrl}
           loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
+          referrerPolicy="strict-origin-when-cross-origin"
           allowFullScreen
           className="absolute inset-0 h-full w-full border-0 grayscale-[0.35] contrast-[1.05]"
         />

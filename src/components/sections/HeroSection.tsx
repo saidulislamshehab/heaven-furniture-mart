@@ -157,15 +157,15 @@ export function HeroSection({ introDone }: HeroSectionProps) {
           </motion.p>
 
           <motion.div {...fade(1.3)} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
-            <Button variant="gold" size="pill" onClick={() => open()}>
-              Request a Consultation <ArrowUpRight />
+            <Button variant="ivory" size="pill" onClick={() => open()}>
+              Start Your Design <ArrowUpRight />
             </Button>
             <button
               type="button"
-              onClick={() => scrollToHash('#craft')}
+              onClick={() => scrollToHash('#collections')}
               className="group eyebrow inline-flex items-center gap-2 self-start py-2 text-brand-ivory/80 transition-colors hover:text-brand-ivory sm:self-auto"
             >
-              Explore our craft
+              Browse the collections
               <ArrowDown className="size-3.5 transition-transform duration-500 group-hover:translate-y-1" />
             </button>
           </motion.div>

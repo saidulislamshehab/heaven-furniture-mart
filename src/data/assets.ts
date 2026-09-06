@@ -8,10 +8,10 @@ export interface VideoAsset {
 
 export const heroVideos: VideoAsset[] = [
   { src: '/videos/hero/hero-egg-chair.mp4', poster: '/images/posters/hero-egg-chair.jpg', orientation: 'landscape', durationSec: 10 },
+  { src: '/videos/hero/hero-sofa.mp4', poster: '/images/posters/hero-sofa.jpg', orientation: 'landscape', durationSec: 10 },
   { src: '/videos/hero/hero-penthouse.mp4', poster: '/images/posters/hero-penthouse.jpg', orientation: 'landscape', durationSec: 10 },
   { src: '/videos/hero/hero-dining-cabinet.mp4', poster: '/images/posters/hero-dining-cabinet.jpg', orientation: 'landscape', durationSec: 10 },
   { src: '/videos/hero/hero-penthouse2.mp4', poster: '/images/posters/hero-penthouse2.jpg', orientation: 'landscape', durationSec: 10 },
-  { src: '/videos/hero/hero-sofa.mp4', poster: '/images/posters/hero-sofa.jpg', orientation: 'landscape', durationSec: 10 },
 ]
 
 export const workshopFilms = [
@@ -46,6 +46,7 @@ export const showroomVideos = {
   blueChairs: { src: '/videos/showroom/showroom-blue-chairs.mp4', poster: '/images/posters/showroom-blue-chairs.jpg', orientation: 'portrait', durationSec: 22 } satisfies VideoAsset,
   oliveSofaDetail: { src: '/videos/showroom/detail-olive-sofa.mp4', poster: '/images/posters/detail-olive-sofa.jpg', orientation: 'portrait', durationSec: 40 } satisfies VideoAsset,
   sofaFabricDetail: { src: '/videos/showroom/detail-sofa-fabric.mp4', poster: '/images/posters/detail-sofa-fabric.jpg', orientation: 'landscape', durationSec: 10 } satisfies VideoAsset,
+  luxuriousModernReel: { src: '/videos/showroom/reel-luxurious-modern.mp4', poster: '/images/posters/reel-luxurious-modern.jpg', orientation: 'portrait', durationSec: 12 } satisfies VideoAsset,
 }
 
 export const brandImages = {
