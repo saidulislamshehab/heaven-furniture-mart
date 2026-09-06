@@ -8,10 +8,6 @@ interface SmartVideoProps extends Omit<VideoHTMLAttributes<HTMLVideoElement>, 's
   lazy?: boolean
   /** Pause when scrolled out of view (default true). */
   pauseOffscreen?: boolean
-  /** Playback volume 0–1 when unmuted. */
-  volume?: number
-  /** Fires if the browser refuses unmuted autoplay; the video falls back to muted playback. */
-  onAutoplayBlocked?: () => void
   /** Optional callback when the media is ready to play. */
   onReady?: () => void
 }
@@ -25,7 +21,7 @@ function prefersStill() {
 
 /**
  * Ambient video that behaves: poster first, source attached near viewport,
- * paused off-screen, and rendered as a still image for reduced-motion / data-saver users.
+ * paused off-screen, strictly muted, and rendered as a still image for reduced-motion / data-saver users.
  */
 export function SmartVideo({
   asset,
@@ -33,8 +29,6 @@ export function SmartVideo({
   pauseOffscreen = true,
   autoPlay = true,
   muted = true,
-  volume,
-  onAutoplayBlocked,
   className,
   onReady,
   ...rest
@@ -45,23 +39,13 @@ export function SmartVideo({
 
   useEffect(() => {
     const el = ref.current
-    if (el && volume !== undefined) el.volume = volume
-  }, [volume])
-
-  useEffect(() => {
-    const el = ref.current
     if (!el || still) return
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setAttached(true)
           if (autoPlay) {
-            el.play().catch(() => {
-              if (el.muted) return
-              el.muted = true
-              el.play().catch(() => {})
-              onAutoplayBlocked?.()
-            })
+            el.play().catch(() => {})
           }
         } else if (pauseOffscreen && !el.paused) {
           el.pause()
@@ -71,7 +55,7 @@ export function SmartVideo({
     )
     io.observe(el)
     return () => io.disconnect()
-  }, [autoPlay, pauseOffscreen, still, onAutoplayBlocked])
+  }, [autoPlay, pauseOffscreen, still])
 
   if (still) {
     return (
