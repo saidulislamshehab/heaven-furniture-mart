@@ -1,19 +1,40 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { Link } from 'react-router'
 import { ArrowUpRight } from 'lucide-react'
-import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Reveal, RevealImage } from '@/components/common/Reveal'
 import { SectionLabel } from '@/components/common/SectionLabel'
 import { Button } from '@/components/ui/button'
 import { brandImages } from '@/data/assets'
 import { site } from '@/data/site'
 
+gsap.registerPlugin(ScrollTrigger)
+
 export function FounderSection({ compact = false }: { compact?: boolean }) {
   const ref = useRef<HTMLElement>(null)
-  const reduce = useReducedMotion()
-  // Text drifts upward while the section crosses the viewport; progress is clamped so it rests at both ends.
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const textY = useTransform(scrollYProgress, [0, 1], [reduce ? 0 : 80, reduce ? 0 : -80])
+  const textRef = useRef<HTMLDivElement>(null)
+
+  // Text drifts upward while the section crosses the viewport and rests once it has left.
+  useEffect(() => {
+    const section = ref.current
+    const text = textRef.current
+    if (!section || !text || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        text,
+        { y: 90 },
+        {
+          y: -90,
+          ease: 'none',
+          // Measure after the pinned sections above (priority -2) have reserved their space.
+          scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: 0.8, invalidateOnRefresh: true, refreshPriority: -3 },
+        }
+      )
+    }, section)
+    ScrollTrigger.refresh()
+    return () => ctx.revert()
+  }, [])
 
   return (
     <section ref={ref} id="founder" className="section-pad overflow-hidden bg-brand-ivory text-brand-brown">
@@ -23,7 +44,7 @@ export function FounderSection({ compact = false }: { compact?: boolean }) {
             src={brandImages.founder}
             alt={`${site.founder.name}, ${site.founder.role} of Heaven Furniture Mart, speaking at the Chattogram Furniture Fair`}
             className="aspect-[4/5] w-full"
-            imgClassName="h-full w-full object-cover object-[42%_18%] saturate-[0.8] contrast-[1.04]"
+            imgClassName="h-full w-full object-cover object-[48%_30%]"
             sizes="(min-width:1024px) 40vw, 100vw"
           />
           <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[calc(100%-2.5rem)] bg-gradient-to-t from-brand-ivory/40 via-transparent to-transparent" />
@@ -33,7 +54,7 @@ export function FounderSection({ compact = false }: { compact?: boolean }) {
           </Reveal>
         </div>
 
-        <motion.div style={{ y: textY }} className="flex flex-col justify-center will-change-transform lg:col-span-6 lg:col-start-7">
+        <div ref={textRef} className="flex flex-col justify-center will-change-transform lg:col-span-6 lg:col-start-7">
           <Reveal>
             <SectionLabel number={compact ? undefined : '06'}>A word from our founder</SectionLabel>
           </Reveal>
@@ -62,7 +83,7 @@ export function FounderSection({ compact = false }: { compact?: boolean }) {
               </Button>
             </Reveal>
           )}
-        </motion.div>
+        </div>
       </div>
     </section>
   )

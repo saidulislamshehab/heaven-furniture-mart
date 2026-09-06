@@ -132,6 +132,8 @@ export function AssistantWidget() {
             key="panel"
             role="dialog"
             aria-labelledby={titleId}
+            // Lenis hijacks wheel events site-wide; opt the whole panel out so the log scrolls natively
+            data-lenis-prevent
             {...panelMotion}
             transition={{ duration: 0.3, ease: luxuryEase }}
             className={cn(

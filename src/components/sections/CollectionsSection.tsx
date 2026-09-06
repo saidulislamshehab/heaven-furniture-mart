@@ -14,7 +14,7 @@ const surfaces = [
   { bg: 'bg-brand-teal-deep', fg: 'text-brand-ivory', muted: 'text-brand-ivory/65', rule: 'border-brand-ivory/12', btn: 'ivory' },
   { bg: 'bg-brand-ivory-deep', fg: 'text-brand-brown', muted: 'text-brand-stone', rule: 'border-brand-brown/12', btn: 'ink' },
   { bg: 'bg-brand-teal', fg: 'text-brand-ivory', muted: 'text-brand-ivory/65', rule: 'border-brand-ivory/12', btn: 'ivory' },
-  { bg: 'bg-brand-ink', fg: 'text-brand-ivory', muted: 'text-brand-ivory/65', rule: 'border-brand-ivory/12', btn: 'gold' },
+  { bg: 'bg-brand-ivory', fg: 'text-brand-brown', muted: 'text-brand-stone', rule: 'border-brand-brown/12', btn: 'gold' },
 ] as const
 
 function CollectionPanel({ c, i }: { c: Category; i: number }) {

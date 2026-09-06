@@ -18,6 +18,8 @@ const socials = [
   { label: 'YouTube', href: site.social.youtube },
 ]
 
+const WORDMARK_LINE = 'FURNITURE MART'.split('')
+
 export function Footer() {
   return (
     <footer className="relative overflow-hidden bg-brand-ink text-brand-ivory">
@@ -116,14 +118,20 @@ export function Footer() {
         </div>
       </div>
 
-      <div
-        aria-hidden
-        className="pointer-events-none flex flex-col items-center select-none px-2 pb-3 text-center leading-none"
-      >
-        <span className="font-serif text-[16vw] leading-[0.8] tracking-[0.06em] text-brand-ivory/[0.035]">HEAVEN</span>
-        <span className="eyebrow mt-[0.5vw] text-[clamp(0.6rem,1.4vw,1.25rem)] tracking-[0.45em] text-brand-ivory/[0.09]">
-          Furniture Mart
-        </span>
+      <div aria-hidden className="pointer-events-none flex justify-center select-none px-2 pb-4 leading-none">
+        <div className="inline-flex flex-col">
+          <span className="font-display text-[15vw] leading-[0.85] font-medium tracking-[0.04em] text-brand-ivory/[0.09]">
+            HEAVEN
+          </span>
+          {/* Letters are spread so the line spans exactly the width of HEAVEN above */}
+          <span className="mt-[0.6vw] flex justify-between px-[0.6vw] font-display text-[clamp(0.9rem,3vw,3rem)] font-medium text-brand-ivory/35">
+            {WORDMARK_LINE.map((ch, i) => (
+              <span key={i} className={ch === ' ' ? 'w-[1.2em]' : undefined}>
+                {ch}
+              </span>
+            ))}
+          </span>
+        </div>
       </div>
     </footer>
   )
