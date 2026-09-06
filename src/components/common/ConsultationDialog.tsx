@@ -211,12 +211,15 @@ function ConsultationBody({ prefill }: { prefill?: ConsultationPrefill }) {
               </div>
 
               <div className="flex flex-col gap-4 pt-1 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-xs leading-relaxed text-brand-ivory/50">
-                  Prefer to talk?{' '}
-                  <a href={`tel:${site.phoneE164}`} className="text-brand-ivory/80 underline-offset-4 hover:underline">
+                <div className="text-xs text-brand-ivory/50">
+                  <span className="block leading-snug">Prefer to talk?</span>
+                  <a
+                    href={`tel:${site.phoneE164}`}
+                    className="mt-0.5 block font-medium text-brand-ivory/85 underline-offset-4 hover:text-brand-gold hover:underline whitespace-nowrap transition-colors"
+                  >
                     {site.phoneDisplay}
                   </a>
-                </p>
+                </div>
                 <Button type="submit" variant="gold" size="pill" className="w-full sm:w-auto">
                   Continue on WhatsApp <ArrowUpRight />
                 </Button>
