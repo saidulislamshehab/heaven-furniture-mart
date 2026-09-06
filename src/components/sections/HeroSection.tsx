@@ -137,14 +137,14 @@ export function HeroSection({ introDone }: HeroSectionProps) {
 
         {/* Layered headline: massive sans line + italic serif line, like a film title card */}
         <h1 className="mt-6 text-balance" aria-label="Furniture, crafted around you.">
-          <span className="block font-sans text-[length:clamp(2.9rem,9.6vw,9.5rem)] font-extrabold uppercase leading-[0.9] tracking-[-0.035em] text-brand-ivory">
+          <span className="block font-serif text-[length:clamp(2.5rem,6.2vw,5.5rem)] font-normal leading-[0.95] tracking-[-0.025em] text-brand-ivory">
             <Letters text="Furniture," ready={ready} delay={0.2} />
           </span>
           <span className="mt-1 flex flex-wrap items-baseline gap-x-[0.25em] sm:mt-2">
-            <span className="font-serif text-[length:clamp(2.4rem,7.4vw,7.25rem)] font-light italic leading-[0.95] tracking-[-0.015em] text-brand-ivory/90">
+            <span className="font-serif text-[length:clamp(2.5rem,6.2vw,5.5rem)] font-light italic leading-[0.95] tracking-[-0.02em] text-brand-ivory/90">
               <Letters text="crafted around" ready={ready} delay={0.5} />
             </span>
-            <span className="font-serif text-[length:clamp(2.4rem,7.4vw,7.25rem)] font-light italic leading-[0.95] tracking-[-0.015em] text-brand-gold-soft">
+            <span className="font-serif text-[length:clamp(2.5rem,6.2vw,5.5rem)] font-light italic leading-[0.95] tracking-[-0.02em] text-brand-gold-soft">
               <Letters text="you." ready={ready} delay={0.95} />
             </span>
           </span>
