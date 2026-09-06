@@ -1,5 +1,5 @@
 import { Link } from 'react-router'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUp, ArrowUpRight } from 'lucide-react'
 import { site } from '@/data/site'
 import { brandImages } from '@/data/assets'
 import { categories } from '@/data/catalog'
@@ -37,7 +37,7 @@ export function Footer() {
             <p className="eyebrow mt-6 text-brand-gold">{site.tagline}</p>
           </div>
 
-          <div className="grid gap-10 sm:grid-cols-3 lg:col-span-7">
+          <div className="grid gap-10 sm:grid-cols-[1fr_1fr_1.5fr] lg:col-span-7">
             <div>
               <h3 className="eyebrow text-brand-ivory/50">Pages</h3>
               <ul className="mt-5 space-y-3">
@@ -79,7 +79,7 @@ export function Footer() {
                   </a>
                 </p>
                 <p>
-                  <a href={`mailto:${site.email}`} className="break-all transition-colors hover:text-brand-gold-soft">
+                  <a href={`mailto:${site.email}`} className="[overflow-wrap:anywhere] transition-colors hover:text-brand-gold-soft">
                     {site.email}
                   </a>
                 </p>
@@ -109,19 +109,22 @@ export function Footer() {
           <button
             type="button"
             onClick={() => scrollToTop(false)}
-            className="eyebrow self-start text-brand-ivory/60 transition-colors hover:text-brand-gold-soft sm:self-auto"
+            className="eyebrow inline-flex items-center gap-1.5 self-start text-brand-ivory/60 transition-colors hover:text-brand-gold-soft sm:self-auto"
           >
-            Back to top ↑
+            Back to top <ArrowUp className="size-3" />
           </button>
         </div>
       </div>
 
-      <p
+      <div
         aria-hidden
-        className="pointer-events-none select-none px-2 pb-2 text-center font-serif text-[16vw] leading-[0.8] tracking-[0.06em] text-brand-ivory/[0.035]"
+        className="pointer-events-none flex flex-col items-center select-none px-2 pb-3 text-center leading-none"
       >
-        HEAVEN
-      </p>
+        <span className="font-serif text-[16vw] leading-[0.8] tracking-[0.06em] text-brand-ivory/[0.035]">HEAVEN</span>
+        <span className="eyebrow mt-[0.5vw] text-[clamp(0.6rem,1.4vw,1.25rem)] tracking-[0.45em] text-brand-ivory/[0.09]">
+          Furniture Mart
+        </span>
+      </div>
     </footer>
   )
 }

@@ -37,12 +37,11 @@ export default function ScrollExpandMedia({
   className,
 }: ScrollExpandMediaProps) {
   const root = useRef<HTMLDivElement>(null)
-  const [reduce, setReduce] = useState(false)
+  const [reduce, setReduce] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches)
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
     const update = () => setReduce(mq.matches)
-    update()
     mq.addEventListener('change', update)
     return () => mq.removeEventListener('change', update)
   }, [])
@@ -76,9 +75,11 @@ export default function ScrollExpandMedia({
       })
 
       // Act I — expand (0 → 1)
+      const startW = () => (window.innerWidth < 640 ? window.innerWidth * 0.62 : Math.min(window.innerWidth * 0.34, 420))
+      const startH = () => Math.min(window.innerHeight * (window.innerWidth < 640 ? 0.42 : 0.5), 520)
       tl.fromTo(
         frame,
-        { width: () => Math.min(window.innerWidth * 0.34, 420), height: () => Math.min(window.innerHeight * 0.5, 520) },
+        { width: startW, height: startH },
         { width: () => window.innerWidth, height: () => window.innerHeight, duration: 1, ease: 'power1.inOut' },
         0
       )
@@ -112,9 +113,10 @@ export default function ScrollExpandMedia({
           data-frame
           className={cn(
             'relative z-0 overflow-hidden bg-brand-teal shadow-[0_40px_120px_-30px_rgba(13,20,19,0.9)]',
-            reduce && 'h-full w-full'
+            // `!` beats inline styles GSAP may have left behind before reduce resolved
+            reduce && 'h-full! w-full!'
           )}
-          style={reduce ? undefined : { width: 'min(34vw, 420px)', height: 'min(50vh, 520px)' }}
+          style={reduce ? undefined : { width: 'min(62vw, 420px)', height: 'min(42vh, 520px)' }}
         >
           <SmartVideo asset={media} lazy={false} />
           <div data-shade className="absolute inset-0 bg-brand-ink" style={{ opacity: reduce ? 0.6 : 0.35 }} />

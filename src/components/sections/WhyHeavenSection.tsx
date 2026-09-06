@@ -1,14 +1,9 @@
 import ScrollExpandMedia from '@/components/ui/scroll-expand-media'
-import { img } from '@/data/assets'
+import { showroomVideos } from '@/data/assets'
 import { site } from '@/data/site'
 import { cn } from '@/lib/utils'
 
-const film = {
-  src: '/videos/showroom/detail-sofa-fabric.mp4',
-  poster: img.creamModernSofa,
-  orientation: 'landscape',
-  durationSec: 10,
-} as const
+const film = showroomVideos.sofaFabricDetail
 
 export function WhyHeavenSection() {
   const points = site.trustPoints.slice(0, 5)

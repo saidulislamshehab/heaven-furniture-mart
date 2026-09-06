@@ -146,7 +146,7 @@ export function ShopPage() {
       />
 
       <section className="bg-brand-ivory text-brand-brown">
-        <div className="sticky top-[60px] z-30 border-b border-brand-brown/10 bg-brand-ivory/90 backdrop-blur-md sm:top-[64px]">
+        <div className="sticky top-[var(--nav-offset,60px)] z-30 border-b border-brand-brown/10 bg-brand-ivory/90 backdrop-blur-md transition-[top] duration-500 ease-[var(--ease-luxury)] motion-reduce:transition-none">
           <div className="container-x mx-auto flex max-w-[1600px] flex-col gap-4 py-4 lg:flex-row lg:items-center lg:justify-between">
             <ul className="-mx-1 flex gap-1 overflow-x-auto scrollbar-none" role="list" aria-label="Filter by category">
               {[{ id: null, name: 'All' }, ...categories].map((c) => {
@@ -256,7 +256,7 @@ export function ShopPage() {
         eyebrow="Don't see it here?"
         title="If you can picture it, we can build it."
         body="Every piece in this collection began as a conversation. Bring your dimensions, references or a sketch — we'll design around them."
-        image={img.studioEmeraldBed}
+        image={img.creamClassicLounge}
       />
 
       <QuickView product={selected} onClose={() => setSelected(null)} />

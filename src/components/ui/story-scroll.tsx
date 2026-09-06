@@ -41,7 +41,7 @@ export interface StoryScrollProps {
 export default function StoryScroll({ children, className, 'aria-label': ariaLabel = 'Story', onProgress, overlay }: StoryScrollProps) {
   const ref = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
-  const [reduce, setReduce] = useState(false)
+  const [reduce, setReduce] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches)
   const onProgressRef = useRef(onProgress)
   useEffect(() => {
     onProgressRef.current = onProgress
@@ -50,7 +50,6 @@ export default function StoryScroll({ children, className, 'aria-label': ariaLab
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
     const update = () => setReduce(mq.matches)
-    update()
     mq.addEventListener('change', update)
     return () => mq.removeEventListener('change', update)
   }, [])

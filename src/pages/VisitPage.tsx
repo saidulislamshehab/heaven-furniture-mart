@@ -84,6 +84,7 @@ export function VisitPage() {
         body="Sit with the details. Feel the materials. Begin with a conversation about the room you want to make yours."
         image={brandImages.showroomExterior}
         imageAlt="Heaven Furniture Mart showroom on Agrabad Access Road"
+        imagePosition="object-[50%_85%] sm:object-center"
       >
         <div className="flex flex-col gap-3 sm:flex-row">
           <Button asChild variant="gold" size="pill">
@@ -268,7 +269,7 @@ export function VisitPage() {
         eyebrow="Your visit can be the first sketch"
         title="Let's meet in the showroom."
         body="Message us to arrange a time, or simply walk in. Either way, your free design consultation begins the moment you arrive."
-        image={img.studioMarbleLeather}
+        image={img.silverBrocadeSofa}
       />
     </>
   )

@@ -17,7 +17,7 @@ export function FinalCTASection({
   eyebrow = 'Begin with a conversation',
   title = "Let's design your dream space.",
   body = 'Bring a room, a measurement or just a feeling. Your free design consultation starts on WhatsApp or in our Agrabad showroom.',
-  image = img.studioNavyVelvet,
+  image = img.royalBlueSalon,
 }: FinalCTASectionProps) {
   const { open } = useConsultation()
   const reduce = useReducedMotion()
@@ -29,7 +29,7 @@ export function FinalCTASection({
         alt=""
         loading="lazy"
         decoding="async"
-        className="absolute inset-0 -z-10 h-full w-full object-cover object-[50%_70%] opacity-60"
+        className="absolute inset-0 -z-10 h-full w-full object-cover object-center opacity-60"
         initial={reduce ? false : { scale: 1.12 }}
         whileInView={{ scale: 1 }}
         viewport={{ once: true }}

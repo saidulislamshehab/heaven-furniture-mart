@@ -61,6 +61,11 @@ export function Navbar() {
     lockScroll(menuOpen)
   }, [menuOpen])
 
+  // Lets sticky elements (e.g. shop filters) sit flush when the bar slides away
+  useEffect(() => {
+    document.documentElement.style.setProperty('--nav-offset', hidden && !menuOpen ? '0px' : '60px')
+  }, [hidden, menuOpen])
+
   const dark = scrolled
 
   return (

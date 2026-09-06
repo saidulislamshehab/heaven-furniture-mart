@@ -9,12 +9,14 @@ interface PageHeroProps {
   body?: string
   image?: string
   imageAlt?: string
+  /** Tailwind object-position class for the background image. */
+  imagePosition?: string
   children?: ReactNode
   className?: string
 }
 
 /** Dark editorial header for inner pages. Full-bleed image variant when `image` is provided. */
-export function PageHero({ eyebrow, title, body, image, imageAlt = '', children, className }: PageHeroProps) {
+export function PageHero({ eyebrow, title, body, image, imageAlt = '', imagePosition = 'object-center', children, className }: PageHeroProps) {
   const reduce = useReducedMotion()
   const rise = (delay: number) => ({
     initial: reduce ? false : { opacity: 0, y: 28 },
@@ -30,12 +32,14 @@ export function PageHero({ eyebrow, title, body, image, imageAlt = '', children,
             src={image}
             alt={imageAlt}
             fetchPriority="high"
-            className="absolute inset-0 -z-10 h-full w-full object-cover"
+            className={cn('absolute inset-0 -z-10 h-full w-full object-cover', imagePosition)}
             initial={reduce ? false : { scale: 1.1, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 2, ease: luxuryEase }}
           />
-          <div className="absolute inset-0 -z-10 bg-gradient-to-t from-brand-ink/90 via-brand-ink/40 to-brand-ink/30" />
+          <div className="absolute inset-0 -z-10 bg-gradient-to-t from-brand-ink/95 via-brand-ink/65 to-brand-ink/25" />
+          {/* Extra left-side scrim keeps type readable over signage / bright facades */}
+          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-brand-ink/60 via-brand-ink/20 to-transparent" />
         </>
       )}
       <div className={cn('container-x mx-auto flex max-w-[1600px] flex-col justify-end pt-36 pb-14 sm:pt-44 sm:pb-20', image && 'min-h-[72svh]')}>

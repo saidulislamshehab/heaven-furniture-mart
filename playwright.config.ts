@@ -1,5 +1,8 @@
 import { defineConfig } from '@playwright/test';
 
+const PORT = process.env.PORT ?? '5173';
+const BASE_URL = `http://localhost:${PORT}`;
+
 /**
  * Playwright configuration for Heaven Furniture Mart landing page
  */
@@ -11,7 +14,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: 'http://localhost:5173',
+    baseURL: BASE_URL,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
@@ -50,8 +53,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:5173',
+    command: `npm run dev -- --port ${PORT} --strictPort`,
+    url: BASE_URL,
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
   },

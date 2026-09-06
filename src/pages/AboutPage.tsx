@@ -85,7 +85,7 @@ export function AboutPage() {
             sizes="(min-width:1024px) 58vw, 100vw"
           />
           <div className="aspect-[4/5] overflow-hidden lg:col-span-3">
-            <SmartVideo asset={showroomVideos.walkthrough} />
+            <SmartVideo asset={showroomVideos.oliveSofaDetail} />
           </div>
           <RevealImage
             src={img.blueModernSofa}
@@ -193,7 +193,7 @@ export function AboutPage() {
       <FinalCTASection
         eyebrow="Start your own chapter"
         title="Let's make something for your home."
-        image={img.studioGreyFloral}
+        image={img.greenVelvetSet}
       />
     </>
   )

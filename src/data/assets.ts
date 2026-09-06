@@ -43,6 +43,8 @@ export const workshopFilms = [
 export const showroomVideos = {
   walkthrough: { src: '/videos/showroom/showroom-walkthrough.mp4', poster: '/images/posters/showroom-walkthrough.jpg', orientation: 'portrait', durationSec: 51 } satisfies VideoAsset,
   blueChairs: { src: '/videos/showroom/showroom-blue-chairs.mp4', poster: '/images/posters/showroom-blue-chairs.jpg', orientation: 'portrait', durationSec: 22 } satisfies VideoAsset,
+  oliveSofaDetail: { src: '/videos/showroom/detail-olive-sofa.mp4', poster: '/images/posters/detail-olive-sofa.jpg', orientation: 'portrait', durationSec: 40 } satisfies VideoAsset,
+  sofaFabricDetail: { src: '/videos/showroom/detail-sofa-fabric.mp4', poster: '/images/posters/detail-sofa-fabric.jpg', orientation: 'landscape', durationSec: 10 } satisfies VideoAsset,
 }
 
 export const brandImages = {
