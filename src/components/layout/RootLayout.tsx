@@ -5,6 +5,7 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { luxuryEase } from '@/components/common/Reveal'
 import { scrollToHash, scrollToTop } from '@/lib/scroll'
+import { ErrorBoundary } from '@/components/common/ErrorBoundary'
 
 const AssistantWidget = lazy(() => import('@/components/assistant/AssistantWidget'))
 
@@ -55,9 +56,11 @@ export function RootLayout() {
           transition={{ duration: 0.45, ease: luxuryEase }}
         >
           <main id="main" className="flex-1">
-            <Suspense fallback={<RouteFallback />}>
-              <Outlet />
-            </Suspense>
+            <ErrorBoundary>
+              <Suspense fallback={<RouteFallback />}>
+                <Outlet />
+              </Suspense>
+            </ErrorBoundary>
           </main>
           <Footer />
         </motion.div>

@@ -1,0 +1,3 @@
+# Netlify & static hosts SPA redirect rules
+/api/*  /api/:splat  200
+/*      /index.html   200

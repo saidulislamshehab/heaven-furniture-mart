@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "typecheck": "tsc -b",
     "lint": "oxlint",
+    "validate": "npm run lint && npm run build",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
     "preview": "vite preview"
