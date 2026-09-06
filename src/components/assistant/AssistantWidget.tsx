@@ -160,7 +160,12 @@ export function AssistantWidget() {
               </button>
             </header>
 
-            <div ref={logRef} className="flex-1 space-y-4 overflow-y-auto px-5 py-5 text-[0.92rem] leading-relaxed" aria-live="polite" aria-relevant="additions">
+            <div
+              ref={logRef}
+              className="flex-1 space-y-4 overflow-y-auto overscroll-contain px-5 py-5 text-[0.92rem] leading-relaxed scrollbar-none"
+              aria-live="polite"
+              aria-relevant="additions"
+            >
               <p className="max-w-[92%] text-brand-ivory/80">{WELCOME}</p>
               {messages.length === 0 && (
                 <ul className="flex flex-wrap gap-2 pt-1" aria-label="Suggested questions">
@@ -209,8 +214,14 @@ export function AssistantWidget() {
               </ol>
             </div>
 
-            <form onSubmit={onSubmit} className="border-t border-brand-ivory/10 px-4 py-3">
-              <div className="flex items-end gap-2">
+            <form onSubmit={onSubmit} className="border-t border-brand-ivory/10 px-4 pt-3 pb-3.5">
+              <div
+                className={cn(
+                  'flex items-end gap-2 rounded-full border border-brand-ivory/15 bg-brand-ivory/[0.05] pl-4 pr-1.5 py-1.5 transition-colors',
+                  'focus-within:border-brand-gold/60 focus-within:bg-brand-ivory/[0.07]',
+                  pending && 'opacity-70'
+                )}
+              >
                 <label className="sr-only" htmlFor={`${titleId}-input`}>
                   Ask about Heaven Furniture Mart
                 </label>
@@ -224,19 +235,27 @@ export function AssistantWidget() {
                   maxLength={1000}
                   placeholder="Ask about our furniture, showroom…"
                   disabled={pending}
-                  className="max-h-28 min-h-11 flex-1 resize-none bg-transparent px-2 py-2.5 text-base text-brand-ivory outline-none placeholder:text-brand-ivory/35 disabled:opacity-60 sm:text-[0.92rem] field-sizing-content"
+                  aria-describedby={`${titleId}-hint`}
+                  className="max-h-28 min-h-9 flex-1 resize-none self-center bg-transparent py-1.5 text-base leading-6 text-brand-ivory outline-none placeholder:text-brand-ivory/40 disabled:cursor-not-allowed sm:text-[0.92rem] field-sizing-content scrollbar-none"
                 />
                 <button
                   type="submit"
                   disabled={pending || !input.trim()}
                   aria-label="Send message"
-                  className="flex size-11 shrink-0 items-center justify-center rounded-full bg-brand-gold text-brand-teal-deep transition-[background-color,opacity] hover:bg-brand-gold-soft disabled:opacity-40"
+                  className="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-gold text-brand-teal-deep transition-[background-color,opacity,transform] hover:bg-brand-gold-soft active:scale-95 disabled:opacity-35 disabled:active:scale-100"
                 >
                   <ArrowUp className="size-4" strokeWidth={2} />
                 </button>
               </div>
-              <p className="mt-1.5 px-2 text-[0.65rem] text-brand-ivory/40">
-                AI assistant · answers only about Heaven. For quotes, call {site.phoneDisplay}.
+              <p id={`${titleId}-hint`} className="mt-2 px-1 text-[0.65rem] leading-relaxed text-brand-ivory/40">
+                AI assistant · answers only about Heaven. For quotes, call{' '}
+                <a
+                  href={`tel:${site.phoneE164}`}
+                  className="whitespace-nowrap text-brand-ivory/70 underline decoration-brand-gold/50 underline-offset-2 transition-colors hover:text-brand-gold-soft"
+                >
+                  {site.phoneDisplay}
+                </a>
+                .
               </p>
             </form>
           </motion.section>
@@ -252,15 +271,36 @@ export function AssistantWidget() {
         tabIndex={revealed || open ? 0 : -1}
         aria-hidden={!(revealed || open)}
         className={cn(
-          'group fixed z-[55] flex h-12 items-center gap-2.5 rounded-full border border-brand-gold/40 bg-brand-teal-deep/90 pl-3.5 pr-5 text-brand-ivory shadow-[0_18px_40px_-12px_rgba(13,20,19,0.7)] backdrop-blur-md transition-[transform,opacity,border-color,box-shadow] duration-500 ease-[var(--ease-luxury)] hover:-translate-y-0.5 hover:border-brand-gold hover:shadow-[0_22px_50px_-12px_rgba(13,20,19,0.8)] motion-reduce:transition-none motion-reduce:hover:translate-y-0',
+          // Icon-only pill that grows to reveal its label on hover / keyboard focus
+          'group fixed z-[55] grid h-12 grid-cols-[3rem_0fr] items-center rounded-full border border-brand-gold/40 bg-brand-teal-deep/90 text-brand-ivory shadow-[0_18px_40px_-12px_rgba(13,20,19,0.7)] backdrop-blur-md',
+          'transition-[grid-template-columns,transform,opacity,border-color,box-shadow] duration-500 ease-[var(--ease-luxury)] motion-reduce:transition-none',
+          'hover:grid-cols-[3rem_1fr] hover:border-brand-gold hover:shadow-[0_22px_50px_-12px_rgba(13,20,19,0.8)] focus-visible:grid-cols-[3rem_1fr] focus-visible:border-brand-gold',
           'bottom-[calc(env(safe-area-inset-bottom)+1.25rem)] left-[max(1rem,env(safe-area-inset-left))] sm:bottom-6 sm:left-6',
           revealed || open ? 'opacity-100' : 'pointer-events-none translate-y-3 opacity-0'
         )}
       >
-        <span className="flex size-7 items-center justify-center rounded-full bg-brand-gold text-brand-teal-deep">
-          <Sparkles className="size-3.5" strokeWidth={2} />
+        <span className="relative flex size-12 items-center justify-center">
+          {!open && (
+            <span
+              aria-hidden
+              className="absolute inset-1.5 rounded-full border border-brand-gold/70 motion-safe:animate-[assistant-halo_2.8s_ease-out_infinite] group-hover:hidden"
+            />
+          )}
+          <span
+            className={cn(
+              'relative flex size-8 items-center justify-center rounded-full bg-brand-gold text-brand-teal-deep transition-transform duration-500 ease-[var(--ease-luxury)]',
+              !open && 'motion-safe:animate-[assistant-twinkle_2.8s_ease-in-out_infinite] group-hover:[animation:none] group-hover:scale-105',
+              open && 'rotate-90 scale-95'
+            )}
+          >
+            {open ? <X className="size-4" strokeWidth={2} /> : <Sparkles className="size-4" strokeWidth={2} />}
+          </span>
         </span>
-        <span className="eyebrow text-[0.62rem]">Ask Heaven</span>
+        <span className="min-w-0 overflow-hidden">
+          <span className="eyebrow block whitespace-nowrap pr-5 text-[0.62rem] opacity-0 transition-opacity duration-300 delay-100 group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none">
+            {open ? 'Close' : 'Ask Heaven'}
+          </span>
+        </span>
       </button>
     </>
   )

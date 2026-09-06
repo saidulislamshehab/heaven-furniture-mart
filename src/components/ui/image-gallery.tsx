@@ -1,5 +1,7 @@
-import { useState, type CSSProperties, type ReactNode } from 'react'
+import { useRef, useState, type CSSProperties, type MouseEvent, type PointerEvent, type ReactNode } from 'react'
 import { cn } from '@/lib/utils'
+
+const DRAG_THRESHOLD = 6
 
 export interface GalleryItem {
   id: string
@@ -25,16 +27,62 @@ interface ImageGalleryProps {
  */
 export default function ImageGallery({ items, onSelect, action, duration = 55, className }: ImageGalleryProps) {
   const [active, setActive] = useState<string | null>(null)
+  const [offset, setOffset] = useState(0)
+  const [dragging, setDragging] = useState(false)
+  const trackRef = useRef<HTMLUListElement>(null)
+  const drag = useRef<{ startX: number; startOffset: number; moved: boolean } | null>(null)
   const loop = [...items, ...items]
+
+  // Drag offset wraps on one item-set width so the doubled strip stays seamless; kept in (-half, 0].
+  const wrap = (x: number) => {
+    const half = (trackRef.current?.scrollWidth ?? 0) / 2
+    return half ? x - Math.ceil(x / half) * half : x
+  }
+
+  const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return
+    drag.current = { startX: e.clientX, startOffset: offset, moved: false }
+  }
+  const onPointerMove = (e: PointerEvent<HTMLDivElement>) => {
+    const d = drag.current
+    if (!d) return
+    const dx = e.clientX - d.startX
+    if (!d.moved && Math.abs(dx) < DRAG_THRESHOLD) return
+    if (!d.moved) {
+      d.moved = true
+      setDragging(true)
+      e.currentTarget.setPointerCapture(e.pointerId)
+    }
+    setOffset(wrap(d.startOffset + dx))
+  }
+  const onPointerUp = () => {
+    drag.current = null
+    setDragging(false)
+  }
+  // Swallow the click that follows a drag so frames don't open/select.
+  const onClickCapture = (e: MouseEvent) => {
+    if (dragging) {
+      e.preventDefault()
+      e.stopPropagation()
+    }
+  }
 
   return (
     <div
-      className={cn('relative w-full overflow-hidden', className)}
+      className={cn('relative w-full overflow-hidden select-none', dragging ? 'cursor-grabbing' : 'cursor-grab', className)}
+      style={{ touchAction: 'pan-y' }}
       onMouseLeave={() => setActive(null)}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
+      onClickCapture={onClickCapture}
     >
+      <div style={{ transform: `translateX(${offset}px)` }} className="w-max will-change-transform">
       <ul
+        ref={trackRef}
         className="flex h-[58vh] min-h-[24rem] w-max gap-1.5 motion-safe:animate-[gallery-ltr_var(--dur)_linear_infinite] sm:gap-2 lg:h-[66vh] lg:max-h-[44rem]"
-        style={{ '--dur': `${duration}s` } as CSSProperties}
+        style={{ '--dur': `${duration}s`, animationPlayState: dragging ? 'paused' : undefined } as CSSProperties}
       >
         {loop.map((it, i) => {
           const key = `${it.id}-${i}`
@@ -48,7 +96,7 @@ export default function ImageGallery({ items, onSelect, action, duration = 55, c
                 'relative h-full shrink-0 overflow-hidden bg-brand-ivory-deep transition-[width] duration-700 ease-[var(--ease-luxury)]',
                 isActive ? 'w-[min(38rem,80vw)]' : 'w-28 sm:w-36 lg:w-44'
               )}
-              onMouseEnter={() => setActive(key)}
+              onMouseEnter={() => !dragging && setActive(key)}
             >
               <button
                 type="button"
@@ -117,6 +165,7 @@ export default function ImageGallery({ items, onSelect, action, duration = 55, c
           )
         })}
       </ul>
+      </div>
     </div>
   )
 }

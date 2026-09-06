@@ -20,7 +20,7 @@ export async function POST(request: Request): Promise<Response> {
 
   try {
     const messages = parseMessages(body)
-    const answer = await askAssistant(messages, AbortSignal.timeout(25_000))
+    const answer = await askAssistant(messages, AbortSignal.timeout(55_000))
     return json({ answer })
   } catch (err) {
     const status = err instanceof AssistantError ? err.status : 502

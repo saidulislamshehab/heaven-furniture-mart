@@ -27,8 +27,66 @@ STYLE
 KNOWLEDGE BASE
 ${KNOWLEDGE}`
 
-const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions'
-const DEFAULT_MODELS = ['nvidia/nemotron-3-ultra-550b-a55b:free', 'minimax/minimax-m2.7:free', 'google/gemma-4-31b-it:free']
+/** One OpenAI-compatible chat endpoint + the models to try on it, in order. */
+interface Endpoint {
+  name: string
+  baseUrl: string
+  apiKey?: string
+  models: string[]
+  headers?: Record<string, string>
+}
+
+const OPENROUTER_DEFAULT_MODELS = [
+  'nvidia/nemotron-3-super-120b-a12b:free',
+  'minimax/minimax-m2.7:free',
+  'google/gemma-4-31b-it:free',
+  'openrouter/free',
+]
+
+const list = (v: string | undefined, fallback: string[]) => {
+  const items = (v ?? '').split(',').map((s) => s.trim()).filter(Boolean)
+  return items.length ? items : fallback
+}
+
+/**
+ * Resolves the provider chain from env. Every entry is optional except LLM7, which is a
+ * keyless hosted API and therefore the always-on last resort (also in production).
+ *
+ *  1. LLM_BASE_URL          any OpenAI-compatible server — e.g. a local `freellmpool proxy`
+ *                           that pools 20+ free providers (https://github.com/0xzr/freellmpool)
+ *  2. OPENROUTER_API_KEY    OpenRouter free models (daily cap applies on free accounts)
+ *  3. LLM7                  https://api.llm7.io/v1, key optional (LLM7_API_KEY)
+ */
+function resolveEndpoints(): Endpoint[] {
+  const chain: Endpoint[] = []
+  if (process.env.LLM_BASE_URL) {
+    chain.push({
+      name: 'custom',
+      baseUrl: process.env.LLM_BASE_URL,
+      apiKey: process.env.LLM_API_KEY || 'unused',
+      models: list(process.env.LLM_MODEL, ['auto']),
+    })
+  }
+  if (process.env.OPENROUTER_API_KEY) {
+    chain.push({
+      name: 'openrouter',
+      baseUrl: 'https://openrouter.ai/api/v1',
+      apiKey: process.env.OPENROUTER_API_KEY,
+      models: list(process.env.OPENROUTER_MODEL, OPENROUTER_DEFAULT_MODELS),
+      headers: {
+        'HTTP-Referer': process.env.SITE_URL ?? 'https://heavenfurnituremart.com',
+        'X-Title': 'Heaven Furniture Mart Assistant',
+      },
+    })
+  }
+  chain.push({
+    name: 'llm7',
+    baseUrl: 'https://api.llm7.io/v1',
+    apiKey: process.env.LLM7_API_KEY || 'unused',
+    models: list(process.env.LLM7_MODEL, ['default', 'fast']),
+  })
+  return chain
+}
 
 export const MAX_MESSAGES = 12
 export const MAX_MESSAGE_CHARS = 1000
@@ -64,6 +122,8 @@ export function parseMessages(body: unknown): ChatMessage[] {
 function cleanAnswer(text: string) {
   return text
     .replace(/<think>[\s\S]*?<\/think>/gi, '')
+    // Some pooled models leak a reasoning preamble before the real reply.
+    .replace(/^[\s\S]*?(?:here'?s a thinking process:|thinking process:)[\s\S]*?\n\s*\n(?=[A-Z])/i, '')
     .replace(/^#{1,6}\s+/gm, '')
     .replace(/\*\*(.+?)\*\*/g, '$1')
     .replace(/^\s*[*•]\s+/gm, '- ')
@@ -71,35 +131,53 @@ function cleanAnswer(text: string) {
 }
 
 export async function askAssistant(messages: ChatMessage[], signal?: AbortSignal): Promise<string> {
-  const apiKey = process.env.OPENROUTER_API_KEY
-  if (!apiKey) throw new AssistantError('Assistant is not configured', 503)
+  const endpoints = resolveEndpoints()
 
-  const models = (process.env.OPENROUTER_MODEL ?? '')
-    .split(',')
-    .map((s) => s.trim())
-    .filter(Boolean)
-  const [model, ...fallbacks] = models.length ? models : DEFAULT_MODELS
+  // Free tiers are flaky (daily caps, 429s, resets, stalls): walk every endpoint/model with its own
+  // short timeout, then make one more pass after a pause if the failures were transient.
+  let lastError: unknown
+  for (let pass = 0; pass < 2; pass++) {
+    for (const ep of endpoints) {
+      for (const model of ep.models) {
+        if (signal?.aborted) break
+        try {
+          return await callModel(ep, model, messages, signal)
+        } catch (err) {
+          lastError = err
+          if (err instanceof AssistantError && err.status === 400) throw err
+          console.warn(`[assistant] ${ep.name}/${model}: ${err instanceof Error ? err.message : err}`)
+        }
+      }
+    }
+    const retryable = !(lastError instanceof AssistantError) || lastError.status === 429
+    if (!retryable || signal?.aborted) break
+    await new Promise((r) => setTimeout(r, 1500))
+  }
+  throw lastError instanceof AssistantError ? lastError : new AssistantError('All providers failed', 502)
+}
 
-  const res = await fetch(OPENROUTER_URL, {
+const PER_MODEL_TIMEOUT_MS = 14_000
+
+async function callModel(ep: Endpoint, model: string, messages: ChatMessage[], outer?: AbortSignal): Promise<string> {
+  const signals = [AbortSignal.timeout(PER_MODEL_TIMEOUT_MS), ...(outer ? [outer] : [])]
+  const res = await fetch(`${ep.baseUrl.replace(/\/$/, '')}/chat/completions`, {
     method: 'POST',
-    signal,
+    signal: AbortSignal.any(signals),
     headers: {
-      Authorization: `Bearer ${apiKey}`,
+      Authorization: `Bearer ${ep.apiKey}`,
       'Content-Type': 'application/json',
-      'HTTP-Referer': process.env.SITE_URL ?? 'https://heavenfurnituremart.com',
-      'X-Title': 'Heaven Furniture Mart Assistant',
+      ...ep.headers,
     },
     body: JSON.stringify({
       model,
-      ...(fallbacks.length ? { models: [model, ...fallbacks] } : {}),
       messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],
       temperature: 0.3,
-      max_tokens: 500,
+      max_tokens: 600,
     }),
   })
 
   if (!res.ok) {
-    throw new AssistantError(`Upstream error ${res.status}`, res.status === 429 ? 429 : 502)
+    throw new AssistantError(`HTTP ${res.status}`, res.status === 429 ? 429 : 502)
   }
 
   const data = (await res.json()) as { choices?: { message?: { content?: string } }[] }
