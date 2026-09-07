@@ -34,7 +34,7 @@ export function SignatureSection() {
         </div>
         <Reveal delay={0.2} className="flex flex-col items-start gap-4 md:items-end">
           <p className="max-w-xs text-[0.98rem] leading-relaxed text-brand-stone md:text-right">
-            The strip drifts on its own — drag to explore, hover a frame to open it. Every piece can be re-sized, re-covered and re-finished for your room.
+            The strip drifts on its own — drag to explore, tap or hover a frame to open it. Every piece can be re-sized, re-covered and re-finished for your room.
           </p>
           <Button asChild variant="text-link">
             <Link to="/shop">
@@ -47,6 +47,7 @@ export function SignatureSection() {
       <Reveal className="mt-12 lg:mt-16">
         <ImageGallery
           items={galleryItems}
+          showTitles={false}
           onSelect={(it) => {
             const p = picks.find((f) => f.slug === it.id)
             open({ room: p ? categoryById(p.category)?.name : undefined, piece: it.title })

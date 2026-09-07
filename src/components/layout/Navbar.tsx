@@ -192,7 +192,7 @@ export function Navbar() {
                                   }}
                                   className={({ isActive }) =>
                                     cn(
-                                      'group flex items-baseline gap-4 py-2 font-serif text-[length:clamp(2.25rem,9vw,4.5rem)] leading-none tracking-tight transition-colors',
+                                      'group flex items-baseline gap-4 py-2 font-serif text-[length:clamp(2.25rem,min(9vw,11svh),4.5rem)] leading-none tracking-tight transition-colors',
                                       isActive ? 'text-brand-ivory' : 'text-brand-ivory/55 hover:text-brand-ivory'
                                     )
                                   }

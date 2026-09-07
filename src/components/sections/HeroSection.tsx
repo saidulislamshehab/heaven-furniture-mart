@@ -205,7 +205,7 @@ export function HeroSection({ introDone }: HeroSectionProps) {
                 </button>
               </li>
             ))}
-            <li className="eyebrow ml-1 tabular-nums text-xs sm:text-sm">
+            <li className="eyebrow ml-1 whitespace-nowrap tabular-nums text-xs sm:text-sm">
               0{active + 1} / 0{heroVideos.length}
             </li>
           </ol>

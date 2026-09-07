@@ -18,6 +18,8 @@ interface ImageGalleryProps {
   action?: ReactNode
   /** Seconds for the strip to travel one full cycle. */
   duration?: number
+  /** Show each piece's name on the frame (labels stay for screen readers regardless). Default true. */
+  showTitles?: boolean
   className?: string
 }
 
@@ -25,7 +27,7 @@ interface ImageGalleryProps {
  * Endless strip of frames drifting left → right. Hovering a frame expands that piece while the
  * strip keeps moving; the rest stay as slivers. Static for reduced-motion users.
  */
-export default function ImageGallery({ items, onSelect, action, duration = 55, className }: ImageGalleryProps) {
+export default function ImageGallery({ items, onSelect, action, duration = 55, showTitles = true, className }: ImageGalleryProps) {
   const [active, setActive] = useState<string | null>(null)
   const [offset, setOffset] = useState(0)
   const [dragging, setDragging] = useState(false)
@@ -81,7 +83,7 @@ export default function ImageGallery({ items, onSelect, action, duration = 55, c
       <div style={{ transform: `translateX(${offset}px)` }} className="w-max will-change-transform">
       <ul
         ref={trackRef}
-        className="flex h-[58vh] min-h-[24rem] w-max gap-1.5 motion-safe:animate-[gallery-ltr_var(--dur)_linear_infinite] sm:gap-2 lg:h-[66vh] lg:max-h-[44rem]"
+        className="flex h-[54vh] min-h-[19rem] w-max gap-1.5 motion-safe:animate-[gallery-ltr_var(--dur)_linear_infinite] sm:h-[58vh] sm:min-h-[24rem] sm:gap-2 lg:h-[66vh] lg:max-h-[44rem]"
         style={{ '--dur': `${duration}s`, animationPlayState: dragging ? 'paused' : undefined } as CSSProperties}
       >
         {loop.map((it, i) => {
@@ -94,7 +96,7 @@ export default function ImageGallery({ items, onSelect, action, duration = 55, c
               aria-hidden={i >= items.length || undefined}
               className={cn(
                 'relative h-full shrink-0 overflow-hidden bg-brand-ivory-deep transition-[width] duration-700 ease-[var(--ease-luxury)]',
-                isActive ? 'w-[min(38rem,80vw)]' : 'w-28 sm:w-36 lg:w-44'
+                isActive ? 'w-[min(38rem,80vw)]' : 'w-22 sm:w-36 lg:w-44'
               )}
               onMouseEnter={() => !dragging && setActive(key)}
             >
@@ -137,17 +139,17 @@ export default function ImageGallery({ items, onSelect, action, duration = 55, c
                 <span
                   className={cn(
                     'absolute bottom-5 left-1/2 hidden origin-bottom-left whitespace-nowrap font-serif text-lg text-brand-ivory transition-opacity duration-500 sm:block',
-                    isActive ? 'opacity-0' : 'opacity-90'
+                    isActive || !showTitles ? 'opacity-0' : 'opacity-90'
                   )}
                   style={{ transform: 'translateX(-50%) rotate(-90deg) translateX(50%)' }}
                 >
-                  {it.title}
+                  {showTitles ? it.title : ''}
                 </span>
 
                 {/* Expanded: title, meta, action */}
                 <span
                   className={cn(
-                    'absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 text-brand-ivory transition-all duration-700 ease-[var(--ease-luxury)] sm:p-7',
+                    'absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-4 text-brand-ivory transition-all duration-700 ease-[var(--ease-luxury)] sm:p-7',
                     isActive ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
                   )}
                 >
@@ -156,7 +158,7 @@ export default function ImageGallery({ items, onSelect, action, duration = 55, c
                       {index}
                       {it.meta ? ` / ${it.meta}` : ''}
                     </span>
-                    <span className="mt-2 block truncate font-serif text-3xl leading-none sm:text-4xl">{it.title}</span>
+                    {showTitles && <span className="mt-2 block truncate font-serif text-3xl leading-none sm:text-4xl">{it.title}</span>}
                   </span>
                   {action && <span className="eyebrow hidden shrink-0 items-center gap-1 text-brand-ivory/85 sm:inline-flex">{action}</span>}
                 </span>
