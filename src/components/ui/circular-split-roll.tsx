@@ -247,7 +247,7 @@ export default function CircularSplitRoll({
                     key={it.id}
                     className="csr-card absolute top-0 left-0 h-(--csr-card-h) w-(--csr-card-w) opacity-0 will-change-[transform,opacity]"
                   >
-                    <div className={cn('relative h-full w-full overflow-hidden bg-brand-teal', cardShadow)}>
+                    <div className={cn('relative h-full w-full overflow-hidden rounded-lg bg-brand-teal', cardShadow)}>
                       <img
                         src={it.image}
                         alt={it.alt}
@@ -277,7 +277,7 @@ export default function CircularSplitRoll({
             className={cn('grid gap-6 border-t py-10 first:border-t-0 first:pt-0 sm:grid-cols-12 sm:gap-8', hairline)}
           >
             <div className="sm:col-span-5">
-              <div className="relative aspect-[4/5] overflow-hidden bg-brand-teal">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-brand-teal">
                 <img src={it.image} alt={it.alt} loading="lazy" decoding="async" className="h-full w-full object-cover" />
                 <span className="eyebrow absolute bottom-4 left-4 text-brand-ivory/85">{it.index}</span>
               </div>

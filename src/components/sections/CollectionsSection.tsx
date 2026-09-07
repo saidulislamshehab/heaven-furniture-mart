@@ -103,7 +103,8 @@ export function CollectionsSection() {
         </div>
         <Reveal delay={0.2} className="flex flex-col items-start gap-4 md:items-end">
           <p className="max-w-xs text-[0.98rem] leading-relaxed text-brand-stone md:text-right">
-            Five rooms, one studio. Scroll to walk through them, left to right.
+            Five rooms, one studio. <span className="lg:hidden">Walk through them one by one.</span>
+            <span className="hidden lg:inline">Scroll to walk through them, left to right.</span>
           </p>
           <Button asChild variant="text-link">
             <Link to="/shop">

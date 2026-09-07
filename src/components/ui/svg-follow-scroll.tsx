@@ -18,7 +18,7 @@ export function SvgFollowScroll({ className }: { className?: string }) {
       ref={ref}
       aria-labelledby="stroke-heading"
       className={cn(
-        'relative flex min-h-[90svh] w-full flex-col items-center justify-center overflow-hidden py-[clamp(6rem,14vw,11rem)] bg-brand-ivory text-brand-brown md:min-h-[110vh]',
+        'relative flex w-full flex-col items-center justify-center overflow-hidden py-[clamp(5rem,14vw,11rem)] bg-brand-ivory text-brand-brown md:min-h-[110vh]',
         className
       )}
     >

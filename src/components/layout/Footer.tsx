@@ -124,7 +124,7 @@ export function Footer() {
             HEAVEN
           </span>
           {/* Letters are spread so the line spans exactly the width of HEAVEN above */}
-          <span className="mt-[0.6vw] flex justify-between px-[0.6vw] font-display text-[clamp(0.55rem,2.8vw,3rem)] font-medium text-brand-ivory/35">
+          <span className="mt-[0.6vw] flex justify-between px-[0.6vw] font-display text-[clamp(0.9rem,3vw,3rem)] font-medium text-brand-ivory/35">
             {WORDMARK_LINE.map((ch, i) => (
               <span key={i} className={ch === ' ' ? 'w-[1.2em]' : undefined}>
                 {ch}

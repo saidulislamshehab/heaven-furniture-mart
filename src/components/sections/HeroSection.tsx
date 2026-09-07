@@ -137,7 +137,7 @@ export function HeroSection({ introDone }: HeroSectionProps) {
             animate={ready ? { scaleX: 1 } : {}}
             transition={{ duration: 0.9, delay: 0.2, ease: luxuryEase }}
           />
-          Bespoke furniture &amp; interior styling · {site.address.city}
+          Bespoke furniture &amp; interior styling<span className="hidden sm:inline"> · {site.address.city}</span>
         </motion.p>
 
         {/* Layered headline: massive sans line + italic serif line, like a film title card */}
@@ -193,7 +193,7 @@ export function HeroSection({ introDone }: HeroSectionProps) {
                 <button
                   type="button"
                   onClick={() => setActive(i)}
-                  className="group flex items-center py-2 px-1 focus:outline-none"
+                  className="group -my-2 flex min-h-11 items-center px-1.5 focus:outline-none"
                   aria-label={`Switch to film ${i + 1}`}
                 >
                   <span
