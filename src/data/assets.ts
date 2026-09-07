@@ -57,6 +57,13 @@ export const brandImages = {
 
 const f = (name: string) => `/images/furniture/${name}.jpg`
 
+/** Editorial photography for the bespoke process steps (licensed stock, Pexels). */
+export const processImages = {
+  discover: '/images/process/discover.jpg',
+  design: '/images/process/design.jpg',
+  craft: '/images/process/craft.jpg',
+} as const
+
 export const img = {
   royalBlueSalon: f('living-royal-blue-salon-set'),
   creamModernSofa: f('living-cream-modern-sofa'),

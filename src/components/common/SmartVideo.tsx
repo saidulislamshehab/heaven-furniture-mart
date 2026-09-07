@@ -46,6 +46,9 @@ export function SmartVideo({
           setAttached(true)
           if (autoPlay) {
             el.play().catch(() => {})
+          } else if (!el.paused) {
+            // autoPlay flipped off while on screen (e.g. card sent to the back of a stack)
+            el.pause()
           }
         } else if (pauseOffscreen && !el.paused) {
           el.pause()

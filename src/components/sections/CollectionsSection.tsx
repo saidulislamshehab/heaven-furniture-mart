@@ -22,7 +22,7 @@ function CollectionPanel({ c, i }: { c: Category; i: number }) {
   const flip = i % 2 === 1
   return (
     <FlowSection aria-label={`${c.name} collection`} className={cn(s.bg, s.fg)}>
-      <div className="container-x mx-auto grid w-full max-w-[1600px] grid-cols-1 items-stretch gap-8 py-12 sm:py-16 lg:h-screen lg:grid-cols-12 lg:gap-12 lg:py-24">
+      <div className="container-x mx-auto grid w-full max-w-[1600px] grid-cols-1 items-stretch gap-8 py-20 lg:h-screen lg:grid-cols-12 lg:gap-12 lg:py-24">
         {/* Copy */}
         <div className={cn('flex flex-col justify-between lg:col-span-5', flip && 'lg:order-2 lg:col-start-8')}>
           <div className={cn('flex items-center justify-between border-b pb-5', s.rule)}>
@@ -32,11 +32,11 @@ function CollectionPanel({ c, i }: { c: Category; i: number }) {
             <span className={cn('eyebrow', s.muted)}>Collection</span>
           </div>
 
-          <div className="py-6 sm:py-8 lg:py-0">
-            <h3 className="font-serif text-[length:clamp(2.25rem,8vw,9.5rem)] leading-[0.92] tracking-[-0.03em] text-balance">
+          <div className="py-10 lg:py-0">
+            <h3 className="font-serif text-[length:clamp(3.5rem,9vw,9.5rem)] leading-[0.9] tracking-[-0.03em] text-balance">
               {c.name}
             </h3>
-            <p className={cn('mt-5 max-w-md text-[1.05rem] leading-relaxed sm:mt-8', s.muted)}>{c.body}</p>
+            <p className={cn('mt-8 max-w-md text-[1.05rem] leading-relaxed', s.muted)}>{c.body}</p>
           </div>
 
           <div className={cn('border-t pt-6', s.rule)}>

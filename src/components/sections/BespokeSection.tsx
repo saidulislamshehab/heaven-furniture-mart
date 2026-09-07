@@ -4,29 +4,29 @@ import CircularSplitRoll, { type CircularSplitRollItem } from '@/components/ui/c
 import { useConsultation } from '@/components/common/ConsultationProvider'
 import { Reveal, SplitWords } from '@/components/common/Reveal'
 import { SectionLabel } from '@/components/common/SectionLabel'
-import { img, workshopFilms } from '@/data/assets'
+import { img, processImages } from '@/data/assets'
 
 const steps: CircularSplitRollItem[] = [
   {
     index: '01',
     title: 'Discover',
     body: 'We begin with your room — measurements, light, routines and the pieces you already love. Not a catalogue size.',
-    image: img.silverTuftedSofa,
-    alt: 'Silver tufted sofa with a carved crest on the showroom floor',
+    image: processImages.discover,
+    alt: 'Hands resting on a hand-drawn room plan with furniture sketched in place',
   },
   {
     index: '02',
     title: 'Design',
     body: 'Together we settle proportion, timber, upholstery and finish, until the drawing feels like it already belongs to your home.',
-    image: img.royalBlueChaise,
-    alt: 'Royal blue chaise sofa with a gilt frame on the showroom floor',
+    image: processImages.design,
+    alt: 'Layered leather and timber material samples in warm browns',
   },
   {
     index: '03',
     title: 'Craft',
     body: 'Skilled makers cut, carve, join and upholster in-house. Premium materials, close attention, no shortcuts.',
-    image: workshopFilms[1].video.poster,
-    alt: 'Hand-carving detail on a timber frame',
+    image: processImages.craft,
+    alt: 'Craftsman hand-planing timber, shavings curling across the bench',
   },
   {
     index: '04',
@@ -67,7 +67,7 @@ export function BespokeSection() {
       </div>
 
       <div className="mt-12 lg:mt-6">
-        <CircularSplitRoll items={steps} radius={420} cardSize={380} sectionHeight={95} tone="light" />
+        <CircularSplitRoll items={steps} radius={440} cardSize={440} sectionHeight={95} tone="light" />
       </div>
 
       <div className="container-x mx-auto max-w-[1600px] pb-[clamp(4.5rem,10vw,10rem)]">

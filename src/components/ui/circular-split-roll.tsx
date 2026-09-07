@@ -226,11 +226,11 @@ export default function CircularSplitRoll({
                     className="csr-title pointer-events-none absolute top-0 left-0 grid grid-cols-[2.5ch_1fr] items-baseline gap-x-5 whitespace-nowrap opacity-0 will-change-[transform,opacity]"
                   >
                     <span className="font-serif text-2xl text-brand-gold">{it.index}</span>
-                    <span className="font-serif text-[length:clamp(3.25rem,5.6vw,6.5rem)] leading-none tracking-[-0.02em]">
+                    <span className="font-serif text-[length:clamp(3.75rem,6.4vw,7.5rem)] leading-none tracking-[-0.02em]">
                       {it.title}
                     </span>
                     {it.body && (
-                      <p className={cn('csr-caption col-start-2 mt-5 w-[min(28rem,30vw)] whitespace-normal text-[0.98rem] leading-relaxed', mutedText)}>
+                      <p className={cn('csr-caption col-start-2 mt-6 w-[min(30rem,32vw)] whitespace-normal text-[1.08rem] leading-relaxed', mutedText)}>
                         {it.body}
                       </p>
                     )}
@@ -247,7 +247,7 @@ export default function CircularSplitRoll({
                     key={it.id}
                     className="csr-card absolute top-0 left-0 h-(--csr-card-h) w-(--csr-card-w) opacity-0 will-change-[transform,opacity]"
                   >
-                    <div className={cn('relative h-full w-full overflow-hidden bg-brand-teal', cardShadow)}>
+                    <div className={cn('relative h-full w-full overflow-hidden rounded-lg bg-brand-teal', cardShadow)}>
                       <img
                         src={it.image}
                         alt={it.alt}
@@ -277,7 +277,7 @@ export default function CircularSplitRoll({
             className={cn('grid gap-6 border-t py-10 first:border-t-0 first:pt-0 sm:grid-cols-12 sm:gap-8', hairline)}
           >
             <div className="sm:col-span-5">
-              <div className="relative aspect-[4/5] overflow-hidden bg-brand-teal">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-brand-teal">
                 <img src={it.image} alt={it.alt} loading="lazy" decoding="async" className="h-full w-full object-cover" />
                 <span className="eyebrow absolute bottom-4 left-4 text-brand-ivory/85">{it.index}</span>
               </div>

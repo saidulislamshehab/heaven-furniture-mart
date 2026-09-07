@@ -1,4 +1,4 @@
-import { KNOWLEDGE } from './knowledge'
+import { KNOWLEDGE } from './knowledge.ts'
 
 export interface ChatMessage {
   role: 'user' | 'assistant'
