@@ -82,7 +82,7 @@ export function CraftSection() {
       {/* Section title on mobile */}
       <div className="container-x mx-auto max-w-[1600px] pt-12 pb-8 sm:hidden">
         <Reveal>
-          <SectionLabel number="04">Inside the workshop</SectionLabel>
+          <SectionLabel number="05">Inside the workshop</SectionLabel>
         </Reveal>
         <h2 className="mt-4 display-3 text-balance">
           <SplitWords text="Made in three movements." />
@@ -94,7 +94,7 @@ export function CraftSection() {
         <div className="container-x mx-auto flex max-w-[1600px] items-start justify-between pt-16 lg:pt-20">
           <div>
             <Reveal>
-              <SectionLabel number="04">Inside the workshop</SectionLabel>
+              <SectionLabel number="05">Inside the workshop</SectionLabel>
             </Reveal>
             <h2 className="mt-5 max-w-[10ch] display-3 text-balance text-brand-ivory drop-shadow-[0_2px_24px_rgba(13,20,19,0.6)]">
               <SplitWords text="Made in three movements." />

@@ -77,7 +77,7 @@ export function FounderSection({ compact = false }: { compact?: boolean }) {
 
         <div ref={textRef} className="flex flex-col justify-center will-change-transform lg:col-span-6 lg:col-start-7">
           <Reveal>
-            <SectionLabel number={compact ? undefined : '06'}>A word from our founder</SectionLabel>
+            <SectionLabel number={compact ? undefined : '07'}>A word from our founder</SectionLabel>
           </Reveal>
           <Reveal delay={0.15}>
             <blockquote className="mt-8">

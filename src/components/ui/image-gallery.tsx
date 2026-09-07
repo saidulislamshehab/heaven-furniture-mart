@@ -136,8 +136,7 @@ export default function ImageGallery({ items, onSelect, action, duration = 55, c
                 </span>
                 <span
                   className={cn(
-                    'absolute bottom-5 left-1/2 hidden origin-bottom-left whitespace-nowrap font-serif text-lg text-brand-ivory transition-opacity duration-500 sm:block',
-                    isActive ? 'opacity-0' : 'opacity-90'
+                    'absolute bottom-5 left-1/2 hidden origin-bottom-left whitespace-nowrap font-serif text-lg text-brand-ivory opacity-0 transition-opacity duration-500 sm:block'
                   )}
                   style={{ transform: 'translateX(-50%) rotate(-90deg) translateX(50%)' }}
                 >

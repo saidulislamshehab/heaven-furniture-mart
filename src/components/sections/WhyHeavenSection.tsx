@@ -16,7 +16,7 @@ export function WhyHeavenSection() {
       </h2>
       <ScrollExpandMedia
         media={film}
-        eyebrow="05 — Why Heaven"
+        eyebrow="06 — Why Heaven"
         title={['Why homeowners', 'choose Heaven.']}
         scrollHint="Scroll to open the showroom"
         lengthVh={340}
@@ -33,7 +33,7 @@ export function WhyHeavenSection() {
               )}
             >
               <div data-reveal className="hidden items-center justify-between md:flex [@media(max-height:600px)]:hidden">
-                <p className="eyebrow text-brand-gold">05 — Why Heaven</p>
+                <p className="eyebrow text-brand-gold">06 — Why Heaven</p>
                 <p className="eyebrow text-brand-ivory/60">Five reasons</p>
               </div>
 

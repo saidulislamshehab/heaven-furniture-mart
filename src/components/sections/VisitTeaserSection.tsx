@@ -27,7 +27,7 @@ export function VisitTeaserSection() {
 
         <div className="flex flex-col justify-center section-pad container-x lg:col-span-5">
           <Reveal>
-            <SectionLabel number="09">Visit the showroom</SectionLabel>
+            <SectionLabel number="10">Visit the showroom</SectionLabel>
           </Reveal>
           <h2 className="mt-6 display-2 text-balance">Come see how it feels.</h2>
           <Reveal delay={0.15}>

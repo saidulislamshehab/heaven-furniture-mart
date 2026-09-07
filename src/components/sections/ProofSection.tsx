@@ -152,7 +152,7 @@ export function ProofSection() {
       <div className="container-x mx-auto grid max-w-[1600px] gap-14 lg:grid-cols-12">
         <div className="lg:col-span-5">
           <Reveal>
-            <SectionLabel number="08">Client voices</SectionLabel>
+            <SectionLabel number="09">Client voices</SectionLabel>
           </Reveal>
           <h2 className="mt-6 max-w-[12ch] display-2 text-balance">
             <SplitWords text="Made for living. Remembered in words." />

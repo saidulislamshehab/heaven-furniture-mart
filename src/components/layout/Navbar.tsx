@@ -157,14 +157,14 @@ export function Navbar() {
                     </DialogPrimitive.Overlay>
                     <DialogPrimitive.Content asChild forceMount aria-describedby={undefined}>
                       <motion.div
-                        className="fixed inset-x-0 top-0 z-[70] flex h-dvh w-full flex-col overflow-y-auto overscroll-contain bg-brand-ivory text-brand-brown shadow-[0_24px_60px_-20px_rgba(13,20,19,0.45)] outline-none sm:right-0 sm:left-auto sm:max-w-md"
+                        className="fixed inset-0 z-[70] flex h-dvh w-full flex-col overflow-y-auto overscroll-contain bg-brand-ivory text-brand-brown outline-none"
                         initial={reduce ? { opacity: 0 } : { y: '-100%' }}
                         animate={reduce ? { opacity: 1 } : { y: 0 }}
                         exit={reduce ? { opacity: 0 } : { y: '-100%' }}
                         transition={{ duration: 0.65, ease: luxuryEase }}
                       >
                         <DialogPrimitive.Title className="sr-only">Menu</DialogPrimitive.Title>
-                        <div className="container-x flex shrink-0 items-center justify-between border-b border-brand-brown/10 py-5 sm:py-6">
+                        <div className="container-x mx-auto flex w-full max-w-[1600px] shrink-0 items-center justify-between border-b border-brand-brown/10 py-5 sm:py-6">
                           <Wordmark
                             dark
                             onHome={(e) => {
@@ -183,9 +183,10 @@ export function Navbar() {
                           </DialogPrimitive.Close>
                         </div>
 
-                        <nav aria-label="Mobile" className="container-x flex flex-1 flex-col justify-center py-6">
-                          <p className="eyebrow text-brand-stone">Index</p>
-                          <ul className="mt-4">
+                        <div className="container-x mx-auto flex w-full max-w-[1600px] flex-1 flex-col md:grid md:grid-cols-[1.25fr_1fr] md:items-center md:gap-x-12 md:py-10 lg:gap-x-20">
+                          <nav aria-label="Mobile" className="flex flex-1 flex-col justify-center py-6 md:py-0">
+                            <p className="eyebrow text-brand-stone">Index</p>
+                            <ul className="mt-4">
                             {navLinks.map((l, i) => (
                               <motion.li
                                 key={l.to}
@@ -210,7 +211,7 @@ export function Navbar() {
                                   {({ isActive }) => (
                                     <>
                                       <span className="eyebrow w-6 shrink-0 text-[0.65rem] text-brand-gold">0{i + 1}</span>
-                                      <span className="flex-1 font-serif text-[length:clamp(1.85rem,min(7.5vw,9svh),3.25rem)] leading-none tracking-tight">
+                                      <span className="flex-1 font-serif text-[length:clamp(1.85rem,min(7.5vw,9svh),3.25rem)] leading-none tracking-tight md:text-[length:clamp(2.75rem,min(6.75vw,11svh),4.5rem)]">
                                         {l.label}
                                       </span>
                                       <ArrowUpRight
@@ -227,20 +228,20 @@ export function Navbar() {
                                 </NavLink>
                               </motion.li>
                             ))}
-                          </ul>
-                        </nav>
+                            </ul>
+                          </nav>
 
-                        <motion.div
-                          className="container-x shrink-0 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]"
-                          initial={{ opacity: 0, y: 16 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.7, delay: 0.5, ease: luxuryEase }}
-                        >
-                          <div className="rounded-2xl bg-brand-teal-deep p-5 text-brand-ivory sm:p-6">
+                          <motion.div
+                            className="shrink-0 pb-[calc(1rem+env(safe-area-inset-bottom,0px))] md:pb-0"
+                            initial={{ opacity: 0, y: 16 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.7, delay: 0.5, ease: luxuryEase }}
+                          >
+                          <div className="rounded-2xl bg-brand-teal-deep p-5 text-brand-ivory sm:p-6 lg:p-8">
                             <p className="eyebrow text-brand-ivory/45">Get in touch</p>
                             <a
                               href={`tel:${site.phoneE164}`}
-                              className="mt-3 block font-serif text-2xl leading-none text-brand-ivory transition-colors hover:text-brand-gold-soft"
+                              className="mt-3 block font-serif text-2xl leading-none text-brand-ivory transition-colors hover:text-brand-gold-soft lg:text-3xl"
                             >
                               {site.phoneDisplay}
                             </a>
@@ -279,7 +280,8 @@ export function Navbar() {
                               Request a Consultation <ArrowUpRight />
                             </Button>
                           </div>
-                        </motion.div>
+                          </motion.div>
+                        </div>
                       </motion.div>
                     </DialogPrimitive.Content>
                   </DialogPrimitive.Portal>

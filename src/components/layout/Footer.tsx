@@ -126,11 +126,18 @@ export function Footer() {
       </div>
 
       <div aria-hidden className="pointer-events-none flex justify-center select-none px-4 pb-6">
-        <img
-          src="/heaven.png"
-          alt=""
-          className="w-full max-w-[1400px] [filter:brightness(0)_invert(1)] opacity-[0.06]"
-        />
+        <div className="w-full max-w-[1400px]">
+          <img
+            src="/heaven.png"
+            alt=""
+            className="w-full [filter:brightness(0)_invert(1)] opacity-[0.06]"
+          />
+          <div className="flex w-full justify-between px-[2%] font-display text-[length:clamp(1rem,4vw,3.25rem)] font-medium uppercase leading-none text-ivory opacity-[0.06]">
+            {"FURNITURE MART".split("").map((char, i) => (
+              <span key={i}>{char === " " ? "\u00A0\u00A0" : char}</span>
+            ))}
+          </div>
+        </div>
       </div>
     </footer>
   )

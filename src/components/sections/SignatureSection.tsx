@@ -26,7 +26,7 @@ export function SignatureSection() {
       <div className="container-x mx-auto flex max-w-[1600px] flex-col gap-6 md:flex-row md:items-end md:justify-between">
         <div>
           <Reveal>
-            <SectionLabel number="07">Signature pieces</SectionLabel>
+            <SectionLabel number="08">Signature pieces</SectionLabel>
           </Reveal>
           <h2 className="mt-6 max-w-[14ch] display-2 text-balance">
             <SplitWords text="A few pieces from the studio floor." />

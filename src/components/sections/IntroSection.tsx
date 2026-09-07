@@ -20,7 +20,7 @@ export function IntroSection() {
               <SectionLabel number="01">Heaven Furniture Mart</SectionLabel>
             </Reveal>
             <h2 className="mt-6 max-w-[16ch] display-2 text-balance">
-              <SplitWords text="One of Chattogram's leading bespoke furniture brands." />
+              <SplitWords text="Among Chattogram's most trusted names in bespoke furniture." />
             </h2>
             <Reveal delay={0.25} className="mt-8 max-w-lg space-y-5 text-[1.05rem] leading-relaxed text-brand-stone">
               <p>

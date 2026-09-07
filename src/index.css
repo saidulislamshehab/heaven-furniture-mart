@@ -16,13 +16,22 @@
   --brand-teal: #1F2E2D;
   --brand-ivory: #F5F1E8;
   --brand-brown: #2B211C;
-  --brand-gold: #B08A45;
+  --brand-gold: #A8543A;
   --brand-wood: #B98A5B;
   --brand-teal-deep: #141F1E;
   --brand-ink: #0D1413;
   --brand-ivory-deep: #ECE5D6;
-  --brand-gold-soft: #C9A86A;
+  --brand-gold-soft: #D08C74;
   --brand-stone: #6B5E56;
+
+  /* Assistant (concierge) theme — intentionally distinct from the site: porcelain, graphite, deep sage */
+  --assistant-surface: #FBFAF6;
+  --assistant-surface-2: #F1EEE7;
+  --assistant-ink: #1B1D1F;
+  --assistant-muted: #6E7276;
+  --assistant-line: rgba(27, 29, 31, 0.1);
+  --assistant-accent: #4E6B5A;
+  --assistant-accent-soft: #DDE6DF;
 
   /* Theme Tokens */
   --background: oklch(0.965 0.012 85);
@@ -85,6 +94,13 @@
 }
 
 @theme inline {
+  --color-assistant-surface: var(--assistant-surface);
+  --color-assistant-surface-2: var(--assistant-surface-2);
+  --color-assistant-ink: var(--assistant-ink);
+  --color-assistant-muted: var(--assistant-muted);
+  --color-assistant-line: var(--assistant-line);
+  --color-assistant-accent: var(--assistant-accent);
+  --color-assistant-accent-soft: var(--assistant-accent-soft);
   --font-heading: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
   --font-serif: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
   --font-sans: 'Figtree Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -277,6 +293,6 @@
 .blueprint-grid {
   background-size: 32px 32px;
   background-image: 
-    linear-gradient(to right, rgba(176, 138, 69, 0.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(176, 138, 69, 0.06) 1px, transparent 1px);
+    linear-gradient(to right, rgba(168, 84, 58, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(168, 84, 58, 0.06) 1px, transparent 1px);
 }

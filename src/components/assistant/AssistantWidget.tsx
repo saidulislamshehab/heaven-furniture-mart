@@ -1,7 +1,6 @@
-import { useEffect, useId, useRef, useState, type FormEvent, type KeyboardEvent } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import { useEffect, useId, useLayoutEffect, useRef, useState, type FormEvent, type KeyboardEvent } from 'react'
+import { AnimatePresence, motion, useReducedMotion, type Transition } from 'motion/react'
 import { ArrowUp, Sparkles, X } from 'lucide-react'
-import { luxuryEase } from '@/components/common/Reveal'
 import { site } from '@/data/site'
 import { cn } from '@/lib/utils'
 
@@ -25,11 +24,18 @@ const SUGGESTIONS = [
 const FALLBACK_ERROR =
   "Sorry, I'm having trouble responding right now. Please try again in a moment or contact Heaven directly."
 
+/* Gooey shell geometry: trigger disc size and the gap the panel lifts to before it grows. */
+const DISC = 48
+const LIFT = DISC + 12
+const SPRING: Transition = { type: 'spring', stiffness: 300, damping: 30 }
+
 let nextId = 1
 
 export function AssistantWidget() {
   const [open, setOpen] = useState(false)
   const [revealed, setRevealed] = useState(false)
+  const [morphing, setMorphing] = useState(false)
+  const [dims, setDims] = useState({ width: 384, height: 560 })
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [pending, setPending] = useState(false)
@@ -40,6 +46,11 @@ export function AssistantWidget() {
   const triggerRef = useRef<HTMLButtonElement>(null)
   const abortRef = useRef<AbortController | null>(null)
 
+  function toggle(next = !open) {
+    setMorphing(true)
+    setOpen(next)
+  }
+
   // Stay out of the hero: appear once the visitor has scrolled past most of the first screen.
   useEffect(() => {
     const onScroll = () => setRevealed(window.scrollY > window.innerHeight * 0.6)
@@ -48,13 +59,28 @@ export function AssistantWidget() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // Panel size is animated numerically, so measure the viewport rather than relying on CSS.
+  useLayoutEffect(() => {
+    if (!open) return
+    const measure = () => {
+      const mobile = window.innerWidth < 640
+      setDims({
+        width: mobile ? window.innerWidth - 28 : 384,
+        height: Math.round(Math.min(window.innerHeight * (mobile ? 0.7 : 0.72), mobile ? 544 : 576)),
+      })
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [open])
+
   // Focus management: input on open, trigger on close. Escape closes.
   useEffect(() => {
     if (!open) return
-    const t = window.setTimeout(() => inputRef.current?.focus(), 60)
+    const t = window.setTimeout(() => inputRef.current?.focus(), 350)
     const onKey = (e: globalThis.KeyboardEvent) => {
       if (e.key === 'Escape') {
-        setOpen(false)
+        toggle(false)
         triggerRef.current?.focus()
       }
     }
@@ -116,51 +142,109 @@ export function AssistantWidget() {
     }
   }
 
-  const panelMotion = reduce
-    ? { initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 } }
+  // Gooey shell: a disc rises out of the trigger, then swells into the panel (and reverses on close).
+  const shellVariants = reduce
+    ? {
+        closed: { opacity: 0, y: -LIFT, width: dims.width, height: dims.height, borderRadius: 12, transition: { duration: 0.15 } },
+        open: { opacity: 1, y: -LIFT, width: dims.width, height: dims.height, borderRadius: 12, transition: { duration: 0.2 } },
+      }
     : {
-        initial: { opacity: 0, y: 16, scale: 0.98 },
-        animate: { opacity: 1, y: 0, scale: 1 },
-        exit: { opacity: 0, y: 12, scale: 0.98 },
+        closed: {
+          opacity: 1,
+          y: 0,
+          width: DISC,
+          height: DISC,
+          borderRadius: DISC / 2,
+          transition: { ...SPRING, y: { ...SPRING, delay: 0.15 }, width: { ...SPRING }, height: { ...SPRING }, borderRadius: { ...SPRING } },
+        },
+        open: {
+          opacity: 1,
+          y: -LIFT,
+          width: dims.width,
+          height: dims.height,
+          borderRadius: 12,
+          transition: {
+            ...SPRING,
+            width: { ...SPRING, delay: 0.15 },
+            height: { ...SPRING, delay: 0.15 },
+            borderRadius: { ...SPRING, delay: 0.15 },
+          },
+        },
       }
 
+  const settled = open && !morphing
+
   return (
-    <>
-      <AnimatePresence>
-        {open && (
-          <motion.section
-            key="panel"
-            role="dialog"
-            aria-labelledby={titleId}
-            // Lenis hijacks wheel events site-wide; opt the whole panel out so the log scrolls natively
-            data-lenis-prevent
-            {...panelMotion}
-            transition={{ duration: 0.3, ease: luxuryEase }}
-            className={cn(
-              'fixed z-[55] flex flex-col overflow-hidden rounded-sm border border-brand-gold/50 bg-brand-ink text-brand-ivory shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8),0_0_0_1px_rgba(201,168,106,0.12)]',
-              'left-[max(0.75rem,env(safe-area-inset-left))] right-[max(0.75rem,env(safe-area-inset-right))] bottom-[calc(env(safe-area-inset-bottom)+5rem)] max-h-[min(70dvh,34rem)]',
-              'sm:left-6 sm:right-auto sm:bottom-24 sm:w-[24rem] sm:max-h-[min(72dvh,36rem)]'
-            )}
-          >
-            <header className="flex items-start justify-between gap-4 border-b border-brand-gold/30 bg-gradient-to-b from-brand-gold/[0.08] to-transparent px-5 py-4">
-              <div className="flex flex-col leading-none">
-                <span id={titleId} className="font-serif text-xl tracking-[0.14em] text-brand-gold">
-                  HEAVEN
-                </span>
-                <span className="eyebrow mt-1 text-[0.55rem] tracking-[0.3em] text-brand-ivory/55">Furniture Mart Assistant</span>
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  setOpen(false)
-                  triggerRef.current?.focus()
-                }}
-                aria-label="Close assistant"
-                className="-mr-2 -mt-1 flex size-10 items-center justify-center rounded-full text-brand-ivory/55 transition-colors hover:bg-brand-gold/10 hover:text-brand-gold"
+    <div
+      className={cn(
+        'fixed z-[55] size-12 transition-[transform,opacity] duration-500 ease-[var(--ease-luxury)] motion-reduce:transition-none',
+        'bottom-[calc(env(safe-area-inset-bottom)+1.25rem)] left-[max(1rem,env(safe-area-inset-left))] sm:bottom-6 sm:left-6',
+        revealed || open ? 'opacity-100' : 'pointer-events-none translate-y-3 opacity-0'
+      )}
+    >
+      {/* Goo filter is only applied while morphing so steady-state text/scrolling stay crisp and cheap. */}
+      <svg aria-hidden className="absolute size-0">
+        <defs>
+          <filter id="hfm-goo">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur" />
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -7" result="goo" />
+            <feBlend in="SourceGraphic" in2="goo" />
+          </filter>
+        </defs>
+      </svg>
+
+      <div className="relative size-12" style={{ filter: morphing && !reduce ? 'url(#hfm-goo)' : undefined }}>
+        <AnimatePresence onExitComplete={() => setMorphing(false)}>
+          {open && (
+            <motion.section
+              key="panel"
+              role="dialog"
+              aria-labelledby={titleId}
+              // Lenis hijacks wheel events site-wide; opt the whole panel out so the log scrolls natively
+              data-lenis-prevent
+              variants={shellVariants}
+              initial="closed"
+              animate="open"
+              exit="closed"
+              onAnimationComplete={(name) => name === 'open' && setMorphing(false)}
+              className={cn(
+                'absolute bottom-0 left-0 z-10 flex flex-col overflow-hidden border bg-assistant-surface font-sans text-assistant-ink',
+                settled ? 'border-assistant-line shadow-[0_32px_80px_-24px_rgba(27,29,31,0.45),0_2px_8px_-2px_rgba(27,29,31,0.12)]' : 'border-transparent'
+              )}
+            >
+              <motion.div
+                className="flex min-h-0 flex-1 flex-col"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1, transition: { duration: 0.25, delay: reduce ? 0 : 0.3 } }}
+                exit={{ opacity: 0, transition: { duration: 0.1 } }}
               >
-                <X className="size-4" strokeWidth={1.5} />
-              </button>
-            </header>
+                <header className="flex items-center justify-between gap-4 border-b border-assistant-line px-5 py-4">
+                  <div className="flex items-center gap-3">
+                    <span aria-hidden className="flex size-9 items-center justify-center rounded-full bg-assistant-accent text-assistant-surface">
+                      <Sparkles className="size-4" strokeWidth={2} />
+                    </span>
+                    <div className="flex flex-col leading-none">
+                      <span id={titleId} className="text-[0.95rem] font-semibold tracking-[-0.01em] text-assistant-ink">
+                        Heaven Concierge
+                      </span>
+                      <span className="mt-1 flex items-center gap-1.5 font-mono text-[0.62rem] tracking-[0.12em] text-assistant-muted uppercase">
+                        <span aria-hidden className="size-1.5 rounded-full bg-assistant-accent" />
+                        AI assistant
+                      </span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      toggle(false)
+                      triggerRef.current?.focus()
+                    }}
+                    aria-label="Close assistant"
+                    className="-mr-2 flex size-10 items-center justify-center rounded-full text-assistant-muted transition-colors hover:bg-assistant-surface-2 hover:text-assistant-ink"
+                  >
+                    <X className="size-4" strokeWidth={1.75} />
+                  </button>
+                </header>
 
             <div
               ref={logRef}
@@ -168,7 +252,7 @@ export function AssistantWidget() {
               aria-live="polite"
               aria-relevant="additions"
             >
-              <p className="max-w-[92%] text-brand-ivory/75">{WELCOME}</p>
+              <p className="max-w-[92%] text-assistant-muted">{WELCOME}</p>
               {messages.length === 0 && (
                 <ul className="flex flex-wrap gap-2 pt-1" aria-label="Suggested questions">
                   {SUGGESTIONS.map((s) => (
@@ -176,7 +260,7 @@ export function AssistantWidget() {
                       <button
                         type="button"
                         onClick={() => void send(s)}
-                        className="rounded-full border border-brand-gold/35 px-3.5 py-2 text-left text-[0.8rem] text-brand-gold-soft transition-colors hover:border-brand-gold hover:bg-brand-gold/10 hover:text-brand-gold"
+                        className="rounded-full border border-assistant-line bg-assistant-surface px-3.5 py-2 text-left text-[0.8rem] font-medium text-assistant-ink transition-colors hover:border-assistant-accent hover:bg-assistant-accent-soft"
                       >
                         {s}
                       </button>
@@ -191,8 +275,8 @@ export function AssistantWidget() {
                       className={cn(
                         'max-w-[88%] whitespace-pre-wrap [overflow-wrap:anywhere] px-4 py-3',
                         m.role === 'user'
-                          ? 'rounded-2xl rounded-br-sm bg-brand-gold text-brand-ink'
-                          : cn('rounded-2xl rounded-bl-sm border border-brand-ivory/10 bg-brand-ivory/[0.05] text-brand-ivory/90', m.error && 'border-brand-gold/60')
+                          ? 'rounded-2xl rounded-br-md bg-assistant-ink text-assistant-surface'
+                          : cn('rounded-2xl rounded-bl-md bg-assistant-surface-2 text-assistant-ink', m.error && 'ring-1 ring-assistant-accent/50')
                       )}
                     >
                       <span className="sr-only">{m.role === 'user' ? 'You: ' : 'Heaven assistant: '}</span>
@@ -202,11 +286,11 @@ export function AssistantWidget() {
                 ))}
                 {pending && (
                   <li className="flex justify-start" aria-label="Assistant is typing">
-                    <div className="flex items-center gap-1.5 rounded-2xl rounded-bl-sm border border-brand-ivory/10 bg-brand-ivory/[0.05] px-4 py-3.5">
+                    <div className="flex items-center gap-1.5 rounded-2xl rounded-bl-md bg-assistant-surface-2 px-4 py-3.5">
                       {[0, 1, 2].map((i) => (
                         <span
                           key={i}
-                          className={cn('size-1.5 rounded-full bg-brand-gold', !reduce && 'animate-pulse')}
+                          className={cn('size-1.5 rounded-full bg-assistant-accent', !reduce && 'animate-pulse')}
                           style={reduce ? undefined : { animationDelay: `${i * 160}ms` }}
                         />
                       ))}
@@ -216,11 +300,11 @@ export function AssistantWidget() {
               </ol>
             </div>
 
-            <form onSubmit={onSubmit} className="border-t border-brand-gold/20 px-4 pt-3 pb-3.5">
+            <form onSubmit={onSubmit} className="border-t border-assistant-line px-4 pt-3 pb-3.5">
               <div
                 className={cn(
-                  'flex items-end gap-2 rounded-full border border-brand-ivory/15 bg-brand-ivory/[0.04] pl-4 pr-1.5 py-1.5 transition-colors',
-                  'focus-within:border-brand-gold focus-within:bg-brand-ivory/[0.07]',
+                  'flex items-end gap-2 rounded-2xl border border-assistant-line bg-assistant-surface-2 pl-4 pr-1.5 py-1.5 transition-[border-color,box-shadow]',
+                  'focus-within:border-assistant-accent focus-within:shadow-[0_0_0_3px_var(--assistant-accent-soft)]',
                   pending && 'opacity-70'
                 )}
               >
@@ -238,73 +322,76 @@ export function AssistantWidget() {
                   placeholder="Ask about our furniture, showroom…"
                   disabled={pending}
                   aria-describedby={`${titleId}-hint`}
-                  className="max-h-28 min-h-9 flex-1 resize-none self-center bg-transparent py-1.5 text-base leading-6 text-brand-ivory outline-none placeholder:text-brand-ivory/40 disabled:cursor-not-allowed sm:text-[0.92rem] field-sizing-content scrollbar-none"
+                  className="max-h-28 min-h-9 flex-1 resize-none self-center bg-transparent py-1.5 text-base leading-6 text-assistant-ink outline-none placeholder:text-assistant-muted/70 disabled:cursor-not-allowed sm:text-[0.92rem] field-sizing-content scrollbar-none"
                 />
                 <button
                   type="submit"
                   disabled={pending || !input.trim()}
                   aria-label="Send message"
-                  className="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-gold text-brand-ink transition-[background-color,opacity,transform] hover:bg-brand-gold-soft active:scale-95 disabled:opacity-35 disabled:active:scale-100"
+                  className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-assistant-accent text-assistant-surface transition-[background-color,opacity,transform] hover:bg-assistant-ink active:scale-95 disabled:opacity-30 disabled:active:scale-100"
                 >
-                  <ArrowUp className="size-4" strokeWidth={2} />
+                  <ArrowUp className="size-4" strokeWidth={2.25} />
                 </button>
               </div>
-              <p id={`${titleId}-hint`} className="mt-2 px-1 text-[0.65rem] leading-relaxed text-brand-ivory/40">
+              <p id={`${titleId}-hint`} className="mt-2 px-1 font-mono text-[0.62rem] leading-relaxed tracking-[0.02em] text-assistant-muted">
                 AI assistant · answers only about Heaven. For quotes, call{' '}
                 <a
                   href={`tel:${site.phoneE164}`}
-                  className="whitespace-nowrap text-brand-gold-soft underline decoration-brand-gold/50 underline-offset-2 transition-colors hover:text-brand-gold"
+                  className="whitespace-nowrap text-assistant-accent underline decoration-assistant-accent/40 underline-offset-2 transition-colors hover:text-assistant-ink"
                 >
                   {site.phoneDisplay}
                 </a>
                 .
               </p>
             </form>
-          </motion.section>
-        )}
-      </AnimatePresence>
+              </motion.div>
+            </motion.section>
+          )}
+        </AnimatePresence>
 
-      <button
-        ref={triggerRef}
-        type="button"
-        onClick={() => setOpen((o) => !o)}
-        aria-expanded={open}
-        aria-label={open ? 'Close Heaven assistant' : 'Ask Heaven — open assistant'}
-        tabIndex={revealed || open ? 0 : -1}
-        aria-hidden={!(revealed || open)}
-        className={cn(
-          // Icon-only pill that grows to reveal its label on hover / keyboard focus
-          'group fixed z-[55] grid h-12 grid-cols-[3rem_0fr] items-center rounded-full border border-brand-gold/60 bg-brand-ink/95 text-brand-gold shadow-[0_18px_40px_-12px_rgba(0,0,0,0.8)] backdrop-blur-md',
-          'transition-[grid-template-columns,transform,opacity,border-color,box-shadow] duration-500 ease-[var(--ease-luxury)] motion-reduce:transition-none',
-          'hover:grid-cols-[3rem_1fr] hover:border-brand-gold hover:shadow-[0_22px_50px_-12px_rgba(0,0,0,0.9),0_0_24px_-6px_rgba(201,168,106,0.45)] focus-visible:grid-cols-[3rem_1fr] focus-visible:border-brand-gold',
-          'bottom-[calc(env(safe-area-inset-bottom)+1.25rem)] left-[max(1rem,env(safe-area-inset-left))] sm:bottom-6 sm:left-6',
-          revealed || open ? 'opacity-100' : 'pointer-events-none translate-y-3 opacity-0'
-        )}
-      >
-        <span className="relative flex size-12 items-center justify-center">
+        <button
+          ref={triggerRef}
+          type="button"
+          onClick={() => toggle()}
+          aria-expanded={open}
+          aria-label={open ? 'Close Heaven assistant' : 'Ask Heaven — open assistant'}
+          tabIndex={revealed || open ? 0 : -1}
+          aria-hidden={!(revealed || open)}
+          className={cn(
+            'group relative z-20 flex size-12 items-center justify-center rounded-full border bg-assistant-surface text-assistant-accent outline-none',
+            'transition-[border-color,box-shadow,transform] duration-500 ease-[var(--ease-luxury)] motion-reduce:transition-none',
+            'hover:-translate-y-0.5 hover:border-assistant-accent focus-visible:border-assistant-accent focus-visible:ring-2 focus-visible:ring-assistant-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory',
+            open && !settled ? 'border-transparent shadow-none' : 'border-assistant-line shadow-[0_18px_40px_-14px_rgba(27,29,31,0.45),0_1px_3px_rgba(27,29,31,0.08)]'
+          )}
+        >
           {!open && (
             <span
               aria-hidden
-              className="absolute inset-1.5 rounded-full border border-brand-gold/70 motion-safe:animate-[assistant-halo_2.8s_ease-out_infinite] group-hover:hidden"
+              className="absolute inset-1.5 rounded-full border border-assistant-accent/60 motion-safe:animate-[assistant-halo_2.8s_ease-out_infinite] group-hover:hidden"
             />
           )}
           <span
             className={cn(
-              'relative flex size-8 items-center justify-center rounded-full bg-brand-gold text-brand-ink transition-transform duration-500 ease-[var(--ease-luxury)]',
+              'relative flex size-8 items-center justify-center rounded-full bg-assistant-accent text-assistant-surface transition-transform duration-500 ease-[var(--ease-luxury)]',
               !open && 'motion-safe:animate-[assistant-twinkle_2.8s_ease-in-out_infinite] group-hover:[animation:none] group-hover:scale-105',
               open && 'rotate-90 scale-95'
             )}
           >
             {open ? <X className="size-4" strokeWidth={2} /> : <Sparkles className="size-4" strokeWidth={2} />}
           </span>
+        </button>
+      </div>
+
+      {/* Hover label lives outside the filtered wrapper so the goo never smears text. */}
+      {!open && (
+        <span
+          aria-hidden
+          className="pointer-events-none absolute top-1/2 left-14 -translate-y-1/2 whitespace-nowrap rounded-full bg-assistant-surface px-3 py-1.5 font-mono text-[0.62rem] tracking-[0.1em] text-assistant-ink uppercase shadow-[0_8px_24px_-10px_rgba(27,29,31,0.4)] opacity-0 transition-opacity duration-300 [div:hover>&]:opacity-100 [div:focus-within>&]:opacity-100 motion-reduce:transition-none"
+        >
+          Ask Heaven
         </span>
-        <span className="min-w-0 overflow-hidden">
-          <span className="eyebrow block whitespace-nowrap pr-5 text-[0.62rem] opacity-0 transition-opacity duration-300 delay-100 group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none">
-            {open ? 'Close' : 'Ask Heaven'}
-          </span>
-        </span>
-      </button>
-    </>
+      )}
+    </div>
   )
 }
 

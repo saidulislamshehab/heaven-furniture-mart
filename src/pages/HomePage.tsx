@@ -2,6 +2,7 @@ import { HeroSection } from '@/components/sections/HeroSection'
 import { IntroSection } from '@/components/sections/IntroSection'
 import { BespokeSection } from '@/components/sections/BespokeSection'
 import { CollectionsSection } from '@/components/sections/CollectionsSection'
+import { StorySection } from '@/components/sections/StorySection'
 import { CraftSection } from '@/components/sections/CraftSection'
 import { WhyHeavenSection } from '@/components/sections/WhyHeavenSection'
 import { FounderSection } from '@/components/sections/FounderSection'
@@ -23,6 +24,7 @@ export function HomePage({ introDone }: { introDone: boolean }) {
       <IntroSection />
       <BespokeSection />
       <CollectionsSection />
+      <StorySection />
       <CraftSection />
       <WhyHeavenSection />
       <FounderSection />
