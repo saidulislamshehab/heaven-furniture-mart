@@ -28,16 +28,24 @@ const socialLinks = [
 function Wordmark({ dark, onHome }: { dark: boolean; onHome?: (e: MouseEvent) => void }) {
   return (
     <Link to="/" onClick={onHome} className="group flex items-center" aria-label="Heaven Furniture Mart — home">
-      <img
-        src={brandImages.wordmark}
-        alt=""
-        width={640}
-        height={216}
+      {/* Masked so the wordmark tints to an exact brand colour and shifts to gold on hover */}
+      <span
+        aria-hidden
         className={cn(
-          'h-7 w-auto object-contain transition-[filter] duration-500 sm:h-8',
-          // Brown artwork reads as ivory over the dark hero; native brown once the bar turns ivory
-          dark ? '' : 'brightness-0 invert-[0.94] sepia-[0.15]'
+          'block h-7 aspect-[16/5] transition-colors duration-500 group-hover:bg-brand-gold sm:h-8',
+          // Light over the hero, dark once the bar turns ivory on scroll
+          dark ? 'bg-brand-teal-deep' : 'bg-brand-ivory'
         )}
+        style={{
+          maskImage: `url(${brandImages.wordmark})`,
+          WebkitMaskImage: `url(${brandImages.wordmark})`,
+          maskRepeat: 'no-repeat',
+          WebkitMaskRepeat: 'no-repeat',
+          maskSize: 'contain',
+          WebkitMaskSize: 'contain',
+          maskPosition: 'left center',
+          WebkitMaskPosition: 'left center',
+        }}
       />
     </Link>
   )

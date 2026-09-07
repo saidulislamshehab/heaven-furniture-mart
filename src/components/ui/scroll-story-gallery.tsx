@@ -123,11 +123,11 @@ function Layer({
       )}
 
       {scene.display && (
-        <div className="absolute inset-0 flex items-center px-5 sm:px-8 lg:px-12">
+        <div className="absolute inset-x-0 top-0 flex px-5 pt-6 sm:px-8 sm:pt-8 lg:inset-y-0 lg:right-auto lg:w-[52%] lg:items-center lg:px-12 lg:pt-0">
           <motion.p
             aria-hidden
             className={cn(
-              'font-serif font-bold leading-[0.85] tracking-[-0.04em] text-[length:clamp(5.5rem,20vw,17rem)]',
+              'font-serif font-bold leading-[0.85] tracking-[-0.04em] text-[length:clamp(5rem,18vw,15rem)] lg:whitespace-nowrap lg:text-[length:clamp(6rem,11vw,11.5rem)]',
               surface.fg
             )}
             style={
@@ -142,23 +142,32 @@ function Layer({
       )}
 
       {scene.src && (
-        <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-t from-brand-ink/70 via-brand-ink/10 to-transparent" />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(13,20,19,0.88)_0%,rgba(13,20,19,0.55)_35%,rgba(13,20,19,0.12)_65%,transparent_100%)]"
+        />
       )}
 
       {(scene.eyebrow || scene.title || scene.description) && (
         <motion.div
-          className={cn('absolute inset-x-0 bottom-0 max-w-xl p-5 pr-20 sm:p-8 sm:pr-28 lg:p-12 lg:pr-32', surface.fg)}
+          className={cn(
+            'absolute inset-x-0 bottom-0 flex flex-col justify-end p-5 pr-20 pb-8 sm:p-8 sm:pr-28 sm:pb-10',
+            scene.src
+              ? 'lg:max-w-2xl lg:p-12 lg:pr-32'
+              : 'lg:inset-y-0 lg:left-auto lg:w-[48%] lg:justify-center lg:p-12 lg:pr-28',
+            surface.fg
+          )}
           style={reduce ? undefined : { y: captionY }}
         >
           {scene.eyebrow && <p className="eyebrow text-brand-gold">{scene.eyebrow}</p>}
           {scene.display && <span className="sr-only">{scene.display}</span>}
           {scene.title && (
-            <h3 className="mt-2 font-serif text-[length:clamp(1.75rem,4vw,3.5rem)] leading-[0.95] tracking-tight text-balance">
+            <h3 className="mt-2 font-serif text-[length:clamp(2rem,4.5vw,4rem)] leading-[0.95] tracking-tight text-balance">
               {scene.title}
             </h3>
           )}
           {scene.description && (
-            <p className={cn('mt-3 hidden max-w-md text-[0.95rem] leading-relaxed sm:block', surface.muted)}>
+            <p className={cn('mt-4 max-w-xl font-serif text-[length:clamp(1.15rem,1.9vw,1.75rem)] leading-snug text-pretty', surface.muted)}>
               {scene.description}
             </p>
           )}
@@ -193,7 +202,7 @@ export function ScrollStoryGallery({ images, direction = 'up', className }: Scro
     <div ref={ref} className={cn('relative h-[460vh] md:h-[500vh]', className)}>
       <div className="sticky top-0 flex h-[100dvh] flex-col justify-center px-4 py-[max(1.25rem,env(safe-area-inset-top))] sm:px-6 lg:px-10">
         <div className="mx-auto w-full max-w-[1600px]">
-          <div className="relative h-[72dvh] w-full overflow-hidden bg-brand-ink shadow-[0_60px_120px_-60px_rgba(13,20,19,0.65)] md:aspect-[16/9] md:h-auto md:max-h-[78dvh]">
+          <div className="relative h-[72dvh] w-full overflow-hidden rounded-[1.5rem] bg-brand-ivory-deep shadow-[0_60px_120px_-60px_rgba(13,20,19,0.45)] sm:rounded-[2rem] md:aspect-[16/9] md:h-auto md:max-h-[78dvh] lg:rounded-[2.5rem]">
             {list.map((scene, i) => (
               <Layer
                 key={(scene.src ?? scene.surface?.bg ?? '') + i}

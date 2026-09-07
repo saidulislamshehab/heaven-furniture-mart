@@ -25,7 +25,7 @@ const INTERNAL_PATHS = new Set(['/', '/shop', '/about', '/visit'])
  *  4. phone (+880…)  5. internal path (/shop?category=x, /#bespoke, /visit)
  */
 const TOKEN =
-  /(https?:\/\/[^\s<>"')\]]+)|(\b(?:www\.|wa\.me\/|facebook\.com\/|instagram\.com\/|youtube\.com\/|maps\.app\.goo\.gl\/)[^\s<>"')\]]*)|([\w.+-]+@[\w-]+\.[\w.-]+\w)|(\+?880[\s-]?\d{4}[\s-]?\d{6}|\+880\s?\d{2,4}[-\s]\d{6,7})|((?:^|(?<=[\s(]))\/(?:(?:shop|about|visit)(?:\?[\w=&-]+)?(?:#[\w-]+)?|#[\w-]+)(?=[\s.,;:!?)]|$))/g
+  /(https?:\/\/[^\s<>"')\]]+)|(\b(?:www\.|wa\.me\/|facebook\.com\/|instagram\.com\/|youtube\.com\/|maps\.app\.goo\.gl\/)[^\s<>"')\]]*)|([\w.+-]+@[\w-]+\.[\w.-]+\w)|(\+?880[\s\-\u2010-\u2015\u2212]?\d{4}[\s\-\u2010-\u2015\u2212]?\d{6}|\+880\s?\d{2,4}[\s\-\u2010-\u2015\u2212]\d{6,7})|((?:^|(?<=[\s(]))\/(?:(?:shop|about|visit)(?:\?[\w=&-]+)?(?:#[\w-]+)?|#[\w-]+)(?=[\s.,;:!?)]|$))/g
 
 const trimTrailing = (s: string) => {
   const m = s.match(/[.,;:!?]+$/)

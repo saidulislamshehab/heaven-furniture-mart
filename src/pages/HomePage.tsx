@@ -32,7 +32,7 @@ export function HomePage({ introDone }: { introDone: boolean }) {
       <SignatureSection />
       <ProofSection />
       <VisitTeaserSection />
-      <MilestonesSection number="11" className="bg-brand-ivory-deep pb-[clamp(4.5rem,10vw,10rem)] text-brand-brown" />
+      <MilestonesSection number="11" className="bg-brand-ivory pb-[clamp(4.5rem,10vw,10rem)] text-brand-brown" />
       <SvgFollowScroll />
     </>
   )

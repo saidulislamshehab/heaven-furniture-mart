@@ -44,7 +44,6 @@ interface Endpoint {
 
 const OPENROUTER_DEFAULT_MODELS = [
   'nvidia/nemotron-3-super-120b-a12b:free',
-  'minimax/minimax-m2.7:free',
   'google/gemma-4-31b-it:free',
   'openrouter/free',
 ]

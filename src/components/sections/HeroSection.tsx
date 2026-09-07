@@ -75,11 +75,11 @@ function HeroFilm({ active, onAdvance }: { active: number; onAdvance: () => void
 function Letters({ text, ready, delay, className }: { text: string; ready: boolean; delay: number; className?: string }) {
   const reduce = useReducedMotion()
   return (
-    <span className={cn('inline-flex overflow-hidden pb-[0.06em] -mb-[0.06em]', className)} aria-hidden>
+    <span className={cn('inline-flex overflow-hidden px-[0.08em] -mx-[0.08em] pt-[0.1em] -mt-[0.1em] pb-[0.12em] -mb-[0.12em]', className)} aria-hidden>
       {text.split('').map((ch, i) => (
         <motion.span
           key={i}
-          className="inline-block will-change-transform"
+          className="inline-block overflow-visible will-change-transform"
           initial={reduce ? false : { y: '110%', opacity: 0, filter: 'blur(6px)' }}
           animate={ready ? { y: '0%', opacity: 1, filter: 'blur(0px)' } : {}}
           transition={{ duration: 1.1, delay: delay + i * 0.035, ease: luxuryEase }}
@@ -141,19 +141,19 @@ export function HeroSection({ introDone }: HeroSectionProps) {
         </motion.p>
 
         {/* Layered headline: massive sans line + italic serif line, like a film title card */}
-        <h1 className="mt-5 text-balance sm:mt-6" aria-label="Rooms worth coming home to.">
+        <h1 className="mt-5 text-balance sm:mt-6" aria-label="Furniture, crafted around you.">
           <span className="block font-serif text-[length:clamp(2.1rem,6.2vw,5.5rem)] font-normal leading-[0.95] tracking-[-0.025em] text-brand-ivory">
-            <Letters text="Rooms worth" ready={ready} delay={0.2} />
+            <Letters text="Furniture," ready={ready} delay={0.2} />
           </span>
           <span className="mt-1 flex flex-wrap items-baseline gap-x-[0.28em] text-[length:clamp(2.1rem,6.2vw,5.5rem)] sm:mt-2">
             <span className="font-serif italic leading-[0.95] tracking-[-0.02em] text-brand-ivory/90">
-              <Letters text="coming" ready={ready} delay={0.5} />
+              <Letters text="crafted" ready={ready} delay={0.5} />
             </span>
-            <span className="font-serif italic leading-[0.95] tracking-[-0.02em] text-brand-gold-soft">
-              <Letters text="home" ready={ready} delay={0.7} />
+            <span className="font-sans font-medium not-italic leading-[0.95] tracking-[-0.03em] text-brand-wood">
+              <Letters text="around" ready={ready} delay={0.7} />
             </span>
             <span className="font-serif italic leading-[0.95] tracking-[-0.02em] text-brand-ivory/90">
-              <Letters text="to." ready={ready} delay={0.88} />
+              <Letters text="you." ready={ready} delay={0.88} />
             </span>
           </span>
         </h1>

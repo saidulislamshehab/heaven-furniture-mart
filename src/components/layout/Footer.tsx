@@ -30,10 +30,21 @@ export function Footer() {
       <div className="container-x mx-auto max-w-[1600px] pt-20 pb-10 sm:pt-28">
         <div className="grid gap-14 lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <img
-              src="/heaven.png"
-              alt="Heaven Furniture Mart"
-              className="h-12 w-auto [filter:brightness(0)_invert(1)] sm:h-14"
+            {/* Masked so the wordmark tints ivory and shifts to gold on hover */}
+            <span
+              role="img"
+              aria-label="Heaven Furniture Mart"
+              className="block h-12 aspect-[2159/728] bg-brand-ivory transition-colors duration-500 hover:bg-brand-gold sm:h-14"
+              style={{
+                maskImage: 'url(/heaven.png)',
+                WebkitMaskImage: 'url(/heaven.png)',
+                maskRepeat: 'no-repeat',
+                WebkitMaskRepeat: 'no-repeat',
+                maskSize: 'contain',
+                WebkitMaskSize: 'contain',
+                maskPosition: 'left center',
+                WebkitMaskPosition: 'left center',
+              }}
             />
             <p className="mt-8 max-w-sm font-serif text-2xl leading-snug text-brand-ivory/85 sm:text-3xl">
               Bespoke furniture and interior styling, designed around the way you live.

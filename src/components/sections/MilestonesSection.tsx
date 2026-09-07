@@ -15,7 +15,6 @@ const surfaces: StorySurface[] = [
 const images: StoryImage[] = site.milestones.map((m, i) => ({
   surface: surfaces[i % surfaces.length],
   display: m.year,
-  eyebrow: `0${i + 1} — Milestone`,
   title: m.title,
   description: m.body,
 }))

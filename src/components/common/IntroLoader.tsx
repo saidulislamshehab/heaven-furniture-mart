@@ -16,11 +16,12 @@ const T = {
   heaven: 0.25, // halves start converging (ivory alone before this)
   stagger: 0.14, // each letter follows the previous one; inner letters lead so none overtake
   letterDur: 1.1, // last letter (H / N) lands ≈ 1.65
-  mart: 1.6, // FURNITURE MART rises
-  martDur: 0.7, // …and is fully settled ≈ 2.3
-  exit: 2.85, // hold 2.3 → 2.85, then the lockup lifts and the curtain rises
+  mart: 1.7, // FURNITURE MART converges the same way once HEAVEN has settled
+  martStagger: 0.05,
+  martDur: 0.9, // last letter lands ≈ 2.9
+  exit: 3.4, // hold 2.9 → 3.4, then the lockup lifts and the curtain rises
   lockupDur: 0.45,
-  curtainDur: 0.8, // curtain fully gone ≈ 3.65 → hero begins
+  curtainDur: 0.8, // curtain fully gone ≈ 4.2 → hero begins
 }
 
 const REVEAL_EASE = [0.16, 1, 0.3, 1] as const
@@ -28,6 +29,8 @@ const SLIDE_EASE = [0.4, 0, 0.15, 1] as const // soft start, long glide into pla
 const CURTAIN_EASE = [0.76, 0, 0.24, 1] as const
 const letters = 'HEAVEN'.split('')
 const LEFT_COUNT = 3 // H E A from the left, V E N from the right
+const martLetters = 'FURNITURE MART'.split('')
+const MART_LEFT_COUNT = 7 // "FURNITU" from the left, "RE MART" from the right
 
 export function useIntroDone() {
   const [done, setDone] = useState(() => {
@@ -70,10 +73,19 @@ export function IntroLoader({ show, onDone }: IntroLoaderProps) {
           ],
           [
             '[data-heaven]',
-            { letterSpacing: ['0.14em', typeof window !== 'undefined' && window.innerWidth < 640 ? '0.04em' : '0.1em'] },
+            { letterSpacing: ['0.02em', typeof window !== 'undefined' && window.innerWidth < 640 ? '-0.03em' : '-0.02em'] },
             { duration: 1.1, ease: REVEAL_EASE, at: T.heaven + 0.3 },
           ],
-          ['[data-mart]', { transform: ['translateY(120%)', 'translateY(0%)'], opacity: [0, 1] }, { duration: T.martDur, ease: REVEAL_EASE, at: T.mart }],
+          [
+            '[data-mart-letter="left"]',
+            { transform: [`translateX(${-travel}px)`, 'translateX(0px)'], opacity: [0, 1] },
+            { duration: T.martDur, ease: SLIDE_EASE, delay: stagger(T.martStagger, { from: 'last' }), at: T.mart },
+          ],
+          [
+            '[data-mart-letter="right"]',
+            { transform: [`translateX(${travel}px)`, 'translateX(0px)'], opacity: [0, 1] },
+            { duration: T.martDur, ease: SLIDE_EASE, delay: stagger(T.martStagger), at: T.mart },
+          ],
           // — hold: nothing animates until T.exit —
           ['[data-lockup]', { opacity: 0, y: -18 }, { duration: T.lockupDur, ease: REVEAL_EASE, at: T.exit }],
           ['[data-edge]', { opacity: 1 }, { duration: 0.2, at: T.exit }],
@@ -112,12 +124,17 @@ export function IntroLoader({ show, onDone }: IntroLoaderProps) {
             <div data-lockup className="flex flex-col items-center px-4 sm:px-6">
               <span className="sr-only">Heaven Furniture Mart</span>
 
-              {/* HEAVEN — two halves converge from the viewport edges, then the spacing settles */}
+              {/* HEAVEN — heavy display cut; two halves converge from the viewport edges, then the spacing settles */}
               <span
                 data-heaven
                 aria-hidden
-                className="flex pb-[0.1em] font-serif leading-[0.85]"
-                style={{ fontSize: 'clamp(2.25rem, 12vw, 12rem)', letterSpacing: reduce ? '0.04em' : '0.14em' }}
+                className="flex pb-[0.1em] font-display leading-[0.85]"
+                style={{
+                  fontSize: 'clamp(2.5rem, 13vw, 13rem)',
+                  fontWeight: 900,
+                  fontVariationSettings: '"opsz" 144, "SOFT" 30, "WONK" 0',
+                  letterSpacing: reduce ? '-0.02em' : '0.02em',
+                }}
               >
                 {letters.map((l, i) => {
                   const side = i < LEFT_COUNT ? 'left' : 'right'
@@ -134,20 +151,25 @@ export function IntroLoader({ show, onDone }: IntroLoaderProps) {
                 })}
               </span>
 
-              {/* FURNITURE MART — rises from beneath through a mask */}
-              <span className="mt-4 overflow-hidden pb-px sm:mt-6">
-                <span
-                  data-mart
-                  aria-hidden
-                  className="block font-mono text-[0.68rem] font-medium uppercase text-brand-teal-deep/70 sm:text-sm"
-                  style={{
-                    letterSpacing: 'clamp(0.2em, 2.8vw, 0.42em)',
-                    opacity: reduce ? 1 : 0,
-                    transform: reduce ? undefined : 'translateY(120%)',
-                  }}
-                >
-                  Furniture&nbsp;Mart
-                </span>
+              {/* FURNITURE MART — same converge as HEAVEN, cued once HEAVEN has landed */}
+              <span
+                aria-hidden
+                className="mt-4 flex font-mono text-[0.68rem] font-medium uppercase text-brand-teal-deep/70 sm:mt-6 sm:text-sm"
+                style={{ letterSpacing: 'clamp(0.2em, 2.8vw, 0.42em)' }}
+              >
+                {martLetters.map((l, i) => {
+                  const side = i < MART_LEFT_COUNT ? 'left' : 'right'
+                  return (
+                    <span
+                      key={i}
+                      data-mart-letter={side}
+                      className="inline-block will-change-transform"
+                      style={reduce ? undefined : { transform: `translateX(${side === 'left' ? -travel : travel}px)`, opacity: 0 }}
+                    >
+                      {l === ' ' ? '\u00A0' : l}
+                    </span>
+                  )
+                })}
               </span>
             </div>
 

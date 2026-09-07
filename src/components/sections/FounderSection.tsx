@@ -59,15 +59,15 @@ export function FounderSection({ compact = false }: { compact?: boolean }) {
     <section ref={ref} id="founder" className="section-pad overflow-hidden bg-brand-ivory text-brand-brown">
       <div className="container-x mx-auto grid max-w-[1600px] gap-12 lg:grid-cols-12 lg:gap-8">
         <div className="lg:col-span-5">
-          <div className="relative overflow-hidden rounded-t-[999px] rounded-b-xl">
+          <div className="relative">
             <RevealImage
               src={brandImages.founder}
               alt={`${site.founder.name}, ${site.founder.role} of Heaven Furniture Mart, speaking at the Chattogram Furniture Fair`}
-              className="aspect-[4/5] w-full"
+              className="aspect-[4/5] w-full rounded-xl"
               imgClassName="h-full w-full object-cover object-[48%_30%]"
               sizes="(min-width:1024px) 40vw, 100vw"
             />
-            <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-t from-brand-ivory/40 via-transparent to-transparent" />
+            <div aria-hidden className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-t from-brand-ivory/40 via-transparent to-transparent" />
           </div>
           <Reveal delay={0.3} className="mt-4 flex items-center justify-between text-brand-stone">
             <p className="eyebrow">Chattogram Furniture Fair · 2024</p>
