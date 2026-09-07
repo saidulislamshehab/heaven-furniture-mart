@@ -27,16 +27,18 @@ const socialLinks = [
 
 function Wordmark({ dark, onHome }: { dark: boolean; onHome?: (e: MouseEvent) => void }) {
   return (
-    <Link to="/" onClick={onHome} className="group flex items-center gap-3" aria-label="Heaven Furniture Mart — home">
-      <img src={brandImages.logo} alt="" width={36} height={36} className="h-8 w-auto object-contain sm:h-9" />
-      <span className="flex flex-col leading-none">
-        <span className={cn('font-serif text-[1.35rem] tracking-[0.14em]', dark ? 'text-brand-teal-deep' : 'text-brand-ivory')}>
-          HEAVEN
-        </span>
-        <span className={cn('eyebrow mt-0.5 text-[0.55rem] tracking-[0.3em]', dark ? 'text-brand-stone' : 'text-brand-ivory/70')}>
-          Furniture Mart
-        </span>
-      </span>
+    <Link to="/" onClick={onHome} className="group flex items-center" aria-label="Heaven Furniture Mart — home">
+      <img
+        src={brandImages.wordmark}
+        alt=""
+        width={640}
+        height={216}
+        className={cn(
+          'h-7 w-auto object-contain transition-[filter] duration-500 sm:h-8',
+          // Brown artwork reads as ivory over the dark hero; native brown once the bar turns ivory
+          dark ? '' : 'brightness-0 invert-[0.94] sepia-[0.15]'
+        )}
+      />
     </Link>
   )
 }
@@ -155,16 +157,16 @@ export function Navbar() {
                     </DialogPrimitive.Overlay>
                     <DialogPrimitive.Content asChild forceMount aria-describedby={undefined}>
                       <motion.div
-                        className="fixed inset-0 z-[70] flex flex-col justify-between overflow-y-auto overscroll-contain bg-brand-teal-deep text-brand-ivory outline-none"
-                        initial={reduce ? { opacity: 0 } : { clipPath: 'inset(0 0 100% 0)' }}
-                        animate={reduce ? { opacity: 1 } : { clipPath: 'inset(0 0 0% 0)' }}
-                        exit={reduce ? { opacity: 0 } : { clipPath: 'inset(0 0 100% 0)' }}
-                        transition={{ duration: 0.7, ease: luxuryEase }}
+                        className="fixed inset-x-0 top-0 z-[70] flex h-dvh w-full flex-col overflow-y-auto overscroll-contain bg-brand-ivory text-brand-brown shadow-[0_24px_60px_-20px_rgba(13,20,19,0.45)] outline-none sm:right-0 sm:left-auto sm:max-w-md"
+                        initial={reduce ? { opacity: 0 } : { y: '-100%' }}
+                        animate={reduce ? { opacity: 1 } : { y: 0 }}
+                        exit={reduce ? { opacity: 0 } : { y: '-100%' }}
+                        transition={{ duration: 0.65, ease: luxuryEase }}
                       >
                         <DialogPrimitive.Title className="sr-only">Menu</DialogPrimitive.Title>
-                        <div className="container-x flex shrink-0 items-center justify-between py-5 sm:py-6">
+                        <div className="container-x flex shrink-0 items-center justify-between border-b border-brand-brown/10 py-5 sm:py-6">
                           <Wordmark
-                            dark={false}
+                            dark
                             onHome={(e) => {
                               scrollToTopIfSameRoute(e, pathname)
                               setMenuOpen(false)
@@ -174,7 +176,7 @@ export function Navbar() {
                             <button
                               type="button"
                               aria-label="Close menu"
-                              className="flex size-11 items-center justify-center rounded-full border border-brand-ivory/30 text-brand-ivory hover:bg-brand-ivory/10"
+                              className="flex size-11 items-center justify-center rounded-full border border-brand-brown/20 text-brand-brown transition-colors hover:border-brand-brown hover:bg-brand-brown hover:text-brand-ivory"
                             >
                               <X className="size-5" strokeWidth={1.5} />
                             </button>
@@ -182,13 +184,14 @@ export function Navbar() {
                         </div>
 
                         <nav aria-label="Mobile" className="container-x flex flex-1 flex-col justify-center py-6">
-                          <ul className="space-y-1">
+                          <p className="eyebrow text-brand-stone">Index</p>
+                          <ul className="mt-4">
                             {navLinks.map((l, i) => (
                               <motion.li
                                 key={l.to}
-                                initial={{ opacity: 0, y: 24 }}
+                                initial={{ opacity: 0, y: 16 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8, delay: 0.2 + i * 0.06, ease: luxuryEase }}
+                                transition={{ duration: 0.7, delay: 0.25 + i * 0.06, ease: luxuryEase }}
                               >
                                 <NavLink
                                   to={l.to}
@@ -199,12 +202,28 @@ export function Navbar() {
                                   }}
                                   className={({ isActive }) =>
                                     cn(
-                                      'block border-b border-brand-ivory/10 py-3 font-serif italic text-[length:clamp(2rem,min(8.5vw,10svh),3.75rem)] leading-tight tracking-tight transition-colors',
-                                      isActive ? 'text-brand-ivory' : 'text-brand-ivory/60 hover:text-brand-ivory'
+                                      'group/nav flex items-baseline gap-4 border-b border-brand-brown/10 py-3.5 transition-colors',
+                                      isActive ? 'text-brand-brown' : 'text-brand-brown/55 hover:text-brand-brown'
                                     )
                                   }
                                 >
-                                  {l.label}
+                                  {({ isActive }) => (
+                                    <>
+                                      <span className="eyebrow w-6 shrink-0 text-[0.65rem] text-brand-gold">0{i + 1}</span>
+                                      <span className="flex-1 font-serif text-[length:clamp(1.85rem,min(7.5vw,9svh),3.25rem)] leading-none tracking-tight">
+                                        {l.label}
+                                      </span>
+                                      <ArrowUpRight
+                                        className={cn(
+                                          'size-5 shrink-0 self-center text-brand-gold transition-[opacity,transform] duration-500 ease-[var(--ease-luxury)]',
+                                          isActive
+                                            ? 'opacity-100'
+                                            : 'translate-x-2 opacity-0 group-hover/nav:translate-x-0 group-hover/nav:opacity-100'
+                                        )}
+                                        strokeWidth={1.5}
+                                      />
+                                    </>
+                                  )}
                                 </NavLink>
                               </motion.li>
                             ))}
@@ -212,47 +231,54 @@ export function Navbar() {
                         </nav>
 
                         <motion.div
-                          className="container-x shrink-0 pt-6 pb-[calc(1.5rem+env(safe-area-inset-bottom,0px))]"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ duration: 0.8, delay: 0.5 }}
+                          className="container-x shrink-0 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]"
+                          initial={{ opacity: 0, y: 16 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.7, delay: 0.5, ease: luxuryEase }}
                         >
-                          <p className="eyebrow text-brand-ivory/45">(Email)</p>
-                          <a
-                            href={`mailto:${site.email}`}
-                            className="mt-2 block break-all font-sans text-lg text-brand-gold-soft transition-colors hover:text-brand-gold"
-                          >
-                            {site.email}
-                          </a>
+                          <div className="rounded-2xl bg-brand-teal-deep p-5 text-brand-ivory sm:p-6">
+                            <p className="eyebrow text-brand-ivory/45">Get in touch</p>
+                            <a
+                              href={`tel:${site.phoneE164}`}
+                              className="mt-3 block font-serif text-2xl leading-none text-brand-ivory transition-colors hover:text-brand-gold-soft"
+                            >
+                              {site.phoneDisplay}
+                            </a>
+                            <a
+                              href={`mailto:${site.email}`}
+                              className="mt-2 block break-all font-sans text-sm text-brand-ivory/70 transition-colors hover:text-brand-gold-soft"
+                            >
+                              {site.email}
+                            </a>
 
-                          <p className="eyebrow mt-6 text-brand-ivory/45">(Socials)</p>
-                          <ul className="mt-3 grid grid-cols-2 gap-x-6 gap-y-1">
-                            {socialLinks.map((s) => (
-                              <li key={s.label}>
-                                <a
-                                  href={s.href}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="group/social flex items-center justify-between border-b border-brand-ivory/10 py-3 text-brand-ivory/80 transition-colors hover:text-brand-ivory"
-                                >
-                                  <span className="font-sans text-sm font-medium uppercase tracking-[0.16em]">{s.label}</span>
-                                  <ArrowUpRight className="size-4 text-brand-ivory/40 transition-transform duration-300 group-hover/social:translate-x-0.5 group-hover/social:-translate-y-0.5 group-hover/social:text-brand-gold" />
-                                </a>
-                              </li>
-                            ))}
-                          </ul>
+                            <ul className="mt-5 flex flex-wrap gap-2">
+                              {socialLinks.map((s) => (
+                                <li key={s.label}>
+                                  <a
+                                    href={s.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-brand-ivory/15 px-3.5 font-sans text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-brand-ivory/80 transition-colors hover:border-brand-gold hover:text-brand-gold-soft"
+                                  >
+                                    {s.label}
+                                    <ArrowUpRight className="size-3" />
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
 
-                          <Button
-                            variant="gold"
-                            size="pill"
-                            className="mt-7 w-full"
-                            onClick={() => {
-                              setMenuOpen(false)
-                              open()
-                            }}
-                          >
-                            Request a Consultation <ArrowUpRight />
-                          </Button>
+                            <Button
+                              variant="gold"
+                              size="pill"
+                              className="mt-6 w-full"
+                              onClick={() => {
+                                setMenuOpen(false)
+                                open()
+                              }}
+                            >
+                              Request a Consultation <ArrowUpRight />
+                            </Button>
+                          </div>
                         </motion.div>
                       </motion.div>
                     </DialogPrimitive.Content>

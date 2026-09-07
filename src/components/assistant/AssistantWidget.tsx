@@ -137,17 +137,17 @@ export function AssistantWidget() {
             {...panelMotion}
             transition={{ duration: 0.3, ease: luxuryEase }}
             className={cn(
-              'fixed z-[55] flex flex-col overflow-hidden rounded-sm border border-brand-gold/25 bg-brand-teal-deep text-brand-ivory shadow-[0_30px_80px_-20px_rgba(13,20,19,0.75)]',
+              'fixed z-[55] flex flex-col overflow-hidden rounded-sm border border-brand-gold/50 bg-brand-ink text-brand-ivory shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8),0_0_0_1px_rgba(201,168,106,0.12)]',
               'left-[max(0.75rem,env(safe-area-inset-left))] right-[max(0.75rem,env(safe-area-inset-right))] bottom-[calc(env(safe-area-inset-bottom)+5rem)] max-h-[min(70dvh,34rem)]',
               'sm:left-6 sm:right-auto sm:bottom-24 sm:w-[24rem] sm:max-h-[min(72dvh,36rem)]'
             )}
           >
-            <header className="flex items-start justify-between gap-4 border-b border-brand-ivory/10 px-5 py-4">
+            <header className="flex items-start justify-between gap-4 border-b border-brand-gold/30 bg-gradient-to-b from-brand-gold/[0.08] to-transparent px-5 py-4">
               <div className="flex flex-col leading-none">
-                <span id={titleId} className="font-serif text-xl tracking-[0.14em]">
+                <span id={titleId} className="font-serif text-xl tracking-[0.14em] text-brand-gold">
                   HEAVEN
                 </span>
-                <span className="eyebrow mt-1 text-[0.55rem] tracking-[0.3em] text-brand-ivory/60">Furniture Mart Assistant</span>
+                <span className="eyebrow mt-1 text-[0.55rem] tracking-[0.3em] text-brand-ivory/55">Furniture Mart Assistant</span>
               </div>
               <button
                 type="button"
@@ -156,7 +156,7 @@ export function AssistantWidget() {
                   triggerRef.current?.focus()
                 }}
                 aria-label="Close assistant"
-                className="-mr-2 -mt-1 flex size-10 items-center justify-center rounded-full text-brand-ivory/60 transition-colors hover:bg-brand-ivory/10 hover:text-brand-ivory"
+                className="-mr-2 -mt-1 flex size-10 items-center justify-center rounded-full text-brand-ivory/55 transition-colors hover:bg-brand-gold/10 hover:text-brand-gold"
               >
                 <X className="size-4" strokeWidth={1.5} />
               </button>
@@ -168,7 +168,7 @@ export function AssistantWidget() {
               aria-live="polite"
               aria-relevant="additions"
             >
-              <p className="max-w-[92%] text-brand-ivory/80">{WELCOME}</p>
+              <p className="max-w-[92%] text-brand-ivory/75">{WELCOME}</p>
               {messages.length === 0 && (
                 <ul className="flex flex-wrap gap-2 pt-1" aria-label="Suggested questions">
                   {SUGGESTIONS.map((s) => (
@@ -176,7 +176,7 @@ export function AssistantWidget() {
                       <button
                         type="button"
                         onClick={() => void send(s)}
-                        className="rounded-full border border-brand-ivory/20 px-3.5 py-2 text-left text-[0.8rem] text-brand-ivory/80 transition-colors hover:border-brand-gold/60 hover:text-brand-ivory"
+                        className="rounded-full border border-brand-gold/35 px-3.5 py-2 text-left text-[0.8rem] text-brand-gold-soft transition-colors hover:border-brand-gold hover:bg-brand-gold/10 hover:text-brand-gold"
                       >
                         {s}
                       </button>
@@ -191,8 +191,8 @@ export function AssistantWidget() {
                       className={cn(
                         'max-w-[88%] whitespace-pre-wrap [overflow-wrap:anywhere] px-4 py-3',
                         m.role === 'user'
-                          ? 'rounded-2xl rounded-br-sm bg-brand-ivory text-brand-teal-deep'
-                          : cn('rounded-2xl rounded-bl-sm bg-brand-ivory/[0.07] text-brand-ivory/90', m.error && 'border border-brand-gold/40')
+                          ? 'rounded-2xl rounded-br-sm bg-brand-gold text-brand-ink'
+                          : cn('rounded-2xl rounded-bl-sm border border-brand-ivory/10 bg-brand-ivory/[0.05] text-brand-ivory/90', m.error && 'border-brand-gold/60')
                       )}
                     >
                       <span className="sr-only">{m.role === 'user' ? 'You: ' : 'Heaven assistant: '}</span>
@@ -202,11 +202,11 @@ export function AssistantWidget() {
                 ))}
                 {pending && (
                   <li className="flex justify-start" aria-label="Assistant is typing">
-                    <div className="flex items-center gap-1.5 rounded-2xl rounded-bl-sm bg-brand-ivory/[0.07] px-4 py-3.5">
+                    <div className="flex items-center gap-1.5 rounded-2xl rounded-bl-sm border border-brand-ivory/10 bg-brand-ivory/[0.05] px-4 py-3.5">
                       {[0, 1, 2].map((i) => (
                         <span
                           key={i}
-                          className={cn('size-1.5 rounded-full bg-brand-gold/80', !reduce && 'animate-pulse')}
+                          className={cn('size-1.5 rounded-full bg-brand-gold', !reduce && 'animate-pulse')}
                           style={reduce ? undefined : { animationDelay: `${i * 160}ms` }}
                         />
                       ))}
@@ -216,11 +216,11 @@ export function AssistantWidget() {
               </ol>
             </div>
 
-            <form onSubmit={onSubmit} className="border-t border-brand-ivory/10 px-4 pt-3 pb-3.5">
+            <form onSubmit={onSubmit} className="border-t border-brand-gold/20 px-4 pt-3 pb-3.5">
               <div
                 className={cn(
-                  'flex items-end gap-2 rounded-full border border-brand-ivory/15 bg-brand-ivory/[0.05] pl-4 pr-1.5 py-1.5 transition-colors',
-                  'focus-within:border-brand-gold/60 focus-within:bg-brand-ivory/[0.07]',
+                  'flex items-end gap-2 rounded-full border border-brand-ivory/15 bg-brand-ivory/[0.04] pl-4 pr-1.5 py-1.5 transition-colors',
+                  'focus-within:border-brand-gold focus-within:bg-brand-ivory/[0.07]',
                   pending && 'opacity-70'
                 )}
               >
@@ -244,7 +244,7 @@ export function AssistantWidget() {
                   type="submit"
                   disabled={pending || !input.trim()}
                   aria-label="Send message"
-                  className="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-gold text-brand-teal-deep transition-[background-color,opacity,transform] hover:bg-brand-gold-soft active:scale-95 disabled:opacity-35 disabled:active:scale-100"
+                  className="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-gold text-brand-ink transition-[background-color,opacity,transform] hover:bg-brand-gold-soft active:scale-95 disabled:opacity-35 disabled:active:scale-100"
                 >
                   <ArrowUp className="size-4" strokeWidth={2} />
                 </button>
@@ -253,7 +253,7 @@ export function AssistantWidget() {
                 AI assistant · answers only about Heaven. For quotes, call{' '}
                 <a
                   href={`tel:${site.phoneE164}`}
-                  className="whitespace-nowrap text-brand-ivory/70 underline decoration-brand-gold/50 underline-offset-2 transition-colors hover:text-brand-gold-soft"
+                  className="whitespace-nowrap text-brand-gold-soft underline decoration-brand-gold/50 underline-offset-2 transition-colors hover:text-brand-gold"
                 >
                   {site.phoneDisplay}
                 </a>
@@ -274,9 +274,9 @@ export function AssistantWidget() {
         aria-hidden={!(revealed || open)}
         className={cn(
           // Icon-only pill that grows to reveal its label on hover / keyboard focus
-          'group fixed z-[55] grid h-12 grid-cols-[3rem_0fr] items-center rounded-full border border-brand-gold/40 bg-brand-teal-deep/90 text-brand-ivory shadow-[0_18px_40px_-12px_rgba(13,20,19,0.7)] backdrop-blur-md',
+          'group fixed z-[55] grid h-12 grid-cols-[3rem_0fr] items-center rounded-full border border-brand-gold/60 bg-brand-ink/95 text-brand-gold shadow-[0_18px_40px_-12px_rgba(0,0,0,0.8)] backdrop-blur-md',
           'transition-[grid-template-columns,transform,opacity,border-color,box-shadow] duration-500 ease-[var(--ease-luxury)] motion-reduce:transition-none',
-          'hover:grid-cols-[3rem_1fr] hover:border-brand-gold hover:shadow-[0_22px_50px_-12px_rgba(13,20,19,0.8)] focus-visible:grid-cols-[3rem_1fr] focus-visible:border-brand-gold',
+          'hover:grid-cols-[3rem_1fr] hover:border-brand-gold hover:shadow-[0_22px_50px_-12px_rgba(0,0,0,0.9),0_0_24px_-6px_rgba(201,168,106,0.45)] focus-visible:grid-cols-[3rem_1fr] focus-visible:border-brand-gold',
           'bottom-[calc(env(safe-area-inset-bottom)+1.25rem)] left-[max(1rem,env(safe-area-inset-left))] sm:bottom-6 sm:left-6',
           revealed || open ? 'opacity-100' : 'pointer-events-none translate-y-3 opacity-0'
         )}
@@ -290,7 +290,7 @@ export function AssistantWidget() {
           )}
           <span
             className={cn(
-              'relative flex size-8 items-center justify-center rounded-full bg-brand-gold text-brand-teal-deep transition-transform duration-500 ease-[var(--ease-luxury)]',
+              'relative flex size-8 items-center justify-center rounded-full bg-brand-gold text-brand-ink transition-transform duration-500 ease-[var(--ease-luxury)]',
               !open && 'motion-safe:animate-[assistant-twinkle_2.8s_ease-in-out_infinite] group-hover:[animation:none] group-hover:scale-105',
               open && 'rotate-90 scale-95'
             )}

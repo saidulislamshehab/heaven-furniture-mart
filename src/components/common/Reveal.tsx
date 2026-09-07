@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react'
+import { Fragment, useState, type ReactNode } from 'react'
 import { motion, useReducedMotion, type HTMLMotionProps } from 'motion/react'
 
 export const luxuryEase = [0.16, 1, 0.3, 1] as const
@@ -97,7 +97,7 @@ export function SplitWords({ text, className, delay = 0, as = 'span' }: SplitWor
       transition={{ staggerChildren: 0.07, delayChildren: delay }}
     >
       {words.map((w, i) => (
-        <span key={i} className="inline-block">
+        <Fragment key={i}>
           <span className="inline-block overflow-hidden pb-[0.08em] -mb-[0.08em] align-bottom" aria-hidden>
             <motion.span
               className="inline-block"
@@ -108,7 +108,7 @@ export function SplitWords({ text, className, delay = 0, as = 'span' }: SplitWor
             </motion.span>
           </span>
           {i < words.length - 1 ? ' ' : ''}
-        </span>
+        </Fragment>
       ))}
     </Tag>
   )

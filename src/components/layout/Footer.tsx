@@ -1,7 +1,6 @@
 import { Link } from 'react-router'
 import { ArrowUp, ArrowUpRight } from 'lucide-react'
 import { site } from '@/data/site'
-import { brandImages } from '@/data/assets'
 import { categories } from '@/data/catalog'
 import { scrollToTop } from '@/lib/scroll'
 import { MorphingButton } from '@/components/common/MorphingButton'
@@ -19,8 +18,6 @@ const socials = [
   { label: 'YouTube', href: site.social.youtube },
 ]
 
-const WORDMARK_LINE = 'FURNITURE MART'.split('')
-
 function openUpdatesEmail(email: string) {
   const subject = 'Keep me posted on new collections'
   const body = `Hello Heaven Furniture Mart,\n\nPlease keep me posted on new collections and showroom events.\nEmail: ${email}`
@@ -33,13 +30,11 @@ export function Footer() {
       <div className="container-x mx-auto max-w-[1600px] pt-20 pb-10 sm:pt-28">
         <div className="grid gap-14 lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <div className="flex items-center gap-3">
-              <img src={brandImages.logo} alt="" width={40} height={40} className="h-10 w-auto" />
-              <span className="flex flex-col leading-none">
-                <span className="font-serif text-2xl tracking-[0.14em]">HEAVEN</span>
-                <span className="eyebrow mt-1 text-[0.55rem] tracking-[0.3em] text-brand-ivory/60">Furniture Mart</span>
-              </span>
-            </div>
+            <img
+              src="/heaven.png"
+              alt="Heaven Furniture Mart"
+              className="h-12 w-auto [filter:brightness(0)_invert(1)] sm:h-14"
+            />
             <p className="mt-8 max-w-sm font-serif text-2xl leading-snug text-brand-ivory/85 sm:text-3xl">
               Bespoke furniture and interior styling, designed around the way you live.
             </p>
@@ -130,20 +125,12 @@ export function Footer() {
         </div>
       </div>
 
-      <div aria-hidden className="pointer-events-none flex justify-center select-none px-2 pb-4 leading-none">
-        <div className="inline-flex flex-col">
-          <span className="font-display text-[15vw] leading-[0.85] font-medium tracking-[0.04em] text-brand-ivory/[0.09]">
-            HEAVEN
-          </span>
-          {/* Letters are spread so the line spans exactly the width of HEAVEN above */}
-          <span className="mt-[0.6vw] flex justify-between px-[0.6vw] font-display text-[clamp(0.9rem,3vw,3rem)] font-medium text-brand-ivory/35">
-            {WORDMARK_LINE.map((ch, i) => (
-              <span key={i} className={ch === ' ' ? 'w-[1.2em]' : undefined}>
-                {ch}
-              </span>
-            ))}
-          </span>
-        </div>
+      <div aria-hidden className="pointer-events-none flex justify-center select-none px-4 pb-6">
+        <img
+          src="/heaven.png"
+          alt=""
+          className="w-full max-w-[1400px] [filter:brightness(0)_invert(1)] opacity-[0.06]"
+        />
       </div>
     </footer>
   )

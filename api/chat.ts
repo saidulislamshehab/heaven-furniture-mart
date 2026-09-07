@@ -1,5 +1,8 @@
 import { AssistantError, askAssistant, parseMessages } from './_lib/assistant'
 
+// Free providers can be slow; allow more than the 10s Hobby default (needs Vercel Pro for >10s).
+export const maxDuration = 60
+
 const FRIENDLY_ERROR =
   "Sorry, I'm having trouble responding right now. Please try again in a moment or contact Heaven Furniture Mart directly at +880 1960-481983."
 

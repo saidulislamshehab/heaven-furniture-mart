@@ -113,15 +113,9 @@ Usage:
 
 Use an elegant editorial serif font.
 
-Recommended options:
+Chosen:
 
-- Cormorant Garamond
-- Playfair Display
-- DM Serif Display
-
-Preferred:
-
-Cormorant Garamond
+Fraunces Variable (light 300 + italic, SOFT 50) — `font-serif` / `display-1..3`
 
 Characteristics:
 
@@ -137,15 +131,13 @@ Characteristics:
 
 Use a modern clean sans-serif.
 
-Recommended options:
+Chosen:
 
-- Manrope
-- Inter
-- Plus Jakarta Sans
+Figtree Variable — `font-sans`, also used for buttons
 
-Preferred:
+## Labels, numerals, captions
 
-Manrope
+DM Mono — `eyebrow` utility / `font-mono` (uppercase, tracked). Three families total; do not add more.
 
 ---
 

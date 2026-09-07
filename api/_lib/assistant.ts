@@ -59,10 +59,15 @@ const list = (v: string | undefined, fallback: string[]) => {
  */
 function resolveEndpoints(): Endpoint[] {
   const chain: Endpoint[] = []
-  if (process.env.LLM_BASE_URL) {
+  // A localhost proxy (e.g. `freellmpool`) is only reachable in local dev — never from a deployed
+  // function, where it would just burn the whole time budget hanging. Skip it off localhost.
+  const base = process.env.LLM_BASE_URL
+  const isLocal = base ? /localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\]/.test(base) : false
+  const runningLocally = !process.env.VERCEL && process.env.NODE_ENV !== 'production'
+  if (base && (!isLocal || runningLocally)) {
     chain.push({
       name: 'custom',
-      baseUrl: process.env.LLM_BASE_URL,
+      baseUrl: base,
       apiKey: process.env.LLM_API_KEY || 'unused',
       models: list(process.env.LLM_MODEL, ['auto']),
     })

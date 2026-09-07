@@ -47,15 +47,14 @@ function FilmStack() {
 
 function FilmPanel({ film }: { film: Film }) {
   return (
-    <article className="group relative aspect-[9/16] w-full overflow-hidden bg-brand-ivory-deep sm:aspect-auto sm:h-[100svh] lg:h-[100vh]">
+    <article className="group relative aspect-[9/16] w-full overflow-hidden bg-brand-teal sm:aspect-auto sm:h-[100svh] lg:h-[100vh]">
       <div className="absolute inset-0 [&_video]:transition-transform [&_video]:duration-[1600ms] [&_video]:ease-[var(--ease-luxury)] group-hover:[&_video]:scale-[1.03]">
         <SmartVideo asset={film.video} lazy={false} muted />
       </div>
-      {/* Ivory veils top and bottom keep the copy legible over the film */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-brand-ivory/95 via-brand-ivory/15 via-45% to-brand-ivory/85" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-brand-ink/80 via-brand-ink/10 to-brand-ink/55" />
 
       {/* Top meta */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 flex items-center justify-end p-5 text-brand-stone sm:p-6">
+      <div className="pointer-events-none absolute inset-x-0 top-0 flex items-center justify-end p-5 text-brand-ivory/85 sm:p-6">
         <span className="eyebrow tabular-nums">
           {film.index} — 00:{String(film.video.durationSec).padStart(2, '0')}
         </span>
@@ -67,8 +66,8 @@ function FilmPanel({ film }: { film: Film }) {
           <p className="eyebrow text-brand-gold">
             {film.index} / {film.label}
           </p>
-          <h3 className="mt-3 font-serif text-3xl leading-tight text-brand-brown sm:text-4xl">{film.title}</h3>
-          <p className="mt-3 hidden text-[0.95rem] leading-relaxed text-brand-stone md:block">{film.body}</p>
+          <h3 className="mt-3 font-serif text-3xl leading-tight text-brand-ivory sm:text-4xl">{film.title}</h3>
+          <p className="mt-3 hidden text-[0.95rem] leading-relaxed text-brand-ivory/70 md:block">{film.body}</p>
         </div>
       </div>
     </article>
@@ -79,7 +78,7 @@ export function CraftSection() {
   // Matches Tailwind `sm`; rendering one variant keeps phones from fetching the eager triptych films.
   const smUp = useMediaQuery('(min-width: 640px)')
   return (
-    <section id="craft" className="relative bg-brand-ivory text-brand-brown">
+    <section id="craft" className="relative bg-brand-ivory text-brand-brown sm:bg-brand-ink sm:text-brand-ivory">
       {/* Section title on mobile */}
       <div className="container-x mx-auto max-w-[1600px] pt-12 pb-8 sm:hidden">
         <Reveal>
@@ -97,7 +96,7 @@ export function CraftSection() {
             <Reveal>
               <SectionLabel number="04">Inside the workshop</SectionLabel>
             </Reveal>
-            <h2 className="mt-5 max-w-[10ch] display-3 text-balance text-brand-brown">
+            <h2 className="mt-5 max-w-[10ch] display-3 text-balance text-brand-ivory drop-shadow-[0_2px_24px_rgba(13,20,19,0.6)]">
               <SplitWords text="Made in three movements." />
             </h2>
           </div>

@@ -145,14 +145,14 @@ export function HeroSection({ introDone }: HeroSectionProps) {
           <span className="block font-serif text-[length:clamp(2.1rem,6.2vw,5.5rem)] font-normal leading-[0.95] tracking-[-0.025em] text-brand-ivory">
             <Letters text="Furniture," ready={ready} delay={0.2} />
           </span>
-          <span className="mt-1 flex flex-wrap items-baseline gap-x-[0.25em] sm:mt-2">
-            <span className="font-serif text-[length:clamp(2.1rem,6.2vw,5.5rem)] font-light italic leading-[0.95] tracking-[-0.02em] text-brand-ivory/90">
+          <span className="mt-1 flex flex-wrap items-baseline gap-x-[0.28em] text-[length:clamp(2.1rem,6.2vw,5.5rem)] sm:mt-2">
+            <span className="font-serif italic leading-[0.95] tracking-[-0.02em] text-brand-ivory/90">
               <Letters text="crafted" ready={ready} delay={0.5} />
             </span>
-            <span className="font-serif text-[length:clamp(2.1rem,6.2vw,5.5rem)] font-light italic leading-[0.95] tracking-[-0.02em] text-brand-ivory/90">
+            <span className="font-serif italic leading-[0.95] tracking-[-0.02em] text-brand-ivory/90">
               <Letters text="around" ready={ready} delay={0.7} />
             </span>
-            <span className="font-serif text-[length:clamp(2.1rem,6.2vw,5.5rem)] font-light italic leading-[0.95] tracking-[-0.02em] text-brand-gold-soft">
+            <span className="font-serif italic leading-[0.95] tracking-[-0.02em] text-brand-gold-soft">
               <Letters text="you." ready={ready} delay={0.95} />
             </span>
           </span>

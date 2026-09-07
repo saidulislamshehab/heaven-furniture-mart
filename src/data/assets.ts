@@ -51,6 +51,7 @@ export const showroomVideos = {
 
 export const brandImages = {
   logo: '/logo.png',
+  wordmark: '/images/brand/heaven-wordmark.png',
   founder: '/images/brand/founder-abul-kalam-bhuiyan.jpg',
   showroomExterior: '/images/brand/showroom-exterior.avif',
 }

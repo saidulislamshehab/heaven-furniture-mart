@@ -81,7 +81,7 @@ function ReviewCarousel() {
               }}
               className="col-start-1 row-start-1 flex cursor-grab flex-col justify-between active:cursor-grabbing"
             >
-              <blockquote className="font-serif text-[length:clamp(1.35rem,3.2vw,3rem)] leading-[1.2] text-brand-ivory/95">
+              <blockquote className="font-serif text-[length:clamp(1.35rem,3.2vw,3rem)] leading-[1.2] text-brand-brown">
                 “{review.quote}”
               </blockquote>
               <figcaption className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2">
@@ -91,11 +91,11 @@ function ReviewCarousel() {
                     <Star
                       key={i}
                       aria-hidden
-                      className={cn('size-3.5', i < review.rating ? 'fill-brand-gold text-brand-gold' : 'text-brand-ivory/25')}
+                      className={cn('size-3.5', i < review.rating ? 'fill-brand-gold text-brand-gold' : 'text-brand-brown/25')}
                     />
                   ))}
                 </span>
-                <p className="eyebrow basis-full text-brand-ivory/50">Google review</p>
+                <p className="eyebrow basis-full text-brand-stone">Google review</p>
               </figcaption>
             </motion.figure>
           </AnimatePresence>
@@ -117,7 +117,7 @@ function ReviewCarousel() {
               <span
                 className={cn(
                   'block h-px transition-[width,background-color] duration-500 ease-[var(--ease-luxury)] motion-reduce:transition-none',
-                  i === index ? 'w-6 bg-brand-gold sm:w-8' : 'w-3 bg-brand-ivory/35 sm:w-4'
+                  i === index ? 'w-6 bg-brand-gold sm:w-8' : 'w-3 bg-brand-brown/30 sm:w-4'
                 )}
               />
             </button>
@@ -128,7 +128,7 @@ function ReviewCarousel() {
             type="button"
             onClick={() => go(-1)}
             aria-label="Previous review"
-            className="flex size-11 items-center justify-center rounded-full border border-brand-ivory/40 text-brand-ivory transition-colors hover:border-brand-ivory hover:bg-brand-ivory hover:text-brand-teal-deep"
+            className="flex size-11 items-center justify-center rounded-full border border-brand-teal-deep/40 text-brand-teal-deep transition-colors hover:border-brand-teal-deep hover:bg-brand-teal-deep hover:text-brand-ivory"
           >
             <ArrowLeft className="size-4" strokeWidth={1.5} />
           </button>
@@ -136,7 +136,7 @@ function ReviewCarousel() {
             type="button"
             onClick={() => go(1)}
             aria-label="Next review"
-            className="flex size-11 items-center justify-center rounded-full border border-brand-ivory/40 text-brand-ivory transition-colors hover:border-brand-ivory hover:bg-brand-ivory hover:text-brand-teal-deep"
+            className="flex size-11 items-center justify-center rounded-full border border-brand-teal-deep/40 text-brand-teal-deep transition-colors hover:border-brand-teal-deep hover:bg-brand-teal-deep hover:text-brand-ivory"
           >
             <ArrowRight className="size-4" strokeWidth={1.5} />
           </button>
@@ -148,7 +148,7 @@ function ReviewCarousel() {
 
 export function ProofSection() {
   return (
-    <section id="reviews" className="section-pad bg-brand-teal-deep text-brand-ivory">
+    <section id="reviews" className="section-pad bg-brand-ivory text-brand-brown">
       <div className="container-x mx-auto grid max-w-[1600px] gap-14 lg:grid-cols-12">
         <div className="lg:col-span-5">
           <Reveal>
@@ -170,11 +170,11 @@ export function ProofSection() {
                 <span className="font-serif text-7xl leading-none sm:text-8xl">{site.googleRating.score}</span>
                 <Star className="size-6 fill-brand-gold text-brand-gold" aria-hidden />
               </span>
-              <span className="eyebrow mt-3 inline-flex items-center gap-1 text-brand-ivory/60 transition-colors group-hover:text-brand-gold-soft">
+              <span className="eyebrow mt-3 inline-flex items-center gap-1 text-brand-stone transition-colors group-hover:text-brand-gold">
                 {site.googleRating.count} Google reviews <ArrowUpRight className="size-3.5" />
               </span>
             </a>
-            <p className="max-w-[16rem] text-[0.95rem] leading-relaxed text-brand-ivory/65">
+            <p className="max-w-[16rem] text-[0.95rem] leading-relaxed text-brand-stone">
               Trusted by hundreds of homeowners across Chattogram and beyond.
             </p>
           </Reveal>

@@ -139,7 +139,7 @@ export function IntroLoader({ show, onDone }: IntroLoaderProps) {
                 <span
                   data-mart
                   aria-hidden
-                  className="block font-sans text-[0.68rem] font-semibold uppercase text-brand-teal-deep/70 sm:text-sm"
+                  className="block font-mono text-[0.68rem] font-medium uppercase text-brand-teal-deep/70 sm:text-sm"
                   style={{
                     letterSpacing: 'clamp(0.2em, 2.8vw, 0.42em)',
                     opacity: reduce ? 1 : 0,
