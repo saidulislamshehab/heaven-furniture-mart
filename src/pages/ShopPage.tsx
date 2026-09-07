@@ -59,7 +59,7 @@ function QuickView({ product, onClose }: { product: Product | null; onClose: () 
             <div className="aspect-[5/4] bg-brand-ivory-deep sm:aspect-auto sm:max-h-[90dvh]">
               <img src={product.image} alt={product.name} className="h-full w-full object-cover" />
             </div>
-            <div className="flex flex-col p-7 sm:p-10">
+            <div className="flex flex-col p-5 sm:p-10">
               <p className="eyebrow text-brand-gold">{cat?.name}</p>
               <DialogTitle className="mt-4 font-serif text-3xl leading-tight sm:text-4xl">{product.name}</DialogTitle>
               <DialogDescription className="mt-3 text-base text-brand-stone">{product.note}</DialogDescription>

@@ -179,14 +179,14 @@ export function VisitPage() {
       {/* Experience */}
       <section className="section-pad bg-brand-teal-deep text-brand-ivory">
         <div className="container-x mx-auto grid max-w-[1600px] items-center gap-14 lg:grid-cols-12">
-          <div className="grid grid-cols-2 gap-4 lg:col-span-6">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-4 lg:col-span-6">
             <div className="aspect-[9/16] overflow-hidden bg-brand-teal">
               <SmartVideo asset={showroomVideos.walkthrough} />
             </div>
             <RevealImage
               src={img.ivoryCarvedDining}
               alt="Ivory carved dining set on the showroom floor"
-              className="mt-12 aspect-[9/16]"
+              className="aspect-[9/16] sm:mt-12"
               sizes="(min-width:1024px) 25vw, 50vw"
               delay={0.15}
             />

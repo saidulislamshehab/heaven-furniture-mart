@@ -38,7 +38,6 @@ export interface CircularSplitRollProps {
 }
 
 const DESKTOP_WIDTH = 1200
-const TABLET_MIN_WIDTH = 1024
 
 function usePrefersReducedMotion() {
   const [reduce, setReduce] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches)
@@ -113,7 +112,7 @@ export default function CircularSplitRoll({
 
     const mm = gsap.matchMedia()
 
-    mm.add(`(min-width: ${TABLET_MIN_WIDTH}px)`, () => {
+    mm.add('(min-width: 1024px)', () => {
       const ctx = gsap.context(() => {
         const root = rootRef.current!
         const leftNodes = gsap.utils.toArray<HTMLElement>('.csr-title', root)
@@ -214,7 +213,7 @@ export default function CircularSplitRoll({
       className={cn('relative w-full', className)}
       style={{ '--csr-card-w': `${cardSize}px`, '--csr-card-h': `${cardSize / cardAspect}px` } as CSSProperties}
     >
-      {/* Desktop: pinned counter-arcing columns */}
+      {/* Desktop (PC): pinned counter-arcing columns */}
       {showRoll && (
         <div ref={stickyRef} className="relative hidden h-screen w-full overflow-hidden lg:block">
           <div className="container-x mx-auto grid h-full max-w-[1600px] grid-cols-12 items-center">
@@ -270,7 +269,7 @@ export default function CircularSplitRoll({
         </div>
       )}
 
-      {/* Mobile / tablet / reduced-motion: stacked editorial list */}
+      {/* Mobile / tablet / reduced-motion: standard vertical editorial list */}
       <ol className={cn('container-x mx-auto max-w-[1600px]', showRoll ? 'lg:hidden' : '')}>
         {safeItems.map((it, i) => (
           <li
@@ -286,9 +285,9 @@ export default function CircularSplitRoll({
             <div className="flex flex-col justify-center sm:col-span-7">
               <div className="flex items-baseline gap-4">
                 <span className="font-serif text-2xl text-brand-gold">{it.index}</span>
-                <h3 className="font-serif text-4xl leading-none sm:text-5xl">{it.title}</h3>
+                <h3 className="font-serif text-3xl leading-tight sm:text-5xl">{it.title}</h3>
               </div>
-              {it.body && <p className={cn('mt-5 max-w-md text-[0.98rem] leading-relaxed', mutedText)}>{it.body}</p>}
+              {it.body && <p className={cn('mt-4 max-w-md text-[0.98rem] leading-relaxed', mutedText)}>{it.body}</p>}
               {i === total - 1 ? null : <span aria-hidden className="mt-8 hidden h-px w-12 bg-brand-gold/50 sm:block" />}
             </div>
           </li>

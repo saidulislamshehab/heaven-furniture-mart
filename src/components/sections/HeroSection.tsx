@@ -106,7 +106,7 @@ export function HeroSection({ introDone }: HeroSectionProps) {
 
   const ref = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
-  const textY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 120])
+  const textY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : typeof window !== 'undefined' && window.innerWidth < 640 ? 45 : 100])
   const textOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0])
   const mediaScale = useTransform(scrollYProgress, [0, 1], [1, reduce ? 1 : 1.12])
   const ready = introDone
@@ -127,7 +127,7 @@ export function HeroSection({ introDone }: HeroSectionProps) {
 
       <motion.div
         style={{ y: textY, opacity: textOpacity }}
-        className="container-x mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-end pt-32 pb-10 sm:pb-14"
+        className="container-x mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-end pt-24 pb-10 sm:pt-32 sm:pb-14"
       >
         <motion.p {...fade(0.1)} className="eyebrow flex items-center gap-3 text-brand-gold-soft">
           <motion.span
@@ -141,15 +141,18 @@ export function HeroSection({ introDone }: HeroSectionProps) {
         </motion.p>
 
         {/* Layered headline: massive sans line + italic serif line, like a film title card */}
-        <h1 className="mt-6 text-balance" aria-label="Furniture, crafted around you.">
-          <span className="block font-serif text-[length:clamp(2.5rem,6.2vw,5.5rem)] font-normal leading-[0.95] tracking-[-0.025em] text-brand-ivory">
+        <h1 className="mt-5 text-balance sm:mt-6" aria-label="Furniture, crafted around you.">
+          <span className="block font-serif text-[length:clamp(2.1rem,6.2vw,5.5rem)] font-normal leading-[0.95] tracking-[-0.025em] text-brand-ivory">
             <Letters text="Furniture," ready={ready} delay={0.2} />
           </span>
           <span className="mt-1 flex flex-wrap items-baseline gap-x-[0.25em] sm:mt-2">
-            <span className="font-serif text-[length:clamp(2.5rem,6.2vw,5.5rem)] font-light italic leading-[0.95] tracking-[-0.02em] text-brand-ivory/90">
-              <Letters text="crafted around" ready={ready} delay={0.5} />
+            <span className="font-serif text-[length:clamp(2.1rem,6.2vw,5.5rem)] font-light italic leading-[0.95] tracking-[-0.02em] text-brand-ivory/90">
+              <Letters text="crafted" ready={ready} delay={0.5} />
             </span>
-            <span className="font-serif text-[length:clamp(2.5rem,6.2vw,5.5rem)] font-light italic leading-[0.95] tracking-[-0.02em] text-brand-gold-soft">
+            <span className="font-serif text-[length:clamp(2.1rem,6.2vw,5.5rem)] font-light italic leading-[0.95] tracking-[-0.02em] text-brand-ivory/90">
+              <Letters text="around" ready={ready} delay={0.7} />
+            </span>
+            <span className="font-serif text-[length:clamp(2.1rem,6.2vw,5.5rem)] font-light italic leading-[0.95] tracking-[-0.02em] text-brand-gold-soft">
               <Letters text="you." ready={ready} delay={0.95} />
             </span>
           </span>
@@ -184,7 +187,7 @@ export function HeroSection({ introDone }: HeroSectionProps) {
             Est. {site.founded}
             <span className="hidden sm:inline"> · {site.address.line1}</span>
           </p>
-          <ol className="flex items-center gap-2 sm:gap-3" aria-label="Hero films">
+          <ol className="flex items-center gap-1.5 sm:gap-3" aria-label="Hero films">
             {heroVideos.map((_, i) => (
               <li key={i} className="flex items-center">
                 <button
@@ -196,7 +199,7 @@ export function HeroSection({ introDone }: HeroSectionProps) {
                   <span
                     className={cn(
                       'block h-px transition-all duration-700',
-                      i === active ? 'w-7 sm:w-10 bg-brand-gold' : 'w-3.5 sm:w-5 bg-brand-ivory/30 group-hover:bg-brand-ivory/70'
+                      i === active ? 'w-6 sm:w-10 bg-brand-gold' : 'w-3 sm:w-5 bg-brand-ivory/30 group-hover:bg-brand-ivory/70'
                     )}
                   />
                 </button>

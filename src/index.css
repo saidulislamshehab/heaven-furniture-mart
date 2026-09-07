@@ -186,7 +186,7 @@
 }
 
 @utility container-x {
-  padding-inline: clamp(1.25rem, 5vw, 4.5rem);
+  padding-inline: clamp(1rem, 4.5vw, 4.5rem);
 }
 
 @utility eyebrow {
@@ -200,7 +200,7 @@
 @utility display-1 {
   font-family: var(--font-serif);
   font-weight: 400;
-  font-size: clamp(2.75rem, 7.5vw, 7rem);
+  font-size: clamp(2.35rem, 7.5vw, 7rem);
   line-height: 0.98;
   letter-spacing: -0.02em;
 }
@@ -208,7 +208,7 @@
 @utility display-2 {
   font-family: var(--font-serif);
   font-weight: 400;
-  font-size: clamp(2.25rem, 5.2vw, 4.75rem);
+  font-size: clamp(1.95rem, 5.2vw, 4.75rem);
   line-height: 1.02;
   letter-spacing: -0.015em;
 }

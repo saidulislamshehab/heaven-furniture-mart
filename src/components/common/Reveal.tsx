@@ -97,15 +97,17 @@ export function SplitWords({ text, className, delay = 0, as = 'span' }: SplitWor
       transition={{ staggerChildren: 0.07, delayChildren: delay }}
     >
       {words.map((w, i) => (
-        <span key={i} className="inline-block overflow-hidden pb-[0.08em] -mb-[0.08em] align-bottom" aria-hidden>
-          <motion.span
-            className="inline-block"
-            variants={{ hidden: { y: '110%', opacity: 0 }, show: { y: 0, opacity: 1 } }}
-            transition={{ duration: 1, ease: luxuryEase }}
-          >
-            {w}
-          </motion.span>
-          {i < words.length - 1 && <span>&nbsp;</span>}
+        <span key={i} className="inline-block">
+          <span className="inline-block overflow-hidden pb-[0.08em] -mb-[0.08em] align-bottom" aria-hidden>
+            <motion.span
+              className="inline-block"
+              variants={{ hidden: { y: '110%', opacity: 0 }, show: { y: 0, opacity: 1 } }}
+              transition={{ duration: 1, ease: luxuryEase }}
+            >
+              {w}
+            </motion.span>
+          </span>
+          {i < words.length - 1 ? ' ' : ''}
         </span>
       ))}
     </Tag>

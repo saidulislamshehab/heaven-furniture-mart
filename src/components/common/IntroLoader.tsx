@@ -54,7 +54,11 @@ export function IntroLoader({ show, onDone }: IntroLoaderProps) {
         animate([['[data-curtain]', { opacity: 0 }, { duration: 0.35, at: 1.1 }]])
       : animate([
           ['[data-letter]', { y: '0%' }, { duration: T.letterDur, ease: REVEAL_EASE, delay: stagger(T.stagger), at: T.heaven }],
-          ['[data-heaven]', { letterSpacing: '0.1em' }, { duration: 1.1, ease: REVEAL_EASE, at: T.heaven + 0.2 }],
+          [
+            '[data-heaven]',
+            { letterSpacing: typeof window !== 'undefined' && window.innerWidth < 640 ? '0.04em' : '0.1em' },
+            { duration: 1.1, ease: REVEAL_EASE, at: T.heaven + 0.2 },
+          ],
           ['[data-mart]', { opacity: 1, y: 0 }, { duration: T.martDur, ease: REVEAL_EASE, at: T.mart }],
           // — hold: nothing animates until T.exit —
           ['[data-lockup]', { opacity: 0, y: -18 }, { duration: T.lockupDur, ease: REVEAL_EASE, at: T.exit }],
@@ -91,7 +95,7 @@ export function IntroLoader({ show, onDone }: IntroLoaderProps) {
             data-curtain
             className="absolute inset-0 flex flex-col items-center justify-center bg-brand-ivory text-brand-teal-deep will-change-transform"
           >
-            <div data-lockup className="flex flex-col items-center px-6">
+            <div data-lockup className="flex flex-col items-center px-4 sm:px-6">
               <span className="sr-only">Heaven Furniture Mart</span>
 
               {/* HEAVEN — masked, staggered letter rise with a subtle spacing settle */}
@@ -99,7 +103,7 @@ export function IntroLoader({ show, onDone }: IntroLoaderProps) {
                 data-heaven
                 aria-hidden
                 className="flex overflow-hidden pb-[0.1em] font-serif leading-[0.85]"
-                style={{ fontSize: 'clamp(3.5rem, 15vw, 12rem)', letterSpacing: reduce ? '0.1em' : '0.2em' }}
+                style={{ fontSize: 'clamp(2.25rem, 12vw, 12rem)', letterSpacing: reduce ? '0.04em' : '0.14em' }}
               >
                 {letters.map((l, i) => (
                   <span key={i} className="inline-block overflow-hidden">
@@ -114,8 +118,8 @@ export function IntroLoader({ show, onDone }: IntroLoaderProps) {
               <span
                 data-mart
                 aria-hidden
-                className="mt-4 font-sans text-[0.7rem] font-semibold uppercase text-brand-teal-deep/70 sm:mt-6 sm:text-sm"
-                style={{ letterSpacing: '0.42em', opacity: reduce ? 1 : 0, transform: reduce ? undefined : 'translateY(12px)' }}
+                className="mt-4 font-sans text-[0.68rem] font-semibold uppercase text-brand-teal-deep/70 sm:mt-6 sm:text-sm"
+                style={{ letterSpacing: 'clamp(0.2em, 2.8vw, 0.42em)', opacity: reduce ? 1 : 0, transform: reduce ? undefined : 'translateY(12px)' }}
               >
                 Furniture&nbsp;Mart
               </span>

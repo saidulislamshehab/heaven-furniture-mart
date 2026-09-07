@@ -57,7 +57,7 @@ function ReviewCarousel() {
         if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setPaused(false)
       }}
     >
-      <div className="relative overflow-hidden border-l border-brand-gold/60 pl-8 sm:pl-12">
+      <div className="relative overflow-hidden border-l border-brand-gold/60 pl-5 sm:pl-12">
         {/* Fixed min-height so slides of different length don't shift the layout */}
         <div className="grid min-h-[16rem] sm:min-h-[18rem] lg:min-h-[22rem]" aria-live={paused || reduce ? 'polite' : 'off'}>
           <AnimatePresence initial={false} custom={direction} mode="popLayout">
@@ -81,7 +81,7 @@ function ReviewCarousel() {
               }}
               className="col-start-1 row-start-1 flex cursor-grab flex-col justify-between active:cursor-grabbing"
             >
-              <blockquote className="font-serif text-[length:clamp(1.75rem,3.2vw,3rem)] leading-[1.2] text-brand-ivory/95">
+              <blockquote className="font-serif text-[length:clamp(1.35rem,3.2vw,3rem)] leading-[1.2] text-brand-ivory/95">
                 “{review.quote}”
               </blockquote>
               <figcaption className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2">

@@ -51,7 +51,7 @@ export function ConsultationDialog({ open, onOpenChange, prefill }: Consultation
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton
-        className="max-h-[92dvh] w-[calc(100%-1.5rem)] max-w-lg overflow-y-auto rounded-sm border border-brand-gold/25 bg-brand-ivory p-7 text-brand-brown shadow-2xl sm:max-w-lg sm:p-10 [&>button]:text-brand-brown/50 [&>button:hover]:text-brand-brown"
+        className="max-h-[92dvh] w-[calc(100%-1.5rem)] max-w-lg overflow-y-auto rounded-sm border border-brand-gold/25 bg-brand-ivory p-5 text-brand-brown shadow-2xl sm:max-w-lg sm:p-10 [&>button]:text-brand-brown/50 [&>button:hover]:text-brand-brown"
       >
         <ConsultationBody prefill={prefill} />
       </DialogContent>

@@ -13,6 +13,15 @@ export function getLenis() {
 
 /** Lock/unlock smooth scrolling (used while dialogs and the menu are open). */
 export function lockScroll(locked: boolean) {
+  if (typeof document !== 'undefined') {
+    if (locked) {
+      document.body.style.overflow = 'hidden'
+      document.body.style.touchAction = 'none'
+    } else {
+      document.body.style.overflow = ''
+      document.body.style.touchAction = ''
+    }
+  }
   if (!instance) return
   if (locked) instance.stop()
   else instance.start()

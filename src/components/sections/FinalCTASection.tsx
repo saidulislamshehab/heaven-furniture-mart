@@ -37,7 +37,7 @@ export function FinalCTASection({
       />
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-brand-ink/70 via-brand-ink/55 to-brand-ink/85" />
 
-      <div className="container-x mx-auto flex max-w-[1600px] flex-col items-start py-28 sm:py-36 lg:py-44">
+      <div className="container-x mx-auto flex max-w-[1600px] flex-col items-start py-20 sm:py-36 lg:py-44">
         <Reveal>
           <p className="eyebrow text-brand-gold-soft">{eyebrow}</p>
         </Reveal>

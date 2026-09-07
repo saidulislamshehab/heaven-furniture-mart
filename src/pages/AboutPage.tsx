@@ -117,9 +117,9 @@ export function AboutPage() {
 
       {/* Craft strip */}
       <section className="bg-brand-ink text-brand-ivory">
-        <div className="grid grid-cols-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3">
           {workshopFilms.map((f) => (
-            <div key={f.id} className="relative aspect-[9/16] sm:aspect-[3/4] lg:aspect-[4/5]">
+            <div key={f.id} className="relative aspect-[16/10] sm:aspect-[3/4] lg:aspect-[4/5]">
               <SmartVideo asset={f.video} />
               <span className="eyebrow absolute bottom-4 left-4 text-brand-ivory/80">
                 {f.index} / {f.label}

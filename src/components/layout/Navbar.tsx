@@ -148,14 +148,14 @@ export function Navbar() {
                     </DialogPrimitive.Overlay>
                     <DialogPrimitive.Content asChild forceMount aria-describedby={undefined}>
                       <motion.div
-                        className="fixed inset-0 z-[70] flex flex-col bg-brand-teal-deep text-brand-ivory outline-none"
+                        className="fixed inset-0 z-[70] flex flex-col justify-between overflow-y-auto overscroll-contain bg-brand-teal-deep text-brand-ivory outline-none"
                         initial={reduce ? { opacity: 0 } : { clipPath: 'inset(0 0 100% 0)' }}
                         animate={reduce ? { opacity: 1 } : { clipPath: 'inset(0 0 0% 0)' }}
                         exit={reduce ? { opacity: 0 } : { clipPath: 'inset(0 0 100% 0)' }}
                         transition={{ duration: 0.7, ease: luxuryEase }}
                       >
                         <DialogPrimitive.Title className="sr-only">Menu</DialogPrimitive.Title>
-                        <div className="container-x flex items-center justify-between py-5 sm:py-6">
+                        <div className="container-x flex shrink-0 items-center justify-between py-5 sm:py-6">
                           <Wordmark
                             dark={false}
                             onHome={(e) => {
@@ -174,7 +174,7 @@ export function Navbar() {
                           </DialogPrimitive.Close>
                         </div>
 
-                        <nav aria-label="Mobile" className="container-x flex flex-1 flex-col justify-center">
+                        <nav aria-label="Mobile" className="container-x flex flex-1 flex-col justify-center py-6">
                           <ul className="space-y-2">
                             {navLinks.map((l, i) => (
                               <motion.li
@@ -192,7 +192,7 @@ export function Navbar() {
                                   }}
                                   className={({ isActive }) =>
                                     cn(
-                                      'group flex items-baseline gap-4 py-2 font-serif text-[length:clamp(2.5rem,10vw,4.5rem)] leading-none tracking-tight transition-colors',
+                                      'group flex items-baseline gap-4 py-2 font-serif text-[length:clamp(2.25rem,9vw,4.5rem)] leading-none tracking-tight transition-colors',
                                       isActive ? 'text-brand-ivory' : 'text-brand-ivory/55 hover:text-brand-ivory'
                                     )
                                   }
@@ -206,7 +206,7 @@ export function Navbar() {
                         </nav>
 
                         <motion.div
-                          className="container-x border-t border-brand-ivory/10 py-6"
+                          className="container-x shrink-0 border-t border-brand-ivory/10 pt-6 pb-[calc(1.5rem+env(safe-area-inset-bottom,0px))]"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ duration: 0.8, delay: 0.6 }}

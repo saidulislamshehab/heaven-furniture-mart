@@ -15,13 +15,14 @@ export function FounderSection({ compact = false }: { compact?: boolean }) {
   const ref = useRef<HTMLElement>(null)
   const textRef = useRef<HTMLDivElement>(null)
 
-  // Text drifts upward while the section crosses the viewport and rests once it has left.
+  // Text drifts upward with parallax while the section crosses the viewport across both mobile and desktop.
   useEffect(() => {
     const section = ref.current
     const text = textRef.current
     if (!section || !text || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
+    const mm = gsap.matchMedia()
+    mm.add('(min-width: 1024px)', () => {
+      const tween = gsap.fromTo(
         text,
         { y: 90 },
         {
@@ -31,9 +32,27 @@ export function FounderSection({ compact = false }: { compact?: boolean }) {
           scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: 0.8, invalidateOnRefresh: true, refreshPriority: -3 },
         }
       )
-    }, section)
-    ScrollTrigger.refresh()
-    return () => ctx.revert()
+      return () => {
+        tween.scrollTrigger?.kill()
+        tween.kill()
+      }
+    })
+    mm.add('(max-width: 1023px)', () => {
+      const tween = gsap.fromTo(
+        text,
+        { y: 45 },
+        {
+          y: -45,
+          ease: 'none',
+          scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: 0.8, invalidateOnRefresh: true, refreshPriority: -3 },
+        }
+      )
+      return () => {
+        tween.scrollTrigger?.kill()
+        tween.kill()
+      }
+    })
+    return () => mm.revert()
   }, [])
 
   return (

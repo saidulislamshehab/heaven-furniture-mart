@@ -37,7 +37,17 @@ function FilmPanel({ film }: { film: Film }) {
 export function CraftSection() {
   return (
     <section id="craft" className="relative bg-brand-ink text-brand-ivory">
-      {/* Section title floats over the films so the strip begins immediately after Collections */}
+      {/* Section title on mobile */}
+      <div className="container-x mx-auto max-w-[1600px] pt-12 pb-8 sm:hidden">
+        <Reveal>
+          <SectionLabel number="04">Inside the workshop</SectionLabel>
+        </Reveal>
+        <h2 className="mt-4 display-3 text-balance text-brand-ivory">
+          <SplitWords text="Made in three movements." />
+        </h2>
+      </div>
+
+      {/* Section title floats over the films on tablet and desktop */}
       <div className="pointer-events-none absolute inset-x-0 top-0 z-10 hidden sm:block">
         <div className="container-x mx-auto flex max-w-[1600px] items-start justify-between pt-16 lg:pt-20">
           <div>

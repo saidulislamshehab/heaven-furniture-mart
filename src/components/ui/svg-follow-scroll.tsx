@@ -28,7 +28,7 @@ export function SvgFollowScroll({ className }: { className?: string }) {
         </Reveal>
         <h2
           id="stroke-heading"
-          className="relative z-10 max-w-[16ch] font-serif text-[length:clamp(3rem,9vw,9rem)] leading-[0.95] tracking-[-0.03em] text-balance"
+          className="relative z-10 max-w-[16ch] font-serif text-[length:clamp(2.1rem,8vw,9rem)] leading-[0.98] tracking-[-0.03em] text-balance"
         >
           From the first line <br />
           <span className="italic text-brand-brown/80">to the last touch.</span>
@@ -71,7 +71,7 @@ function TwoLines({ progress, reduce }: { progress: MotionValue<number>; reduce:
   return (
     <div
       aria-hidden
-      className="relative -my-2 h-[clamp(7rem,18vw,17rem)] w-[min(1100px,88vw)] overflow-hidden md:w-[min(1100px,78vw)]"
+      className="relative -my-2 h-[clamp(5rem,16vw,17rem)] w-[min(1100px,92vw)] overflow-hidden md:w-[min(1100px,78vw)]"
     >
       <motion.svg
         viewBox="0 0 1200 320"
