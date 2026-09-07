@@ -17,19 +17,56 @@ export const KNOWLEDGE = `
 
 ## Contact (official)
 - Phone / WhatsApp: +880 1960-481983
+- WhatsApp chat link: https://wa.me/8801960481983
 - Email: heavenfurnituremart@gmail.com
-- Facebook: facebook.com/HeavenFurnitureMart
-- Instagram: instagram.com/heaven_furniture_ltd
-- YouTube: youtube.com/@HeavenFurnitureMart
-- Google Maps: https://maps.app.goo.gl/XnZzpdkLTNB9jhGP9f
-- Google rating shown on the website: 4.8
+- Facebook: https://www.facebook.com/HeavenFurnitureMart
+- Instagram: https://www.instagram.com/heaven_furniture_ltd
+- YouTube: https://www.youtube.com/@HeavenFurnitureMart
+- Google Maps (directions & live hours): https://maps.app.goo.gl/XnZzpdkLTNB9jhGP9f
+- Google rating shown on the website: 4.8 (about 30 reviews)
+
+## Website map (pages on this site — give these paths when pointing visitors somewhere)
+- / — Home: hero, brand intro, the bespoke process, collections, inside the workshop, why Heaven, founder, signature pieces, client reviews, visit teaser, milestones.
+  - /#bespoke — the five-step bespoke process (Discover, Design, Craft, Deliver, Install)
+  - /#collections — collections overview
+  - /#craft — inside the workshop (films)
+  - /#why — why customers choose Heaven
+  - /#founder — the Managing Director
+  - /#signature — signature pieces
+  - /#reviews — client reviews
+  - /#milestones — company milestones
+- /shop — Shop / catalogue of pieces, filterable by category:
+  - /shop?category=living-room
+  - /shop?category=bedroom
+  - /shop?category=dining
+  - /shop?category=office-study
+  - /shop?category=bespoke
+- /about — Our story: the beginning, what we believe, the workshop, the founder, milestones, showroom presence.
+- /visit — Visit the showroom: address, map, hours note, showroom features, WhatsApp and directions.
+- "Request a Consultation" / "Start your design" buttons across the site open the free consultation form (name, phone, room type, optional piece/notes).
+
+## Bespoke process (the five steps shown on the website)
+1. Discover — starts with the customer's room: measurements, light, routines and pieces they already love.
+2. Design — proportion, timber, upholstery and finish are settled together until the drawing feels like it belongs to the home.
+3. Craft — skilled makers cut, carve, join and upholster in-house.
+4. Deliver — the piece travels from the workshop to the door.
+5. Install — the team places, levels and finishes everything in the room.
+- Free design consultation, delivery and installation are included.
 
 ## What they sell (categories)
-- Living Room — sofas, coffee tables, TV units, consoles
-- Bedroom — beds, wardrobes, dressing tables, bedside tables
-- Dining — dining tables, dining chairs, cabinets
-- Office & Study — executive tables, bookshelves, workstations
-- Bespoke / Custom — anything built to a customer's own space, size and taste
+- Living Room — sofas, coffee tables, TV units, consoles (/shop?category=living-room)
+- Bedroom — beds, wardrobes, dressing tables, bedside tables (/shop?category=bedroom)
+- Dining — dining tables, dining chairs, cabinets (/shop?category=dining)
+- Office & Study — executive tables, bookshelves, workstations (/shop?category=office-study)
+- Bespoke / Custom — anything built to a customer's own space, size and taste (/shop?category=bespoke)
+
+## Pieces currently shown in the online catalogue (/shop) — names and short notes only; NO prices or specs are published
+- Living Room: Royal Blue Salon Set (carved frame, velvet upholstery); Cream Tufted Lounge Set (button-tufted, gilt detailing); Blue Brocade Loveseat; Grey Floral Sofa (embroidered velvet); Carved Armchair Pair (dark timber, striped upholstery); Navy Velvet Sofa (gold trim); Classic Lounge Suite (timber frame, neutral linen); Cream Modern Sofa; Blue Modern Sofa (channel stitching); Green Velvet Set (olive velvet, silver-leaf frame); Woven Hanging Egg Chair (rattan, steel stand); Royal Blue Chaise (gilt frame); Silver Tufted Sofa (carved crest); Grey Damask Armchair.
+- Bedroom: Emerald Channel Bed (channel-stitched velvet headboard); Teal Carved Bed (carved timber, teal upholstery); Modern Bedroom Set (upholstered bed with side tables); Vanity Dressing Table (lit mirror, lacquered drawers).
+- Dining: Marble Dining Suite (marble top, leather chairs); Ivory Grand Dining (carved ivory finish, floral seats); Marble Dining with Quilted Chairs; Ivory Carved Dining Set; Display Cabinet (glass front, carved crown); Black Sideboard (matte black, brass hardware).
+- Office & Study: Director Desk (integrated storage); Executive Chair in brown or black (high back); Ergonomic Mesh Chair; Lounge Meeting Table (round, four seats).
+- Bespoke: Made-to-Measure Console; Bespoke Seating (any fabric, any frame); Bespoke Dining (sized for your family).
+- Every catalogue piece can also be adapted — size, timber, fabric and finish — through the bespoke service.
 
 ## Why customers choose Heaven (trust points)
 - Free design consultation
@@ -61,6 +98,20 @@ export const KNOWLEDGE = `
 
 ## Managing Director quote
 "At Heaven Furniture Mart, we believe furniture is more than just function; it is a reflection of lifestyle, taste, and comfort. Every piece we create is designed to bring lasting elegance into the homes of our clients." — Abul Kalam Bhuiyan, Managing Director
+
+## What Heaven believes (from the About page)
+- Furniture is a reflection of a life — taste, comfort and routine differ from home to home, so should the furniture.
+- Craft is a promise, not a finish — selected timber, honest joinery, careful upholstery, made in-house to last.
+- Bespoke should feel effortless — one team from measurement to installation.
+
+## Client reviews (public Google reviews quoted on the website, all 5 stars)
+- Jefranul Rakib: bought a living room set; staff helpful without being pushy; delivered on time without a scratch.
+- Rakibur Rahaman: desk setup looks premium and productive; finishing, build quality and detailing are amazing.
+- Asraf Khan: durable materials, beautiful design, reasonable price; friendly staff, quick delivery.
+- MRH: very good service; extraordinary aesthetic design.
+- Sajibur Rahman: knowledgeable, friendly staff invested in finding the perfect furniture.
+- Al Mamun: good product quality, polite staff, recommended.
+- Jamshed Ul: competitive price, satisfied with the service.
 
 ## Brand character
 Warm, editorial, spacious, confident. Real craftsmanship and real photography. Not cheap, crowded or marketplace-like.

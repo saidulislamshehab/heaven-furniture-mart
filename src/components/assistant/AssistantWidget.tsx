@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useReducedMotion, type Transition } from 'moti
 import { ArrowUp, Sparkles, X } from 'lucide-react'
 import { site } from '@/data/site'
 import { cn } from '@/lib/utils'
+import { RichText } from './RichText'
 
 interface Message {
   id: number
@@ -12,11 +13,11 @@ interface Message {
 }
 
 const WELCOME =
-  'Welcome to Heaven Furniture Mart. I can help you learn about our bespoke furniture, craftsmanship, showroom and services.'
+  'Welcome to Heaven Furniture Mart. Ask me about our bespoke furniture, collections, showroom, or how to get in touch — I can point you to the right page.'
 
 const SUGGESTIONS = [
   'What does Heaven specialize in?',
-  'Do you make custom furniture?',
+  'How does the bespoke process work?',
   'Where is the showroom?',
   'How can I contact Heaven?',
 ]
@@ -280,7 +281,7 @@ export function AssistantWidget() {
                       )}
                     >
                       <span className="sr-only">{m.role === 'user' ? 'You: ' : 'Heaven assistant: '}</span>
-                      {m.content}
+                      {m.role === 'assistant' ? <RichText text={m.content} onNavigate={() => toggle(false)} /> : m.content}
                     </div>
                   </li>
                 ))}

@@ -59,7 +59,7 @@ export function FounderSection({ compact = false }: { compact?: boolean }) {
     <section ref={ref} id="founder" className="section-pad overflow-hidden bg-brand-ivory text-brand-brown">
       <div className="container-x mx-auto grid max-w-[1600px] gap-12 lg:grid-cols-12 lg:gap-8">
         <div className="lg:col-span-5">
-          <div className="relative">
+          <div className="relative overflow-hidden rounded-t-[999px] rounded-b-xl">
             <RevealImage
               src={brandImages.founder}
               alt={`${site.founder.name}, ${site.founder.role} of Heaven Furniture Mart, speaking at the Chattogram Furniture Fair`}

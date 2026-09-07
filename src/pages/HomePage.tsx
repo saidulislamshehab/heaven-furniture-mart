@@ -9,6 +9,7 @@ import { FounderSection } from '@/components/sections/FounderSection'
 import { SignatureSection } from '@/components/sections/SignatureSection'
 import { ProofSection } from '@/components/sections/ProofSection'
 import { VisitTeaserSection } from '@/components/sections/VisitTeaserSection'
+import { MilestonesSection } from '@/components/sections/MilestonesSection'
 import { SvgFollowScroll } from '@/components/ui/svg-follow-scroll'
 import { usePageMeta } from '@/lib/usePageMeta'
 
@@ -31,6 +32,7 @@ export function HomePage({ introDone }: { introDone: boolean }) {
       <SignatureSection />
       <ProofSection />
       <VisitTeaserSection />
+      <MilestonesSection number="11" className="bg-brand-ivory-deep pb-[clamp(4.5rem,10vw,10rem)] text-brand-brown" />
       <SvgFollowScroll />
     </>
   )

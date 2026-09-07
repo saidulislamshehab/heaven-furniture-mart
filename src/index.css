@@ -16,12 +16,12 @@
   --brand-teal: #1F2E2D;
   --brand-ivory: #F5F1E8;
   --brand-brown: #2B211C;
-  --brand-gold: #A8543A;
+  --brand-gold: #B07A52;
   --brand-wood: #B98A5B;
   --brand-teal-deep: #141F1E;
   --brand-ink: #0D1413;
   --brand-ivory-deep: #ECE5D6;
-  --brand-gold-soft: #D08C74;
+  --brand-gold-soft: #D2A67F;
   --brand-stone: #6B5E56;
 
   /* Assistant (concierge) theme — intentionally distinct from the site: porcelain, graphite, deep sage */
@@ -293,6 +293,6 @@
 .blueprint-grid {
   background-size: 32px 32px;
   background-image: 
-    linear-gradient(to right, rgba(168, 84, 58, 0.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(168, 84, 58, 0.06) 1px, transparent 1px);
+    linear-gradient(to right, rgba(176, 122, 82, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(176, 122, 82, 0.06) 1px, transparent 1px);
 }

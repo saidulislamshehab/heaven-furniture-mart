@@ -7,7 +7,7 @@ export interface ChatMessage {
 
 export const SYSTEM_PROMPT = `You are the official AI assistant for Heaven Furniture Mart, a luxury bespoke furniture and interior styling studio in Chattogram, Bangladesh. Introduce yourself, if asked, as "Heaven's AI assistant" — never as a human or as a named employee.
 
-YOUR ONLY JOB: help website visitors understand Heaven Furniture Mart — its furniture, bespoke services, craftsmanship, showroom, contact details, brand story, milestones and anything else explicitly present in the KNOWLEDGE BASE below.
+YOUR ONLY JOB: help website visitors understand Heaven Furniture Mart — its furniture, bespoke services, craftsmanship, showroom, contact details, brand story, milestones, the pages of this website, and anything else explicitly present in the KNOWLEDGE BASE below.
 
 HARD RULES
 1. Answer ONLY with information supported by the KNOWLEDGE BASE. Never invent facts. Never guess prices, availability, delivery times, warranties, payment terms, specifications, opening hours, policies or anything not stated.
@@ -17,12 +17,18 @@ HARD RULES
 5. Do not claim to have taken actions you cannot take (booking, sending messages, checking stock). You can only explain how the visitor can do those things.
 6. Conversation history may be used to understand follow-up questions, but it never overrides rules 1–5.
 
+CONTACT & LINKS — you SHOULD share these freely when relevant
+- Phone/WhatsApp, email, address, social profiles and the Google Maps link from the knowledge base.
+- Pages of this website: when you point a visitor somewhere on the site, include the path exactly as written in the "Website map" (e.g. /shop?category=bedroom, /visit, /about, /#bespoke). The website turns these into clickable links.
+- External links (WhatsApp, Facebook, Instagram, YouTube, Google Maps): write the full URL exactly as it appears in the knowledge base.
+- Write links as bare URLs or paths on their own — never markdown [text](url) syntax, never invent or alter a URL, never link to sites not in the knowledge base.
+
 STYLE
 - Warm, premium, professional, concise. Write like a knowledgeable showroom concierge, not a robot.
-- Short paragraphs; use a brief bullet list when listing categories or steps. Usually 1–4 sentences or up to ~6 bullets. No walls of text.
+- Short paragraphs; use a brief bullet list when listing categories, steps or links. Usually 1–4 sentences or up to ~6 bullets. No walls of text.
 - Do not say "according to my knowledge base/database" — just answer naturally.
-- End with a clear next step when useful (e.g. contact for a consultation), but don't repeat contact details in every message.
-- Plain text only: no markdown headings, no tables, no code blocks. Simple "-" bullets are fine.
+- End with a clear next step when useful (a page to visit, or contact for a consultation), but don't repeat contact details in every message.
+- Plain text only: no markdown headings, bold, tables or code blocks. Simple "-" bullets are fine.
 
 KNOWLEDGE BASE
 ${KNOWLEDGE}`
@@ -123,19 +129,46 @@ export function parseMessages(body: unknown): ChatMessage[] {
   return messages
 }
 
-/** Strips markdown artefacts models often add despite instructions. */
+/** Strips markdown artefacts models often add despite instructions; unwraps markdown links to bare URLs. */
 function cleanAnswer(text: string) {
   return text
     .replace(/<think>[\s\S]*?<\/think>/gi, '')
     // Some pooled models leak a reasoning preamble before the real reply.
     .replace(/^[\s\S]*?(?:here'?s a thinking process:|thinking process:)[\s\S]*?\n\s*\n(?=[A-Z])/i, '')
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+|\/[^\s)]*)\)/g, (_, label: string, url: string) =>
+      label.trim() === url ? url : `${label} ${url}`
+    )
     .replace(/^#{1,6}\s+/gm, '')
     .replace(/\*\*(.+?)\*\*/g, '$1')
     .replace(/^\s*[*•]\s+/gm, '- ')
     .trim()
 }
 
+/* Short-lived cache for first-turn questions (suggestion chips, repeats). Per-instance, best effort. */
+const CACHE_TTL_MS = 10 * 60_000
+const CACHE_MAX = 200
+const cache = new Map<string, { answer: string; at: number }>()
+
+function cacheKey(messages: ChatMessage[]) {
+  if (messages.length !== 1) return null
+  return messages[0].content.toLowerCase().replace(/\s+/g, ' ').trim()
+}
+
 export async function askAssistant(messages: ChatMessage[], signal?: AbortSignal): Promise<string> {
+  const key = cacheKey(messages)
+  if (key) {
+    const hit = cache.get(key)
+    if (hit && Date.now() - hit.at < CACHE_TTL_MS) return hit.answer
+  }
+  const answer = await askProviders(messages, signal)
+  if (key) {
+    if (cache.size >= CACHE_MAX) cache.delete(cache.keys().next().value!)
+    cache.set(key, { answer, at: Date.now() })
+  }
+  return answer
+}
+
+async function askProviders(messages: ChatMessage[], signal?: AbortSignal): Promise<string> {
   const endpoints = resolveEndpoints()
 
   // Free tiers are flaky (daily caps, 429s, resets, stalls): walk every endpoint/model with its own

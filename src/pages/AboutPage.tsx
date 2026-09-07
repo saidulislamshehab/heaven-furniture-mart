@@ -5,6 +5,7 @@ import { Reveal, RevealImage, SplitWords } from '@/components/common/Reveal'
 import { SectionLabel } from '@/components/common/SectionLabel'
 import { SmartVideo } from '@/components/common/SmartVideo'
 import { FounderSection } from '@/components/sections/FounderSection'
+import { MilestonesSection } from '@/components/sections/MilestonesSection'
 import { FinalCTASection } from '@/components/sections/FinalCTASection'
 import { Button } from '@/components/ui/button'
 import { brandImages, img, showroomVideos, workshopFilms } from '@/data/assets'
@@ -131,33 +132,7 @@ export function AboutPage() {
 
       <FounderSection compact />
 
-      {/* Timeline */}
-      <section className="section-pad bg-brand-ivory text-brand-brown">
-        <div className="container-x mx-auto max-w-[1600px]">
-          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <div>
-              <Reveal>
-                <SectionLabel number="03">Milestones</SectionLabel>
-              </Reveal>
-              <h2 className="mt-6 display-2">
-                <SplitWords text="Six years, five milestones." />
-              </h2>
-            </div>
-          </div>
-          <ol className="mt-14 grid gap-y-12 md:grid-cols-2 md:gap-x-12 lg:mt-20 lg:grid-cols-5 lg:gap-x-8">
-            {site.milestones.map((m, i) => (
-              <li key={m.year} className="relative">
-                <Reveal delay={i * 0.08} className="border-t border-brand-brown/15 pt-6">
-                  <span aria-hidden className="absolute -top-[3px] left-0 size-[5px] rounded-full bg-brand-gold" />
-                  <p className="font-serif text-5xl leading-none sm:text-6xl">{m.year}</p>
-                  <h3 className="mt-5 text-lg font-medium">{m.title}</h3>
-                  <p className="mt-2 text-[0.95rem] leading-relaxed text-brand-stone">{m.body}</p>
-                </Reveal>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
+      <MilestonesSection number="03" />
 
       {/* Showroom presence */}
       <section className="bg-brand-ivory-deep text-brand-brown">

@@ -73,7 +73,7 @@ Muted Gold / Brass
 
 Suggested:
 
-#B08A45
+#B07A52
 
 Usage:
 

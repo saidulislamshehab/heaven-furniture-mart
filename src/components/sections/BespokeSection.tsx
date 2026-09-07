@@ -55,12 +55,12 @@ export function BespokeSection() {
             <SectionLabel number="02">The bespoke difference</SectionLabel>
           </Reveal>
           <h2 className="mt-6 display-1">
-            <SplitWords text="Not off the shelf." />
+            <SplitWords text="Made around you." />
           </h2>
           <Reveal delay={0.3}>
             <p className="mt-8 max-w-md text-[1.05rem] leading-relaxed text-brand-stone">
-              Every Heaven piece begins with a room, a need and a conversation. Five steps, one team —
-              from the first measurement to the last adjustment in your home.
+              Your home is unique; your furniture should be too. From dimensions and materials to
+              finishes and details, every piece is shaped around your space — in five steps, by one team.
             </p>
           </Reveal>
         </div>

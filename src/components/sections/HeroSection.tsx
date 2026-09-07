@@ -141,19 +141,19 @@ export function HeroSection({ introDone }: HeroSectionProps) {
         </motion.p>
 
         {/* Layered headline: massive sans line + italic serif line, like a film title card */}
-        <h1 className="mt-5 text-balance sm:mt-6" aria-label="Made to measure, made to stay.">
+        <h1 className="mt-5 text-balance sm:mt-6" aria-label="Rooms worth coming home to.">
           <span className="block font-serif text-[length:clamp(2.1rem,6.2vw,5.5rem)] font-normal leading-[0.95] tracking-[-0.025em] text-brand-ivory">
-            <Letters text="Made to measure," ready={ready} delay={0.2} />
+            <Letters text="Rooms worth" ready={ready} delay={0.2} />
           </span>
           <span className="mt-1 flex flex-wrap items-baseline gap-x-[0.28em] text-[length:clamp(2.1rem,6.2vw,5.5rem)] sm:mt-2">
             <span className="font-serif italic leading-[0.95] tracking-[-0.02em] text-brand-ivory/90">
-              <Letters text="made" ready={ready} delay={0.5} />
-            </span>
-            <span className="font-serif italic leading-[0.95] tracking-[-0.02em] text-brand-ivory/90">
-              <Letters text="to" ready={ready} delay={0.68} />
+              <Letters text="coming" ready={ready} delay={0.5} />
             </span>
             <span className="font-serif italic leading-[0.95] tracking-[-0.02em] text-brand-gold-soft">
-              <Letters text="stay." ready={ready} delay={0.82} />
+              <Letters text="home" ready={ready} delay={0.7} />
+            </span>
+            <span className="font-serif italic leading-[0.95] tracking-[-0.02em] text-brand-ivory/90">
+              <Letters text="to." ready={ready} delay={0.88} />
             </span>
           </span>
         </h1>
