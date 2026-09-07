@@ -26,14 +26,19 @@ export function WhyHeavenSection() {
           // Pinned: GSAP scrubs `data-reveal` items. In flow: each item fades up on its own as it enters.
           const Item = pinned ? 'div' : Reveal
           return (
-            <div className="container-x mx-auto flex max-w-[1600px] flex-col justify-between py-12 md:h-full md:py-10 lg:py-12">
-              <div data-reveal className="hidden items-center justify-between md:flex">
+            <div
+              className={cn(
+                'container-x mx-auto flex max-w-[1600px] flex-col justify-between md:py-10 lg:py-12',
+                pinned ? 'h-full pt-[calc(var(--nav-offset,60px)+1.25rem)] pb-[calc(env(safe-area-inset-bottom)+1.25rem)]' : 'py-12'
+              )}
+            >
+              <div data-reveal className="hidden items-center justify-between md:flex [@media(max-height:600px)]:hidden">
                 <p className="eyebrow text-brand-gold">05 — Why Heaven</p>
                 <p className="eyebrow text-brand-ivory/60">Five reasons</p>
               </div>
 
               {/* Items alternate left / right of a central gold spine, revealed top to bottom */}
-              <div className="relative flex flex-1 flex-col justify-center gap-9 md:gap-2">
+              <div className={cn('relative flex flex-1 flex-col justify-center md:gap-2 [@media(max-height:600px)]:gap-0', pinned ? 'gap-4 sm:gap-6' : 'gap-9')}>
                 <span aria-hidden className="pointer-events-none absolute inset-y-0 left-1/2 hidden w-px -translate-x-1/2 bg-brand-gold/40 md:block" />
                 {points.map((t, i) => {
                   const right = i % 2 === 1
@@ -55,8 +60,16 @@ export function WhyHeavenSection() {
                         )}
                       />
                       <p className="eyebrow text-brand-gold">0{i + 1}</p>
-                      <h3 className="mt-2 font-serif text-2xl leading-tight text-brand-ivory sm:text-3xl lg:text-4xl">{t.title}</h3>
-                      <p className="mt-2 text-[0.95rem] leading-relaxed text-brand-ivory/70">{t.body}</p>
+                      <h3 className="mt-1.5 font-serif text-[1.35rem] leading-tight text-brand-ivory sm:mt-2 sm:text-3xl lg:text-4xl [@media(max-height:600px)]:mt-0.5 [@media(max-height:600px)]:text-xl">{t.title}</h3>
+                      <p
+                        className={cn(
+                          'mt-1.5 text-[0.9rem] leading-relaxed text-brand-ivory/70 sm:mt-2 sm:text-[0.95rem]',
+                          // Landscape phones can't hold five bodies inside the pinned frame
+                          pinned && '[@media(max-height:600px)]:hidden'
+                        )}
+                      >
+                        {t.body}
+                      </p>
                     </Item>
                   )
                 })}

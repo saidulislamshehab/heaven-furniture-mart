@@ -3,7 +3,7 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SmartVideo } from '@/components/common/SmartVideo'
 import type { VideoAsset } from '@/data/assets'
-import { MD_UP, REDUCED_MOTION, useMediaQuery } from '@/lib/useMediaQuery'
+import { REDUCED_MOTION, useMediaQuery } from '@/lib/useMediaQuery'
 import { cn } from '@/lib/utils'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -27,10 +27,10 @@ export interface ScrollExpandMediaProps {
 }
 
 /**
- * Pinned sequence (tablet and up): a small framed film grows to fill the viewport while the title
+ * Pinned sequence on every viewport: a small framed film grows to fill the screen while the title
  * splits outward; once full, the overlay content reveals item by item. Scroll-scrubbed, reversible.
- * On phones and for reduced-motion users it becomes a vertical composition: a full-bleed media
- * header carrying the title, followed by the content in normal flow — no pinning, no scroll hijack.
+ * Phones get a larger starting frame and a shorter scroll distance so the sequence stays brisk.
+ * Reduced-motion users get a vertical composition instead: media header + content in normal flow.
  */
 export default function ScrollExpandMedia({
   media,
@@ -44,8 +44,7 @@ export default function ScrollExpandMedia({
 }: ScrollExpandMediaProps) {
   const root = useRef<HTMLDivElement>(null)
   const reduce = useMediaQuery(REDUCED_MOTION)
-  const mdUp = useMediaQuery(MD_UP)
-  const pinned = mdUp && !reduce
+  const pinned = !reduce
 
   useEffect(() => {
     if (!root.current || !pinned) return
@@ -61,13 +60,15 @@ export default function ScrollExpandMedia({
       const reveals = gsap.utils.toArray<HTMLElement>('[data-reveal]', el)
       if (!frame || !left || !right || !content) return
 
+      const phone = () => window.innerWidth < 768
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: el,
           start: 'top top',
-          end: () => `+=${(lengthVh / 100) * window.innerHeight}`,
+          // Shorter travel on phones: less scroll to hijack, same three acts.
+          end: () => `+=${((phone() ? lengthVh * 0.7 : lengthVh) / 100) * window.innerHeight}`,
           pin: true,
-          scrub: 1.6,
+          scrub: phone() ? 1 : 1.6,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           refreshPriority: -2,
@@ -76,8 +77,8 @@ export default function ScrollExpandMedia({
       })
 
       // Act I — expand (0 → 1)
-      const startW = () => Math.min(window.innerWidth * 0.34, 420)
-      const startH = () => Math.min(window.innerHeight * 0.5, 520)
+      const startW = () => (phone() ? window.innerWidth * 0.62 : Math.min(window.innerWidth * 0.34, 420))
+      const startH = () => Math.min(window.innerHeight * (phone() ? 0.42 : 0.5), 520)
       tl.fromTo(
         frame,
         { width: startW, height: startH },
@@ -139,7 +140,7 @@ export default function ScrollExpandMedia({
         <div
           data-frame
           className="relative z-0 overflow-hidden bg-brand-teal shadow-[0_40px_120px_-30px_rgba(13,20,19,0.9)]"
-          style={{ width: 'min(34vw, 420px)', height: 'min(50vh, 520px)' }}
+          style={{ width: 'min(62vw, 420px)', height: 'min(42vh, 520px)' }}
         >
           <SmartVideo asset={media} lazy={false} />
           <div data-shade className="absolute inset-0 bg-brand-ink" style={{ opacity: 0.35 }} />
@@ -152,7 +153,7 @@ export default function ScrollExpandMedia({
               {eyebrow}
             </p>
           )}
-          <h2 className="flex flex-wrap items-baseline justify-center gap-x-[0.3em] font-serif text-[length:clamp(2.75rem,7.5vw,7.5rem)] leading-[0.95] tracking-[-0.02em]">
+          <h2 className="flex flex-wrap items-baseline justify-center gap-x-[0.3em] font-serif text-[length:clamp(2.25rem,7.5vw,7.5rem)] leading-[0.95] tracking-[-0.02em]">
             <span data-title-left className="block">
               {title[0]}
             </span>
