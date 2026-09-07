@@ -4,6 +4,7 @@ import { site } from '@/data/site'
 import { brandImages } from '@/data/assets'
 import { categories } from '@/data/catalog'
 import { scrollToTop } from '@/lib/scroll'
+import { MorphingButton } from '@/components/common/MorphingButton'
 
 const pages = [
   { label: 'Home', to: '/' },
@@ -19,6 +20,12 @@ const socials = [
 ]
 
 const WORDMARK_LINE = 'FURNITURE MART'.split('')
+
+function openUpdatesEmail(email: string) {
+  const subject = 'Keep me posted on new collections'
+  const body = `Hello Heaven Furniture Mart,\n\nPlease keep me posted on new collections and showroom events.\nEmail: ${email}`
+  window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+}
 
 export function Footer() {
   return (
@@ -37,6 +44,11 @@ export function Footer() {
               Bespoke furniture and interior styling, designed around the way you live.
             </p>
             <p className="eyebrow mt-6 text-brand-gold">{site.tagline}</p>
+
+            <div className="mt-10">
+              <h3 className="eyebrow text-brand-ivory/50">New collections & showroom events</h3>
+              <MorphingButton className="mt-5" onSubmit={openUpdatesEmail} />
+            </div>
           </div>
 
           <div className="grid gap-10 sm:grid-cols-[1fr_1fr_1.5fr] lg:col-span-7">

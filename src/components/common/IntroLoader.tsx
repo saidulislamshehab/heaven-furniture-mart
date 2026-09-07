@@ -14,13 +14,13 @@ import { AnimatePresence, motion, stagger, useAnimate, useReducedMotion } from '
 /* Master timeline (seconds from start) */
 const T = {
   heaven: 0.25, // halves start converging (ivory alone before this)
-  stagger: 0.04, // outer letters lead, inner letters trail
-  letterDur: 1.1, // last letter lands ≈ 1.5
-  mart: 1.35, // FURNITURE MART rises
-  martDur: 0.7, // …and is fully settled ≈ 2.05
-  exit: 2.6, // hold 2.05 → 2.6, then the lockup lifts and the curtain rises
+  stagger: 0.14, // each letter follows the previous one; inner letters lead so none overtake
+  letterDur: 1.1, // last letter (H / N) lands ≈ 1.65
+  mart: 1.6, // FURNITURE MART rises
+  martDur: 0.7, // …and is fully settled ≈ 2.3
+  exit: 2.85, // hold 2.3 → 2.85, then the lockup lifts and the curtain rises
   lockupDur: 0.45,
-  curtainDur: 0.8, // curtain fully gone ≈ 3.4 → hero begins
+  curtainDur: 0.8, // curtain fully gone ≈ 3.65 → hero begins
 }
 
 const REVEAL_EASE = [0.16, 1, 0.3, 1] as const
@@ -61,12 +61,12 @@ export function IntroLoader({ show, onDone }: IntroLoaderProps) {
           [
             '[data-letter="left"]',
             { transform: [`translateX(${-travel}px)`, 'translateX(0px)'], opacity: [0, 1] },
-            { duration: T.letterDur, ease: SLIDE_EASE, delay: stagger(T.stagger), at: T.heaven },
+            { duration: T.letterDur, ease: SLIDE_EASE, delay: stagger(T.stagger, { from: 'last' }), at: T.heaven },
           ],
           [
             '[data-letter="right"]',
             { transform: [`translateX(${travel}px)`, 'translateX(0px)'], opacity: [0, 1] },
-            { duration: T.letterDur, ease: SLIDE_EASE, delay: stagger(T.stagger, { from: 'last' }), at: T.heaven },
+            { duration: T.letterDur, ease: SLIDE_EASE, delay: stagger(T.stagger), at: T.heaven },
           ],
           [
             '[data-heaven]',

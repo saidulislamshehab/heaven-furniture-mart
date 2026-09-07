@@ -226,11 +226,11 @@ export default function CircularSplitRoll({
                     className="csr-title pointer-events-none absolute top-0 left-0 grid grid-cols-[2.5ch_1fr] items-baseline gap-x-5 whitespace-nowrap opacity-0 will-change-[transform,opacity]"
                   >
                     <span className="font-serif text-2xl text-brand-gold">{it.index}</span>
-                    <span className="font-serif text-[length:clamp(3.25rem,5.6vw,6.5rem)] leading-none tracking-[-0.02em]">
+                    <span className="font-serif text-[length:clamp(3.75rem,6.4vw,7.5rem)] leading-none tracking-[-0.02em]">
                       {it.title}
                     </span>
                     {it.body && (
-                      <p className={cn('csr-caption col-start-2 mt-5 w-[min(28rem,30vw)] whitespace-normal text-[0.98rem] leading-relaxed', mutedText)}>
+                      <p className={cn('csr-caption col-start-2 mt-6 w-[min(30rem,32vw)] whitespace-normal text-[1.08rem] leading-relaxed', mutedText)}>
                         {it.body}
                       </p>
                     )}
