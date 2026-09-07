@@ -94,12 +94,12 @@ export default function ScrollExpandMedia({
       // Act II — reveal content (1 → 2)
       tl.fromTo(content, { opacity: 0 }, { opacity: 1, duration: 0.2 }, 1)
       reveals.forEach((node, i) => {
-        tl.fromTo(node, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: 'power2.out' }, 1.05 + i * 0.14)
+        tl.fromTo(node, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: 'power2.out' }, 1.05 + i * 0.1)
         const line = node.querySelector<HTMLElement>('[data-line]')
-        if (line) tl.fromTo(line, { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: 'power2.out' }, 1.1 + i * 0.14)
+        if (line) tl.fromTo(line, { scaleX: 0 }, { scaleX: 1, duration: 0.35, ease: 'power2.out' }, 1.1 + i * 0.1)
       })
-      // Hold at the end so the finished composition sits for a beat
-      tl.to({}, { duration: 0.4 })
+      // Brief hold so the finished composition registers before the pin releases
+      tl.to({}, { duration: 0.12 })
     }, root)
     ScrollTrigger.refresh()
     return () => ctx.revert()

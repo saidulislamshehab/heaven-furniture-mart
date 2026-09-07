@@ -1,4 +1,4 @@
-import { AssistantError, askAssistant, parseMessages } from './_lib/assistant'
+import { AssistantError, askAssistant, parseMessages } from './_lib/assistant.js'
 
 // Free providers can be slow; 60s is the Hobby-plan ceiling (Pro allows more).
 export const maxDuration = 60

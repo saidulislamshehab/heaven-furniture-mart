@@ -10,7 +10,7 @@ import { FinalCTASection } from '@/components/sections/FinalCTASection'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import { img } from '@/data/assets'
+import { img, pageHeroImages } from '@/data/assets'
 import { categories, categoryById, products, type CategoryId, type Product } from '@/data/catalog'
 import { site } from '@/data/site'
 import { usePageMeta } from '@/lib/usePageMeta'
@@ -133,6 +133,7 @@ export function ShopPage() {
   }
 
   const activeCat = categoryById(category)
+  const heroImage = (activeCat && pageHeroImages.shopByCategory[activeCat.id]) || pageHeroImages.shop
 
   return (
     <>
@@ -143,6 +144,8 @@ export function ShopPage() {
           activeCat?.body ??
           'Living, bedroom, dining and office pieces from the Heaven studio — each one a starting point for something made to your measure.'
         }
+        image={heroImage.src}
+        imageAlt={heroImage.alt}
       />
 
       <section className="bg-brand-ivory text-brand-brown">

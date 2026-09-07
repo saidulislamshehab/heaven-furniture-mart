@@ -60,10 +60,10 @@ export function Footer() {
           <div className="grid gap-10 sm:grid-cols-[1fr_1fr_1.5fr] lg:col-span-7">
             <div>
               <h3 className="eyebrow text-brand-ivory/50">Pages</h3>
-              <ul className="mt-5 space-y-3">
+              <ul className="mt-4 space-y-0.5">
                 {pages.map((p) => (
                   <li key={p.to}>
-                    <Link to={p.to} className="text-[0.95rem] text-brand-ivory/85 transition-colors hover:text-brand-gold-soft">
+                    <Link to={p.to} className="inline-flex min-h-10 items-center text-[0.95rem] text-brand-ivory/85 transition-colors hover:text-brand-gold-soft">
                       {p.label}
                     </Link>
                   </li>
@@ -72,12 +72,12 @@ export function Footer() {
             </div>
             <div>
               <h3 className="eyebrow text-brand-ivory/50">Collections</h3>
-              <ul className="mt-5 space-y-3">
+              <ul className="mt-4 space-y-0.5">
                 {categories.map((c) => (
                   <li key={c.id}>
                     <Link
                       to={`/shop?category=${c.id}`}
-                      className="text-[0.95rem] text-brand-ivory/85 transition-colors hover:text-brand-gold-soft"
+                      className="inline-flex min-h-10 items-center text-[0.95rem] text-brand-ivory/85 transition-colors hover:text-brand-gold-soft"
                     >
                       {c.name}
                     </Link>

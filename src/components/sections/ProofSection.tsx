@@ -175,7 +175,7 @@ export function ProofSection() {
               </span>
             </a>
             <p className="max-w-[16rem] text-[0.95rem] leading-relaxed text-brand-stone">
-              Trusted by hundreds of homeowners across Chattogram and beyond.
+              Trusted by homeowners across Chattogram and beyond.
             </p>
           </Reveal>
         </div>

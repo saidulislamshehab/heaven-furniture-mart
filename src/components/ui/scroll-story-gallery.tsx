@@ -4,6 +4,7 @@ import {
   useMotionValueEvent,
   useReducedMotion,
   useScroll,
+  useSpring,
   useTransform,
   type MotionValue,
 } from 'motion/react'
@@ -43,8 +44,8 @@ export interface ScrollStoryGalleryProps {
 
 const COUNT = 5
 /* Scroll rhythm: each scene holds, then the next uncovers it. Units are relative. */
-const HOLD = 0.55
-const REVEAL = 1
+const HOLD = 0.6
+const REVEAL = 1.6
 const TOTAL = COUNT * HOLD + (COUNT - 1) * REVEAL
 
 const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
@@ -183,7 +184,9 @@ export function ScrollStoryGallery({ images, direction = 'up', className }: Scro
   const list = normalize(images)
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] })
-  const progress = useTransform(scrollYProgress, [0, 1], [0, 1], { clamp: true })
+  /* Spring lags the raw scroll slightly so fast wheel ticks don't snap between scenes. */
+  const smoothed = useSpring(scrollYProgress, { stiffness: 60, damping: 22, mass: 0.6, restDelta: 0.0005 })
+  const progress = useTransform(reduce ? scrollYProgress : smoothed, [0, 1], [0, 1], { clamp: true })
 
   /* Active index only changes 5 times per pass — cheap to keep in state. */
   const [active, setActive] = useState(0)
@@ -199,10 +202,10 @@ export function ScrollStoryGallery({ images, direction = 'up', className }: Scro
   if (list.length === 0) return null
 
   return (
-    <div ref={ref} className={cn('relative h-[460vh] md:h-[500vh]', className)}>
+    <div ref={ref} className={cn('relative h-[620vh] md:h-[700vh]', className)}>
       <div className="sticky top-0 flex h-[100dvh] flex-col justify-center px-4 py-[max(1.25rem,env(safe-area-inset-top))] sm:px-6 lg:px-10">
         <div className="mx-auto w-full max-w-[1600px]">
-          <div className="relative h-[72dvh] w-full overflow-hidden rounded-[1.5rem] bg-brand-ivory-deep shadow-[0_60px_120px_-60px_rgba(13,20,19,0.45)] sm:rounded-[2rem] md:aspect-[16/9] md:h-auto md:max-h-[78dvh] lg:rounded-[2.5rem]">
+          <div className="relative h-[74dvh] w-full overflow-hidden rounded-[1.5rem] bg-brand-ivory-deep shadow-[0_60px_120px_-60px_rgba(13,20,19,0.45)] sm:rounded-[2rem] md:h-[86dvh] lg:rounded-[2.5rem]">
             {list.map((scene, i) => (
               <Layer
                 key={(scene.src ?? scene.surface?.bg ?? '') + i}
@@ -216,7 +219,7 @@ export function ScrollStoryGallery({ images, direction = 'up', className }: Scro
 
             {/* Progress index — gold reads on every brand surface */}
             <ol
-              className="absolute right-5 bottom-5 flex flex-col items-end gap-1.5 font-mono text-[0.65rem] tracking-[0.14em] text-brand-gold sm:right-8 sm:bottom-8 sm:gap-2 sm:text-[0.7rem] lg:right-12 lg:bottom-12"
+              className="absolute right-5 bottom-5 flex flex-col items-end gap-1.5 font-mono text-[0.7rem] tracking-[0.14em] text-brand-gold sm:right-8 sm:bottom-8 sm:gap-2 lg:right-12 lg:bottom-12"
               aria-label="Gallery progress"
             >
               {list.map((_, i) => (

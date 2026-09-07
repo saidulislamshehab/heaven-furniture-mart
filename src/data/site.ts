@@ -12,7 +12,7 @@ export const site = {
   phoneDisplay: '+880 1960-481983',
   phoneE164: '+8801960481983',
   email: 'heavenfurnituremart@gmail.com',
-  mapsUrl: 'https://maps.app.goo.gl/XnZzpdkLTNB9jhGP9f',
+  mapsUrl: 'https://maps.app.goo.gl/WVXYtxmapjVe5i7o6',
   mapsEmbedUrl:
     'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3690.6354659037056!2d91.7930853!3d22.3296222!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30acd999401bf62b%3A0xcd9639571c8d5c27!2sHeaven%20Furniture%20Mart!5e0!3m2!1sen!2sbd!4v1788714688708!5m2!1sen!2sbd',
   mapsCoords: { lat: 22.3296222, lng: 91.7930853 },
@@ -76,11 +76,31 @@ export const site = {
     { title: 'Easy payment options', body: 'Flexible plans so the right piece is never out of reach.' },
   ],
   milestones: [
-    { year: '2020', title: 'Founded', body: 'Established in Chattogram by Managing Director Abul Kalam Bhuiyan.' },
-    { year: '2021', title: 'Agrabad showroom', body: 'Opened the showroom on Agrabad Access Road.' },
-    { year: '2024–25', title: 'International Furniture Fair', body: 'Exhibited at the International Furniture Fair, Chattogram.' },
-    { year: '2025', title: 'Chamber of Commerce', body: 'Became a member of the Chamber of Commerce.' },
-    { year: '2026', title: 'BFIOA recognition', body: 'Received nationwide BFIOA recognition.' },
+    {
+      year: '2020',
+      title: 'Founded',
+      body: 'Established in Chattogram by Managing Director Abul Kalam Bhuiyan. The idea was simple: furniture designed around the room it will live in, crafted by our own hands rather than bought off a shelf.',
+    },
+    {
+      year: '2021',
+      title: 'Agrabad showroom',
+      body: 'Opened the showroom on Agrabad Access Road. For the first time, homeowners could walk in, sit on the pieces, feel the timber and fabric, and talk through their space with a designer in person.',
+    },
+    {
+      year: '2024–25',
+      title: 'International Furniture Fair',
+      body: 'Exhibited at the International Furniture Fair, Chattogram, across two consecutive years. Standing beside the region’s leading makers, our bespoke pieces were seen and judged by a far wider audience.',
+    },
+    {
+      year: '2025',
+      title: 'Chamber of Commerce',
+      body: 'Became a member of the Chamber of Commerce. A formal step that reflects how far the studio has grown, and a commitment to doing business with the standards our clients expect.',
+    },
+    {
+      year: '2026',
+      title: 'BFIOA recognition',
+      body: 'Received nationwide BFIOA recognition. An acknowledgement from the furniture industry itself that the design and craftsmanship coming out of Chattogram stand with the best in the country.',
+    },
   ],
   showroomFeatures: [
     'Custom Furniture Design',

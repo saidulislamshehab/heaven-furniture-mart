@@ -1,41 +1,40 @@
 import { Reveal, SplitWords } from '@/components/common/Reveal'
 import { SectionLabel } from '@/components/common/SectionLabel'
 import { ScrollRevealGallery, type ScrollRevealImage } from '@/components/ui/scroll-reveal-gallery'
-
-const unsplash = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1800&q=80`
+import { storyImages } from '@/data/assets'
 
 const images: ScrollRevealImage[] = [
   {
-    src: unsplash('photo-1586023492125-27b2c045efd7'),
-    alt: 'Sunlit living room with a low linen sofa, timber side table and layered neutral textiles',
+    src: storyImages.arrive,
+    alt: 'Sunlit living room with a caramel leather sofa, cream armchairs and a gallery wall of framed prints',
     eyebrow: '01 — Arrive',
     title: 'A room that breathes.',
     description: 'Warm light, honest timber and one sofa made to the exact width of the wall it rests against.',
   },
   {
-    src: unsplash('photo-1616486338812-3dadae4b4ace'),
-    alt: 'Minimal lounge with a curved sofa, sculptural lamp and soft ivory walls',
+    src: storyImages.gather,
+    alt: 'Warm lounge with a grey sofa, leather and timber accents and floor-to-ceiling windows onto greenery',
     eyebrow: '02 — Gather',
     title: 'Made for long evenings.',
     description: 'Seating proportioned to the people who use it — deep enough to stay, refined enough to admire.',
   },
   {
-    src: unsplash('photo-1616594039964-ae9021a400a0'),
-    alt: 'Calm bedroom with an upholstered headboard, bedside cabinets and muted linen bedding',
+    src: storyImages.rest,
+    alt: 'Moody bedroom with a channel-tufted velvet bed, brass chandelier and a patterned rug',
     eyebrow: '03 — Rest',
     title: 'Quiet by design.',
     description: 'A bedroom suite built as one thought: headboard, cabinets and wardrobe in a single matched grain.',
   },
   {
-    src: unsplash('photo-1617806118233-18e1de247200'),
-    alt: 'Dining room with a solid timber table, cane chairs and a low pendant lamp',
+    src: storyImages.share,
+    alt: 'Bright dining room with a long table, emerald velvet chairs and a round mirror above a console',
     eyebrow: '04 — Share',
     title: 'The table that hosts.',
     description: 'Solid timber, hand-finished edges and a length decided by how many you like to feed.',
   },
   {
-    src: unsplash('photo-1600210492486-724fe5c67fb0'),
-    alt: 'Study corner with a walnut desk, leather chair and built-in shelving in warm light',
+    src: storyImages.belong,
+    alt: 'Study with a deep green feature wall, tan leather sofa, framed artwork and a brass floor lamp',
     eyebrow: '05 — Belong',
     title: 'Every piece, in its place.',
     description: 'From the first drawing to installation day — furniture that fits the room, and the life inside it.',

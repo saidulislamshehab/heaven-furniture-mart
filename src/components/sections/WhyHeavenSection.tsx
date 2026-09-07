@@ -19,7 +19,7 @@ export function WhyHeavenSection() {
         eyebrow="06 — Why Heaven"
         title={['Why homeowners', 'choose Heaven.']}
         scrollHint="Scroll to open the showroom"
-        lengthVh={340}
+        lengthVh={220}
         tone="light"
       >
         {({ pinned }) => {

@@ -22,23 +22,37 @@ function useStillMedia() {
   return still
 }
 
+/** Phones and slow links get a single looping film instead of the five-part rotation (~28 MB). */
+function useLiteFilm() {
+  const [lite] = useState(() => {
+    if (typeof window === 'undefined') return false
+    const nav = navigator as Navigator & { connection?: { effectiveType?: string } }
+    const slow = /(^|-)2g$|^3g$/.test(nav.connection?.effectiveType ?? '')
+    return window.innerWidth < 768 || slow
+  })
+  return lite
+}
+
 /** Plays the hero films in sequence with a slow cross-fade across all devices including mobile. */
 function HeroFilm({ active, onAdvance }: { active: number; onAdvance: () => void }) {
   const still = useStillMedia()
+  const lite = useLiteFilm()
   const refs = useRef<(HTMLVideoElement | null)[]>([])
+  const list = lite ? heroVideos.slice(0, 1) : heroVideos
+  const current = active % list.length
 
   useEffect(() => {
     if (still) return
     refs.current.forEach((v, i) => {
       if (!v) return
-      if (i === active) {
-        v.currentTime = 0
+      if (i === current) {
+        if (list.length > 1) v.currentTime = 0
         v.play().catch(() => {})
       } else if (!v.paused) {
         v.pause()
       }
     })
-  }, [active, still])
+  }, [current, still, list.length])
 
   if (still) {
     return <img src={heroVideos[0].poster} alt="" className="absolute inset-0 h-full w-full object-cover" fetchPriority="high" />
@@ -46,7 +60,7 @@ function HeroFilm({ active, onAdvance }: { active: number; onAdvance: () => void
 
   return (
     <>
-      {heroVideos.map((v, i) => (
+      {list.map((v, i) => (
         <video
           key={v.src}
           ref={(el) => {
@@ -56,14 +70,15 @@ function HeroFilm({ active, onAdvance }: { active: number; onAdvance: () => void
           poster={i === 0 ? v.poster : undefined}
           muted
           playsInline
+          loop={list.length === 1}
           autoPlay={i === 0}
-          preload={i === 0 || i === active || i === (active + 1) % heroVideos.length ? 'auto' : 'none'}
-          onEnded={onAdvance}
+          preload={i === current ? 'auto' : i === (current + 1) % list.length ? 'metadata' : 'none'}
+          onEnded={list.length > 1 ? onAdvance : undefined}
           aria-hidden
           tabIndex={-1}
           className={cn(
-            'absolute inset-0 h-full w-full object-cover transition-opacity duration-[1400ms] ease-[var(--ease-luxury)]',
-            i === active ? 'opacity-100' : 'opacity-0'
+            'absolute inset-0 h-full w-full object-cover object-[60%_center] transition-opacity duration-[1400ms] ease-[var(--ease-luxury)] sm:object-center',
+            i === current ? 'opacity-100' : 'opacity-0'
           )}
         />
       ))}

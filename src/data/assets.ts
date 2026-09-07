@@ -56,6 +56,31 @@ export const brandImages = {
   showroomExterior: '/images/brand/showroom-exterior.avif',
 }
 
+/** Editorial interior photography for the "room by room" story (Unsplash licence). */
+export const storyImages = {
+  arrive: '/images/story/01-arrive.jpg',
+  gather: '/images/story/02-gather.jpg',
+  rest: '/images/story/03-rest.jpg',
+  share: '/images/story/04-share.jpg',
+  belong: '/images/story/05-belong.jpg',
+}
+
+/** Unsplash CDN image, resized server-side. Editorial interiors used where we have no own photography. */
+export const unsplash = (id: string, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=80`
+
+/** Full-bleed page-hero imagery for inner pages. */
+export const pageHeroImages = {
+  shop: { src: unsplash('photo-1555041469-a586c61ea9bc', 2000), alt: 'Sunlit living room with a tailored grey sofa, timber coffee table and layered neutral textiles' },
+  shopByCategory: {
+    'living-room': { src: unsplash('photo-1555041469-a586c61ea9bc', 2000), alt: 'Tailored grey sofa in a bright, minimal living room' },
+    bedroom: { src: unsplash('photo-1616594039964-ae9021a400a0', 2000), alt: 'Calm bedroom with an upholstered headboard and linen bedding' },
+    dining: { src: unsplash('photo-1617806118233-18e1de247200', 2000), alt: 'Dining room with a solid timber table and cane chairs under a pendant lamp' },
+    'office-study': { src: unsplash('photo-1497366811353-6870744d04b2', 2000), alt: 'Glass-walled office with a long timber meeting table and upholstered chairs' },
+    bespoke: { src: unsplash('photo-1583847268964-b28dc8f51f92', 2000), alt: 'Soft grey sofa with turned-timber tables and layered textiles in a made-to-measure living room' },
+  },
+  about: { src: unsplash('photo-1615873968403-89e068629265', 2000), alt: 'Tan leather sofa against a deep teal wall with framed prints and a brass floor lamp' },
+} as const
+
 const f = (name: string) => `/images/furniture/${name}.jpg`
 
 /** Editorial photography for the bespoke process steps (licensed stock, Pexels). */

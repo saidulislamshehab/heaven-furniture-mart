@@ -8,7 +8,7 @@ import { FounderSection } from '@/components/sections/FounderSection'
 import { MilestonesSection } from '@/components/sections/MilestonesSection'
 import { FinalCTASection } from '@/components/sections/FinalCTASection'
 import { Button } from '@/components/ui/button'
-import { brandImages, img, showroomVideos, workshopFilms } from '@/data/assets'
+import { brandImages, img, pageHeroImages, showroomVideos, workshopFilms } from '@/data/assets'
 import { site } from '@/data/site'
 import { usePageMeta } from '@/lib/usePageMeta'
 
@@ -39,8 +39,8 @@ export function AboutPage() {
         eyebrow={`Our story · Est. ${site.founded}`}
         title="Built around the way Chattogram lives."
         body="Heaven Furniture Mart began with a simple belief: furniture should be made for the room it lives in, and the people who live with it."
-        image={img.creamClassicLounge}
-        imageAlt="Cream classic lounge set on the Heaven Furniture Mart showroom floor"
+        image={pageHeroImages.about.src}
+        imageAlt={pageHeroImages.about.alt}
       />
 
       {/* Story */}
