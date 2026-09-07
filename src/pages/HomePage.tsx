@@ -21,19 +21,26 @@ export function HomePage({ introDone }: { introDone: boolean }) {
 
   return (
     <>
-      <HeroSection introDone={introDone} />
-      <IntroSection />
-      <BespokeSection />
-      <CollectionsSection />
-      <StorySection />
-      <CraftSection />
-      <WhyHeavenSection />
-      <FounderSection />
-      <SignatureSection />
-      <ProofSection />
-      <VisitTeaserSection />
-      <MilestonesSection number="11" className="bg-brand-ivory pb-[clamp(4.5rem,10vw,10rem)] text-brand-brown" />
-      <SvgFollowScroll />
+      <div className="relative isolate">
+        {/* Hero pins to the top; the sections below scroll up and over it */}
+        <div className="sticky top-0 z-0 h-[100svh] overflow-hidden">
+          <HeroSection introDone={introDone} />
+        </div>
+        <div className="relative z-10">
+          <IntroSection />
+          <BespokeSection />
+          <CollectionsSection />
+          <StorySection />
+          <CraftSection />
+          <WhyHeavenSection />
+          <FounderSection />
+          <SignatureSection />
+          <ProofSection />
+          <VisitTeaserSection />
+          <MilestonesSection number="11" className="bg-brand-ivory pb-[clamp(4.5rem,10vw,10rem)] text-brand-brown" />
+          <SvgFollowScroll />
+        </div>
+      </div>
     </>
   )
 }

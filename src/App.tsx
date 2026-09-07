@@ -11,25 +11,31 @@ const AboutPage = lazy(() => import('@/pages/AboutPage').then((m) => ({ default:
 const VisitPage = lazy(() => import('@/pages/VisitPage').then((m) => ({ default: m.VisitPage })))
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage })))
 
-function App() {
+function AppShell() {
   const [introDone, markIntroDone] = useIntroDone()
 
   return (
+    <SmoothScrollProvider>
+      <ConsultationProvider>
+        <IntroLoader show={!introDone} onDone={markIntroDone} />
+        <Routes>
+          <Route element={<RootLayout />}>
+            <Route index element={<HomePage introDone={introDone} />} />
+            <Route path="shop" element={<ShopPage />} />
+            <Route path="about" element={<AboutPage />} />
+            <Route path="visit" element={<VisitPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Route>
+        </Routes>
+      </ConsultationProvider>
+    </SmoothScrollProvider>
+  )
+}
+
+function App() {
+  return (
     <BrowserRouter>
-      <SmoothScrollProvider>
-        <ConsultationProvider>
-          <IntroLoader show={!introDone} onDone={markIntroDone} />
-          <Routes>
-            <Route element={<RootLayout />}>
-              <Route index element={<HomePage introDone={introDone} />} />
-              <Route path="shop" element={<ShopPage />} />
-              <Route path="about" element={<AboutPage />} />
-              <Route path="visit" element={<VisitPage />} />
-              <Route path="*" element={<NotFoundPage />} />
-            </Route>
-          </Routes>
-        </ConsultationProvider>
-      </SmoothScrollProvider>
+      <AppShell />
     </BrowserRouter>
   )
 }

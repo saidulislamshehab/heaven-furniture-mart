@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
+import { useLocation } from 'react-router'
 import { AnimatePresence, motion, stagger, useAnimate, useReducedMotion } from 'motion/react'
 
 /**
  * Minimal brand title card on warm ivory: HEA slides in from the left and VEN from the right,
  * meeting at centre; FURNITURE MART rises from beneath, the lockup holds, then the ivory panel
- * lifts like a curtain to reveal the ready hero. Plays on a fresh landing-page load; skipped on
- * inner routes.
+ * lifts like a curtain to reveal the page. Plays on first load and again on every route change
+ * (Home / Shop / About / Visit); hash-only jumps don't retrigger it.
  *
  * One master sequence drives every step; `onDone` fires only when the curtain has fully left,
  * so the hero entrance never overlaps the intro.
@@ -32,13 +33,12 @@ const LEFT_COUNT = 3 // H E A from the left, V E N from the right
 const martLetters = 'FURNITURE MART'.split('')
 const MART_LEFT_COUNT = 7 // "FURNITU" from the left, "RE MART" from the right
 
+/** `done` is true only for the route the intro has already finished on; a new pathname re-arms it. */
 export function useIntroDone() {
-  const [done, setDone] = useState(() => {
-    if (typeof window === 'undefined') return true
-    return window.location.pathname !== '/'
-  })
-  const markDone = useCallback(() => setDone(true), [])
-  return [done, markDone] as const
+  const { pathname } = useLocation()
+  const [doneFor, setDoneFor] = useState<string | null>(null)
+  const markDone = useCallback(() => setDoneFor(pathname), [pathname])
+  return [doneFor === pathname, markDone] as const
 }
 
 interface IntroLoaderProps {
@@ -124,16 +124,14 @@ export function IntroLoader({ show, onDone }: IntroLoaderProps) {
             <div data-lockup className="flex flex-col items-center px-4 sm:px-6">
               <span className="sr-only">Heaven Furniture Mart</span>
 
-              {/* HEAVEN — heavy display cut; two halves converge from the viewport edges, then the spacing settles */}
+              {/* HEAVEN — heavy grotesque wordmark; two halves converge from the viewport edges, then the spacing settles */}
               <span
                 data-heaven
                 aria-hidden
-                className="flex pb-[0.1em] font-display leading-[0.85]"
+                className="flex pb-[0.08em] font-wordmark leading-[0.9]"
                 style={{
-                  fontSize: 'clamp(2.5rem, 13vw, 13rem)',
-                  fontWeight: 900,
-                  fontVariationSettings: '"opsz" 144, "SOFT" 30, "WONK" 0',
-                  letterSpacing: reduce ? '-0.02em' : '0.02em',
+                  fontSize: 'clamp(3rem, 17vw, 14rem)',
+                  letterSpacing: reduce ? '-0.01em' : '0.03em',
                 }}
               >
                 {letters.map((l, i) => {
@@ -154,8 +152,8 @@ export function IntroLoader({ show, onDone }: IntroLoaderProps) {
               {/* FURNITURE MART — same converge as HEAVEN, cued once HEAVEN has landed */}
               <span
                 aria-hidden
-                className="mt-4 flex font-mono text-[0.68rem] font-medium uppercase text-brand-teal-deep/70 sm:mt-6 sm:text-sm"
-                style={{ letterSpacing: 'clamp(0.2em, 2.8vw, 0.42em)' }}
+                className="mt-4 flex font-mono text-[1rem] font-medium uppercase text-brand-teal-deep/75 sm:mt-6 sm:text-[1.35rem] lg:text-[1.6rem]"
+                style={{ letterSpacing: 'clamp(0.2em, 1.6vw, 0.45em)' }}
               >
                 {martLetters.map((l, i) => {
                   const side = i < MART_LEFT_COUNT ? 'left' : 'right'

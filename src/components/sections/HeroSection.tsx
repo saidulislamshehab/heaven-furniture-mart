@@ -141,19 +141,23 @@ export function HeroSection({ introDone }: HeroSectionProps) {
         </motion.p>
 
         {/* Layered headline: massive sans line + italic serif line, like a film title card */}
-        <h1 className="mt-5 text-balance sm:mt-6" aria-label="Furniture, crafted around you.">
+        <h1 className="mt-5 text-balance sm:mt-6" aria-label="Built around the way you live.">
           <span className="block font-serif text-[length:clamp(2.1rem,6.2vw,5.5rem)] font-normal leading-[0.95] tracking-[-0.025em] text-brand-ivory">
-            <Letters text="Furniture," ready={ready} delay={0.2} />
+            <Letters text="Built around" ready={ready} delay={0.2} />
           </span>
           <span className="mt-1 flex flex-wrap items-baseline gap-x-[0.28em] text-[length:clamp(2.1rem,6.2vw,5.5rem)] sm:mt-2">
             <span className="font-serif italic leading-[0.95] tracking-[-0.02em] text-brand-ivory/90">
-              <Letters text="crafted" ready={ready} delay={0.5} />
+              <Letters text="the way" ready={ready} delay={0.5} />
             </span>
-            <span className="font-sans font-medium not-italic leading-[0.95] tracking-[-0.03em] text-brand-wood">
-              <Letters text="around" ready={ready} delay={0.7} />
+            <span
+              className="font-serif italic font-light leading-[0.95] tracking-[-0.01em] text-brand-wood"
+              // Fraunces' expressive axes: max wonk (swash-like forms) and softness
+              style={{ fontVariationSettings: '"WONK" 1, "SOFT" 100, "opsz" 144' }}
+            >
+              <Letters text="you" ready={ready} delay={0.7} />
             </span>
             <span className="font-serif italic leading-[0.95] tracking-[-0.02em] text-brand-ivory/90">
-              <Letters text="you." ready={ready} delay={0.88} />
+              <Letters text="live." ready={ready} delay={0.88} />
             </span>
           </span>
         </h1>
