@@ -10,6 +10,7 @@ import {
 } from 'motion/react'
 import { cn } from '@/lib/utils'
 import { srcSetFor } from '@/lib/images'
+import { isLowPower } from '@/lib/device'
 
 /** Solid-colour scene surface. Classes must come from the brand palette. */
 export interface StorySurface {
@@ -105,6 +106,8 @@ function Layer({
   const captionY = useTransform(eased, [0, 1], ['24px', '0px'])
 
   const surface = scene.surface ?? photoSurface
+  /* Scaling a full-bleed photo every frame is the costliest part of this scene on phones. */
+  const animateImage = !reduce && !isLowPower()
 
   return (
     <motion.div
@@ -121,7 +124,7 @@ function Layer({
           decoding="async"
           sizes="(min-width:1024px) 92vw, 100vw"
           className="absolute inset-0 h-full w-full object-cover"
-          style={reduce ? undefined : { scale, y: drift }}
+          style={animateImage ? { scale, y: drift } : undefined}
         />
       )}
 
@@ -200,9 +203,9 @@ export function ScrollStoryGallery({ images, direction = 'up', className }: Scro
   const list = normalize(images)
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] })
-  /* Spring lags the raw scroll slightly so fast wheel ticks don't snap between scenes. */
+  /* Spring lags the raw scroll slightly so fast wheel ticks don't snap between scenes. Touch scroll has its own inertia. */
   const smoothed = useSpring(scrollYProgress, { stiffness: 60, damping: 22, mass: 0.6, restDelta: 0.0005 })
-  const progress = useTransform(reduce ? scrollYProgress : smoothed, [0, 1], [0, 1], { clamp: true })
+  const progress = useTransform(reduce || isLowPower() ? scrollYProgress : smoothed, [0, 1], [0, 1], { clamp: true })
 
   /* Active index only changes 5 times per pass — cheap to keep in state. */
   const [active, setActive] = useState(0)
@@ -254,7 +257,11 @@ export function ScrollStoryGallery({ images, direction = 'up', className }: Scro
                       i === active ? 'w-6 sm:w-8' : 'w-2'
                     )}
                   />
-                  0{i + 1}
+                  {/* Only the current index is printed; dimmed numbers can't meet contrast, ticks carry the rest */}
+                  <span aria-hidden className={cn('transition-opacity duration-500', i === active ? 'opacity-100' : 'opacity-0')}>
+                    0{i + 1}
+                  </span>
+                  <span className="sr-only">{`Scene ${i + 1} of ${list.length}`}</span>
                 </li>
               ))}
             </ol>

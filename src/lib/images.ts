@@ -19,6 +19,9 @@ function variants(src: string) {
  * file there, and a 404 candidate would leave high-DPR phones with a broken image.
  */
 export function srcSetFor(src: string, maxWidth = 2048): string | undefined {
+  if (/^https:\/\/images\.unsplash\.com\//.test(src)) {
+    return [640, 1080, 1600, 2000].map((w) => `${src.replace(/([?&])w=\d+/, `$1w=${w}`)} ${w}w`).join(', ')
+  }
   const v = variants(src)
   if (!v) return undefined
   const known = VARIANTS[v.key]
@@ -35,15 +38,16 @@ export function webpFor(src: string, width: (typeof WIDTHS)[number] | 'full' = '
 }
 
 /**
- * Always serves the 1080p rendition on every device. The 720p companion from
- * scripts/optimize-videos.mjs is used only when the visitor has explicitly enabled data saver.
+ * 1080p on tablets and desktops; the 720p companion from scripts/optimize-videos.mjs on phones
+ * (≤767px, where 720p already exceeds the rendered size) and for visitors with data saver on.
+ * Roughly halves the media payload on mobile.
  */
 let smallVideo: boolean | undefined
 export function videoSrcFor(src: string): string {
   if (smallVideo === undefined) {
     if (typeof window === 'undefined') return src
     const nav = navigator as Navigator & { connection?: { saveData?: boolean } }
-    smallVideo = Boolean(nav.connection?.saveData)
+    smallVideo = Boolean(nav.connection?.saveData) || window.matchMedia('(max-width: 767px)').matches
   }
   return smallVideo ? src.replace(/\.mp4$/, '-720.mp4') : src
 }

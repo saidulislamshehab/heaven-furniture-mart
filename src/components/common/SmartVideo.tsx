@@ -41,7 +41,7 @@ export function SmartVideo({
   useEffect(() => {
     const el = ref.current
     if (!el || still) return
-    // Buffer one viewport ahead so the film is ready before it appears…
+    // Buffer half a viewport ahead so the film is ready before it appears without competing with the hero…
     const prefetch = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -49,7 +49,7 @@ export function SmartVideo({
           prefetch.disconnect()
         }
       },
-      { rootMargin: '100% 0px' }
+      { rootMargin: '50% 0px' }
     )
     // …but only play/pause on actual visibility.
     const io = new IntersectionObserver(
@@ -92,7 +92,8 @@ export function SmartVideo({
   return (
     <video
       ref={ref}
-      poster={asset.poster}
+      // Posters download eagerly regardless of `preload`, so gate them on proximity like the source.
+      poster={attached ? asset.poster : undefined}
       src={attached ? videoSrcFor(asset.src) : undefined}
       muted={muted}
       playsInline
@@ -102,7 +103,7 @@ export function SmartVideo({
       onCanPlay={onReady}
       aria-hidden
       tabIndex={-1}
-      className={cn('h-full w-full object-cover', className)}
+      className={cn('h-full w-full bg-brand-ink/10 object-cover', className)}
       {...rest}
     />
   )

@@ -121,7 +121,7 @@ export default function SwipeStack({ items, onFrontChange, aspect = '9 / 16', to
           'eyebrow absolute -bottom-12 left-1/2 z-50 flex min-h-11 -translate-x-1/2 items-center gap-2 whitespace-nowrap transition-colors',
           light ? 'text-brand-stone hover:text-brand-brown focus-visible:text-brand-brown' : 'text-brand-ivory/70 hover:text-brand-ivory focus-visible:text-brand-ivory'
         )}
-        aria-label="Show next film"
+        aria-label="Swipe or tap for next film"
       >
         Swipe or tap for next
       </button>

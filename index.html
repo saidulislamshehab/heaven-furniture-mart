@@ -17,16 +17,32 @@
     <meta property="og:description" content="Designed. Crafted. Customized. Bespoke luxury furniture and interior styling from Agrabad, Chattogram." />
     <meta property="og:image" content="/images/posters/hero-sofa.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
-    <link rel="preload" as="image" href="/images/posters/hero-egg-chair.jpg" fetchpriority="high" />
-    <!-- First hero film: fetch during the intro so it plays the instant the curtain lifts -->
-    <link rel="preload" as="video" type="video/mp4" href="/videos/hero/hero-egg-chair.mp4" />
-    <!-- Pre-paint the intro's ivory backdrop so the dark body never flashes before React mounts -->
+    <!-- Inner-page heroes load from the Unsplash CDN -->
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+    <!-- Landing page only: pre-paint the intro's ivory backdrop so the dark body never flashes before React mounts,
+         paint a caption so slow connections get a first contentful paint before the JS bundle lands (the intro removes it),
+         and preload the hero poster so it is on screen the instant the curtain lifts. The first film buffers via its own
+         <video preload="auto"> during the intro; `<link rel=preload as=video>` is unsupported in Chromium and only warns. -->
     <script>
       if (location.pathname === '/') {
         var s = document.createElement('style')
         s.id = 'intro-prepaint'
-        s.textContent = 'html,body{background:#F5F0EB !important}'
+        s.textContent =
+          'html,body{background:#F5F0EB !important}' +
+          '#intro-premark{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font:500 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.18em;text-transform:uppercase;color:#875636;opacity:.85}'
         document.head.appendChild(s)
+        var poster = document.createElement('link')
+        poster.rel = 'preload'
+        poster.as = 'image'
+        poster.href = '/images/posters/hero-egg-chair.jpg'
+        poster.fetchPriority = 'high'
+        document.head.appendChild(poster)
+        document.addEventListener('DOMContentLoaded', function () {
+          var m = document.createElement('p')
+          m.id = 'intro-premark'
+          m.textContent = 'Heaven Furniture Mart · Chattogram'
+          document.body.appendChild(m)
+        })
       }
     </script>
   </head>

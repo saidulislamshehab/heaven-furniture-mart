@@ -33,7 +33,10 @@
   --brand-ink: #0D1413;
   --brand-ivory-deep: #ECE5D6;
   --brand-gold-soft: #D2A67F;
+  --brand-gold-deep: #875636;
   --brand-stone: #6B5E56;
+  /* Gold for 11px small-caps labels: deep on ivory (5.4:1), soft on dark (6.4:1). Dark surfaces override below. */
+  --eyebrow-gold: var(--brand-gold-deep);
 
   /* Assistant (concierge) theme — intentionally distinct from the site: porcelain, graphite, deep sage */
   --assistant-surface: #FBFAF6;
@@ -127,6 +130,7 @@
   --color-brand-ink: var(--brand-ink);
   --color-brand-ivory-deep: var(--brand-ivory-deep);
   --color-brand-gold-soft: var(--brand-gold-soft);
+  --color-brand-gold-deep: var(--brand-gold-deep);
   --color-brand-stone: var(--brand-stone);
   --ease-luxury: cubic-bezier(0.16, 1, 0.3, 1);
   --color-border: var(--border);
@@ -223,6 +227,15 @@
   font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
+}
+
+/* Small-caps gold that stays AA on whichever surface it sits on (nearest surface wins). */
+@utility text-eyebrow-gold {
+  color: var(--eyebrow-gold);
+}
+@layer base {
+  .bg-brand-teal, .bg-brand-teal-deep, .bg-brand-ink, .bg-brand-brown { --eyebrow-gold: var(--brand-gold-soft); }
+  .bg-brand-ivory, .bg-brand-ivory-deep, .bg-background { --eyebrow-gold: var(--brand-gold-deep); }
 }
 
 @utility display-1 {

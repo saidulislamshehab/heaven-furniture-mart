@@ -21,12 +21,12 @@ function ProductCard({ p, onOpen, index }: { p: Product; onOpen: () => void; ind
   const cat = categoryById(p.category)
   return (
     <Reveal delay={Math.min(index % 3, 2) * 0.08} once>
-      <button type="button" onClick={onOpen} className="group block w-full text-left" aria-label={`Quick view: ${p.name}`}>
+      <button type="button" onClick={onOpen} className="group block w-full text-left">
         <div className="relative aspect-[5/4] overflow-hidden bg-brand-ivory-deep">
           <img
             src={p.image}
             srcSet={srcSetFor(p.image)}
-            alt={p.name}
+            alt=""
             loading="lazy"
             decoding="async"
             sizes="(min-width:1280px) 30vw, (min-width:640px) 45vw, 100vw"
@@ -40,10 +40,10 @@ function ProductCard({ p, onOpen, index }: { p: Product; onOpen: () => void; ind
         </div>
         <div className="mt-4 flex items-start justify-between gap-3">
           <div>
-            <h3 className="font-serif text-xl leading-tight sm:text-2xl">{p.name}</h3>
+            <h2 className="font-serif text-xl leading-tight sm:text-2xl">{p.name}</h2>
             <p className="mt-1 text-sm text-brand-stone">{p.note}</p>
           </div>
-          <span className="eyebrow mt-1 shrink-0 text-brand-stone/80">{cat?.short}</span>
+          <span className="eyebrow mt-1 shrink-0 text-brand-stone">{cat?.short}</span>
         </div>
       </button>
     </Reveal>
@@ -152,7 +152,7 @@ export function ShopPage() {
       />
 
       <section className="bg-brand-ivory text-brand-brown">
-        <div className="sticky top-[var(--nav-offset,60px)] z-30 border-b border-brand-brown/10 bg-brand-ivory/90 backdrop-blur-md transition-[top] duration-500 ease-[var(--ease-luxury)] motion-reduce:transition-none">
+        <div className="sticky top-[var(--nav-offset,60px)] z-30 border-b border-brand-brown/10 bg-brand-ivory [@media(hover:hover)]:bg-brand-ivory/90 [@media(hover:hover)]:backdrop-blur-md transition-[top] duration-500 ease-[var(--ease-luxury)] motion-reduce:transition-none">
           <div className="container-x mx-auto flex max-w-[1600px] flex-col gap-4 py-4 lg:flex-row lg:items-center lg:justify-between">
             <ul className="-mx-1 flex gap-1 overflow-x-auto scrollbar-none" role="list" aria-label="Filter by category">
               {[{ id: null, name: 'All' }, ...categories].map((c) => {

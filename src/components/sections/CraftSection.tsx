@@ -35,7 +35,7 @@ function FilmStack() {
         }))}
       />
       <div className="mx-auto mt-16 max-w-[min(78vw,22rem)]" aria-live="polite">
-        <p className="eyebrow text-brand-gold">
+        <p className="eyebrow text-brand-gold-deep">
           {current.index} / {current.label}
         </p>
         <h3 className="mt-2 font-serif text-3xl leading-tight text-brand-brown">{current.title}</h3>
@@ -63,7 +63,7 @@ function FilmPanel({ film }: { film: Film }) {
       {/* Bottom copy */}
       <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6 lg:p-8">
         <div className="max-w-xs">
-          <p className="eyebrow text-brand-gold">
+          <p className="eyebrow text-brand-gold-soft">
             {film.index} / {film.label}
           </p>
           <h3 className="mt-3 font-serif text-3xl leading-tight text-brand-ivory sm:text-4xl">{film.title}</h3>

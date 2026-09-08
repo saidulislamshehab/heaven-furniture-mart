@@ -104,7 +104,7 @@ export function Navbar() {
         className={cn(
           'fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow,padding,translate] duration-500 ease-[var(--ease-luxury)] will-change-transform motion-reduce:transition-none',
           dark
-            ? 'bg-brand-ivory/90 py-3 shadow-[0_1px_0_0_rgba(43,33,28,0.08)] backdrop-blur-md supports-backdrop-filter:bg-brand-ivory/80 [@media(max-height:500px)]:py-2'
+            ? 'bg-brand-ivory py-3 shadow-[0_1px_0_0_rgba(43,33,28,0.08)] [@media(hover:hover)]:bg-brand-ivory/85 [@media(hover:hover)]:backdrop-blur-md [@media(max-height:500px)]:py-2'
             : 'bg-transparent py-5 sm:py-6 [@media(max-height:500px)]:py-2.5',
           hidden && !menuOpen ? '-translate-y-full' : 'translate-y-0'
         )}

@@ -12,12 +12,11 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
   const lenisRef = useRef<Lenis | null>(null)
 
   useEffect(() => {
-    // Check if user prefers reduced motion
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    /* Touch devices already scroll natively (syncTouch is off); skipping Lenis removes a per-frame RAF loop. */
+    const touchOnly = window.matchMedia('(hover: none) and (pointer: coarse)').matches
 
-    if (prefersReducedMotion) {
+    if (prefersReducedMotion || touchOnly) {
       return
     }
 

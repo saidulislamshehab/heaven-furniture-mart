@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
+import { useLocation } from 'react-router'
 import { AnimatePresence, motion, stagger, useAnimate, useReducedMotion } from 'motion/react'
 
 /**
  * Minimal brand title card on warm ivory: HEA slides in from the left and VEN from the right,
  * meeting at centre; FURNITURE MART rises from beneath, the lockup holds, then the ivory panel
- * lifts like a curtain to reveal the page. Plays on first load and again on every route change
- * (Home / Shop / About / Visit); hash-only jumps don't retrigger it.
+ * lifts like a curtain to reveal the page. Plays once, only when the visit starts on the landing
+ * page; inner pages (Shop / About / Visit) opened directly render immediately.
  *
  * One master sequence drives every step; `onDone` fires only when the curtain has fully left,
  * so the hero entrance never overlaps the intro.
@@ -32,10 +33,14 @@ const LEFT_COUNT = 3 // H E A from the left, V E N from the right
 const martLetters = 'FURNITURE MART'.split('')
 const MART_LEFT_COUNT = 7 // "FURNITU" from the left, "RE MART" from the right
 
-/** Plays once per full page load (reload / first visit); client-side route changes never re-arm it. */
+/** Landing page only, once per full page load; inner pages and client-side route changes never arm it. */
 export function useIntroDone() {
-  const [done, setDone] = useState(false)
+  const { pathname } = useLocation()
+  const [done, setDone] = useState(() => pathname !== '/')
   const markDone = useCallback(() => setDone(true), [])
+  useEffect(() => {
+    if (done) document.getElementById('intro-premark')?.remove()
+  }, [done])
   return [done, markDone] as const
 }
 
@@ -54,6 +59,8 @@ export function IntroLoader({ show, onDone }: IntroLoaderProps) {
   useEffect(() => {
     if (!show) return
     document.documentElement.style.overflow = 'hidden'
+    // The static caption painted by index.html has done its job once the curtain is on screen.
+    document.getElementById('intro-premark')?.remove()
 
     const controls = reduce
       ? // Reduced motion: completed lockup, brief hold, quiet fade — no long trap.

@@ -86,7 +86,7 @@ function ReviewCarousel() {
               </blockquote>
               <figcaption className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2">
                 <p className="text-lg">{review.author}</p>
-                <span className="flex items-center gap-0.5" aria-label={`${review.rating} out of 5 stars`}>
+                <span role="img" className="flex items-center gap-0.5" aria-label={`${review.rating} out of 5 stars`}>
                   {Array.from({ length: 5 }, (_, i) => (
                     <Star
                       key={i}

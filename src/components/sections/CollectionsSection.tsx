@@ -27,7 +27,7 @@ function CollectionPanel({ c, i }: { c: Category; i: number }) {
         {/* Copy */}
         <div className={cn('flex flex-col justify-between lg:col-span-5', flip && 'lg:order-2 lg:col-start-8')}>
           <div className={cn('flex items-center justify-between border-b pb-5', s.rule)}>
-            <span className="eyebrow text-brand-gold">
+            <span className="eyebrow text-eyebrow-gold">
               {c.index} / {String(categories.length).padStart(2, '0')}
             </span>
             <span className={cn('eyebrow', s.muted)}>Collection</span>

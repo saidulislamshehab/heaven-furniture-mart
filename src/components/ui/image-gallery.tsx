@@ -1,9 +1,34 @@
-import { useRef, useState, type CSSProperties, type MouseEvent, type PointerEvent, type ReactNode, type RefObject } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type MouseEvent, type PointerEvent, type ReactNode, type RefObject } from 'react'
 import { srcSetFor } from '@/lib/images'
 import { useMediaQuery } from '@/lib/useMediaQuery'
 import { cn } from '@/lib/utils'
 
 const DRAG_THRESHOLD = 6
+
+/**
+ * Marquee frames enter from the side, where native lazy-loading never fires — so frames load
+ * eagerly, but only once the gallery itself is within a viewport of the fold.
+ */
+function useNearViewport<T extends HTMLElement>() {
+  const ref = useRef<T>(null)
+  const [near, setNear] = useState(false)
+  useEffect(() => {
+    const el = ref.current
+    if (!el || near) return
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setNear(true)
+          io.disconnect()
+        }
+      },
+      { rootMargin: '100% 0px' }
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [near])
+  return [ref, near] as const
+}
 
 export interface GalleryItem {
   id: string
@@ -84,10 +109,11 @@ export default function ImageGallery({ items, onSelect, action, duration = 55, c
 /** Phones: two marquee rows moving in opposite directions, each draggable. Rows are doubled so the loop is seamless. */
 function PhoneRows({ items, onSelect, action, className }: Omit<ImageGalleryProps, 'duration'>) {
   const half = Math.ceil(items.length / 2)
+  const [ref, near] = useNearViewport<HTMLDivElement>()
   return (
-    <div className={cn('flex flex-col gap-3', className)} role="list" aria-label="Signature pieces">
-      <PhoneRow items={items.slice(0, half)} dir="ltr" indexOffset={0} onSelect={onSelect} action={action} />
-      <PhoneRow items={items.slice(half)} dir="rtl" indexOffset={half} onSelect={onSelect} action={action} />
+    <div ref={ref} className={cn('flex flex-col gap-3', className)} role="list" aria-label="Signature pieces">
+      <PhoneRow items={items.slice(0, half)} dir="ltr" indexOffset={0} onSelect={onSelect} action={action} near={near} />
+      <PhoneRow items={items.slice(half)} dir="rtl" indexOffset={half} onSelect={onSelect} action={action} near={near} />
     </div>
   )
 }
@@ -98,7 +124,8 @@ function PhoneRow({
   indexOffset,
   onSelect,
   action,
-}: Pick<ImageGalleryProps, 'items' | 'onSelect' | 'action'> & { dir: 'ltr' | 'rtl'; indexOffset: number }) {
+  near,
+}: Pick<ImageGalleryProps, 'items' | 'onSelect' | 'action'> & { dir: 'ltr' | 'rtl'; indexOffset: number; near: boolean }) {
   const trackRef = useRef<HTMLUListElement>(null)
   const { offset, dragging, handlers } = useDragTrack(trackRef)
   const loop = [...items, ...items]
@@ -139,8 +166,7 @@ function PhoneRow({
                     srcSet={srcSetFor(it.src)}
                     sizes="42vw"
                     alt={it.alt}
-                    /* Marquee frames enter from off-screen; lazy loading would leave them blank. */
-                    loading="eager"
+                    loading={near ? 'eager' : 'lazy'}
                     decoding="async"
                     draggable={false}
                     className="h-full w-full object-cover"
@@ -168,10 +194,12 @@ function DriftStrip({ items, onSelect, action, duration = 55, className }: Image
   const [active, setActive] = useState<string | null>(null)
   const trackRef = useRef<HTMLUListElement>(null)
   const { offset, dragging, handlers } = useDragTrack(trackRef)
+  const [rootRef, near] = useNearViewport<HTMLDivElement>()
   const loop = [...items, ...items]
 
   return (
     <div
+      ref={rootRef}
       className={cn('relative w-full overflow-hidden select-none', dragging ? 'cursor-grabbing' : 'cursor-grab', className)}
       style={{ touchAction: 'pan-y' }}
       onMouseLeave={() => setActive(null)}
@@ -211,8 +239,7 @@ function DriftStrip({ items, onSelect, action, duration = 55, className }: Image
                   srcSet={srcSetFor(it.src)}
                   sizes="(min-width:1024px) 38rem, 80vw"
                   alt={it.alt}
-                  /* The track is a CSS marquee — lazy frames entering from the edge often never fire. Clones hit cache. */
-                  loading="eager"
+                  loading={near ? 'eager' : 'lazy'}
                   decoding="async"
                   draggable={false}
                   className={cn(

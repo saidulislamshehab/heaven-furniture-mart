@@ -6,8 +6,9 @@ import { useConsultation } from '@/components/common/ConsultationProvider'
 import { luxuryEase } from '@/components/common/Reveal'
 import { heroVideos } from '@/data/assets'
 import { site } from '@/data/site'
-import { scrollToHash } from '@/lib/scroll'
+import { isLowPower } from '@/lib/device'
 import { videoSrcFor } from '@/lib/images'
+import { scrollToHash } from '@/lib/scroll'
 import { cn } from '@/lib/utils'
 
 interface HeroSectionProps {
@@ -40,6 +41,15 @@ function HeroFilm({ active, onAdvance }: { active: number; onAdvance: () => void
   const refs = useRef<(HTMLVideoElement | null)[]>([])
   const list = lite ? heroVideos.slice(0, 1) : heroVideos
   const current = active % list.length
+  // The successor's src is attached a few seconds into the current film so it never competes with first paint.
+  const [warmedFor, setWarmedFor] = useState(-1)
+  const warmNext = warmedFor === current
+
+  useEffect(() => {
+    if (still || list.length < 2) return
+    const t = window.setTimeout(() => setWarmedFor(current), 3500)
+    return () => window.clearTimeout(t)
+  }, [current, still, list.length])
 
   useEffect(() => {
     if (still) return
@@ -66,8 +76,8 @@ function HeroFilm({ active, onAdvance }: { active: number; onAdvance: () => void
           ref={(el) => {
             refs.current[i] = el
           }}
-          // Only the playing film and its successor ever get a src; the rest stay empty until reached
-          src={i === current || i === (current + 1) % list.length ? videoSrcFor(v.src) : undefined}
+          // Only the playing film and (after a beat) its successor ever get a src; the rest stay empty until reached
+          src={i === current || (warmNext && i === (current + 1) % list.length) ? videoSrcFor(v.src) : undefined}
           poster={i === 0 ? v.poster : undefined}
           muted
           playsInline
@@ -90,14 +100,16 @@ function HeroFilm({ active, onAdvance }: { active: number; onAdvance: () => void
 /** Per-letter rise with a soft blur settle. `ready` gates the start so it lands after the intro hand-off. */
 function Letters({ text, ready, delay, className }: { text: string; ready: boolean; delay: number; className?: string }) {
   const reduce = useReducedMotion()
+  /* Animated blur re-rasterises every glyph per frame — skipped on phones. */
+  const blur = !isLowPower()
   return (
     <span className={cn('inline-flex overflow-hidden px-[0.08em] -mx-[0.08em] pt-[0.1em] -mt-[0.1em] pb-[0.12em] -mb-[0.12em]', className)} aria-hidden>
       {text.split('').map((ch, i) => (
         <motion.span
           key={i}
           className="inline-block overflow-visible will-change-transform"
-          initial={reduce ? false : { y: '110%', opacity: 0, filter: 'blur(6px)' }}
-          animate={ready ? { y: '0%', opacity: 1, filter: 'blur(0px)' } : {}}
+          initial={reduce ? false : { y: '110%', opacity: 0, ...(blur && { filter: 'blur(6px)' }) }}
+          animate={ready ? { y: '0%', opacity: 1, ...(blur && { filter: 'blur(0px)' }) } : {}}
           transition={{ duration: 1.1, delay: delay + i * 0.035, ease: luxuryEase }}
         >
           {ch === ' ' ? '\u00A0' : ch}

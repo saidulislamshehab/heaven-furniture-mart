@@ -122,7 +122,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-20 flex flex-col gap-4 border-t border-brand-ivory/10 pt-6 text-xs text-brand-ivory/45 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-20 flex flex-col gap-4 border-t border-brand-ivory/10 pt-6 text-xs text-brand-ivory/55 sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {new Date().getFullYear()} {site.name}. Est. {site.founded}, {site.address.city}.
           </p>
