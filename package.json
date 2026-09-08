@@ -14,6 +14,7 @@
     "test:ui": "playwright test --ui",
     "preview": "vite preview",
     "optimize:images": "node scripts/optimize-images.mjs",
+    "optimize:og": "node scripts/make-og-image.mjs",
     "optimize:videos": "node scripts/optimize-videos.mjs",
     "optimize": "npm run optimize:images && npm run optimize:videos"
   },
