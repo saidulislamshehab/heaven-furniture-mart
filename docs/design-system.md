@@ -41,7 +41,7 @@ Warm Ivory
 
 Suggested:
 
-#F5F1E8
+#F5F0EB
 
 Usage:
 

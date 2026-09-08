@@ -4,7 +4,7 @@ import CircularSplitRoll, { type CircularSplitRollItem } from '@/components/ui/c
 import { useConsultation } from '@/components/common/ConsultationProvider'
 import { Reveal, SplitWords } from '@/components/common/Reveal'
 import { SectionLabel } from '@/components/common/SectionLabel'
-import { img, processImages } from '@/data/assets'
+import { processImages } from '@/data/assets'
 
 const steps: CircularSplitRollItem[] = [
   {
@@ -32,15 +32,15 @@ const steps: CircularSplitRollItem[] = [
     index: '04',
     title: 'Deliver',
     body: 'Your piece travels from our workshop to your door with the same care it was made with.',
-    image: img.creamClassicLounge,
-    alt: 'Cream classic lounge set with carved armchairs',
+    image: processImages.deliver,
+    alt: 'Mover carrying an emerald velvet sofa through a warm timber hallway into the home',
   },
   {
     index: '05',
     title: 'Install',
     body: 'We place, level and finish everything in your room — and leave only when it looks the way you imagined.',
-    image: img.ivoryCarvedDining,
-    alt: 'Ivory carved dining set, installed and styled',
+    image: processImages.install,
+    alt: 'Finished classic salon at dusk — cream sofa, marble table and a warm floor lamp, styled and complete',
   },
 ]
 

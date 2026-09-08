@@ -51,7 +51,7 @@ export function ConsultationDialog({ open, onOpenChange, prefill }: Consultation
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton
-        className="max-h-[calc(100dvh-1rem)] w-[calc(100%-1rem)] max-w-lg overflow-y-auto rounded-sm border border-brand-gold/25 bg-brand-ivory p-4 text-brand-brown shadow-2xl sm:max-w-lg sm:p-8 md:p-10 [&>button]:text-brand-brown/50 [&>button:hover]:text-brand-brown"
+        className="max-h-[calc(100dvh-1rem)] w-[calc(100%-1rem)] max-w-lg overflow-y-auto rounded-sm border border-brand-gold/25 bg-brand-ivory p-6 text-brand-brown shadow-2xl sm:max-w-lg sm:p-8 md:p-10 [&>button]:text-brand-brown/50 [&>button:hover]:text-brand-brown"
       >
         <ConsultationBody prefill={prefill} />
       </DialogContent>
@@ -92,26 +92,37 @@ function ConsultationBody({ prefill }: { prefill?: ConsultationPrefill }) {
   return (
     <>
       {sent ? (
-          <div className="flex flex-col items-start gap-5 py-2">
-            <CheckCircle2 className="size-9 text-brand-gold" strokeWidth={1.25} />
-            <DialogHeader className="space-y-3 text-left">
-              <DialogTitle className="font-serif text-3xl leading-tight sm:text-4xl">
-                Your message is ready.
-              </DialogTitle>
-              <DialogDescription className="text-base leading-relaxed text-brand-stone">
-                We opened WhatsApp with your details filled in. If it didn't appear, use the button
-                below — or call us directly. We reply during showroom hours.
+          <div className="flex flex-col gap-6 py-1 sm:gap-8">
+            <DialogHeader className="space-y-4 pr-8 text-left">
+              <span className="inline-flex size-12 items-center justify-center rounded-full bg-brand-gold/15 text-brand-gold">
+                <CheckCircle2 className="size-6" strokeWidth={1.5} />
+              </span>
+              <div className="space-y-2">
+                <p className="eyebrow text-brand-gold">Almost there</p>
+                <DialogTitle className="font-serif text-[clamp(1.75rem,7vw,2.5rem)] leading-[1.05] text-balance">
+                  Your message is ready.
+                </DialogTitle>
+              </div>
+              <DialogDescription className="text-[0.95rem] leading-relaxed text-brand-stone text-pretty">
+                WhatsApp should have opened with your details filled in. If it didn't, use the button
+                below. We reply during showroom hours.
               </DialogDescription>
             </DialogHeader>
-            <div className="flex w-full flex-col gap-3 sm:flex-row">
-              <Button asChild variant="gold" size="pill" className="flex-1">
+
+            <div className="flex flex-col gap-3">
+              <Button asChild variant="gold" size="pill" className="w-full">
                 <a href={sent} target="_blank" rel="noopener noreferrer">
                   <MessageCircle /> Open WhatsApp
                 </a>
               </Button>
-              <Button asChild variant="outline-dark" size="pill" className="flex-1">
+              <div className="flex items-center gap-3 text-brand-stone">
+                <span className="h-px flex-1 bg-brand-brown/15" aria-hidden />
+                <span className="font-mono text-[0.65rem] tracking-[0.14em] uppercase">or</span>
+                <span className="h-px flex-1 bg-brand-brown/15" aria-hidden />
+              </div>
+              <Button asChild variant="outline-dark" size="pill" className="w-full">
                 <a href={`tel:${site.phoneE164}`}>
-                  <Phone /> {site.phoneDisplay}
+                  <Phone /> Call {site.phoneDisplay}
                 </a>
               </Button>
             </div>
@@ -124,14 +135,14 @@ function ConsultationBody({ prefill }: { prefill?: ConsultationPrefill }) {
                 Tell us about your room.
               </DialogTitle>
               {/* Hidden on short phones so the whole form fits without scrolling; still read by AT. */}
-              <DialogDescription className="text-sm leading-relaxed text-brand-stone max-sm:[@media(max-height:760px)]:sr-only sm:text-[0.95rem]">
+              <DialogDescription className="text-sm leading-relaxed text-brand-stone [@media(max-height:760px)]:sr-only sm:text-[0.95rem]">
                 A few details and we'll continue on WhatsApp — measurements, references and ideas
                 are all welcome.
               </DialogDescription>
             </DialogHeader>
 
-            <form onSubmit={handleSubmit} noValidate className="mt-4 space-y-4 sm:mt-6 sm:space-y-6">
-              <div className="grid grid-cols-2 gap-4 sm:gap-6">
+            <form onSubmit={handleSubmit} noValidate className="mt-6 space-y-5 sm:space-y-6">
+              <div className="grid grid-cols-2 gap-5 sm:gap-6">
                 <div className="space-y-1.5">
                   <label htmlFor={`${id}-name`} className="eyebrow text-brand-stone">
                     Name
@@ -203,7 +214,7 @@ function ConsultationBody({ prefill }: { prefill?: ConsultationPrefill }) {
                 </label>
                 <textarea
                   id={`${id}-msg`}
-                  rows={2}
+                  rows={3}
                   value={form.message}
                   onChange={(e) => update('message')(e.target.value)}
                   placeholder="Room size, the piece you have in mind, a finish you love…"
@@ -211,7 +222,7 @@ function ConsultationBody({ prefill }: { prefill?: ConsultationPrefill }) {
                 />
               </div>
 
-              <div className="flex flex-col-reverse gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+              <div className="flex flex-col-reverse gap-4 pt-2 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-xs text-brand-stone max-sm:text-center">
                   Prefer to talk?{' '}
                   <a

@@ -25,7 +25,7 @@
 :root {
   /* Brand Specific Colors */
   --brand-teal: #1F2E2D;
-  --brand-ivory: #F5F1E8;
+  --brand-ivory: #F5F0EB;
   --brand-brown: #2B211C;
   --brand-gold: #B07A52;
   --brand-wood: #B98A5B;
@@ -45,7 +45,7 @@
   --assistant-accent-soft: #DDE6DF;
 
   /* Theme Tokens */
-  --background: oklch(0.965 0.012 85);
+  --background: var(--brand-ivory);
   --foreground: oklch(0.24 0.02 55);
   
   --card: oklch(0.98 0.008 85);

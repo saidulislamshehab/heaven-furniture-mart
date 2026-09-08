@@ -88,6 +88,8 @@ export const processImages = {
   discover: '/images/process/discover.jpg',
   design: '/images/process/design.jpg',
   craft: '/images/process/craft.jpg',
+  deliver: '/images/process/deliver.jpg',
+  install: '/images/process/install.jpg',
 } as const
 
 export const img = {
