@@ -22,7 +22,7 @@ export const KNOWLEDGE = `
 - Facebook: https://www.facebook.com/HeavenFurnitureMart
 - Instagram: https://www.instagram.com/heaven_furniture_ltd
 - YouTube: https://www.youtube.com/@HeavenFurnitureMart
-- Google Maps (directions & live hours): https://maps.app.goo.gl/XnZzpdkLTNB9jhGP9f
+- Google Maps (directions & live hours): https://maps.app.goo.gl/WVXYtxmapjVe5i7o6
 - Google rating shown on the website: 4.8 (about 30 reviews)
 
 ## Website map (pages on this site — give these paths when pointing visitors somewhere)
