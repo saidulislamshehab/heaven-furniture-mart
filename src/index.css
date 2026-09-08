@@ -262,6 +262,10 @@
   from { transform: translateX(-50%); }
   to { transform: translateX(0); }
 }
+@keyframes gallery-rtl {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
 
 /* Soft gold halo for the assistant trigger — transform/opacity only */
 @keyframes assistant-halo {

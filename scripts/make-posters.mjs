@@ -18,6 +18,7 @@ const videos = [
   ['videos/showroom/detail-sofa-fabric.mp4', 'images/posters/detail-sofa-fabric.jpg', 2],
   ['videos/showroom/detail-olive-sofa.mp4', 'images/posters/detail-olive-sofa.jpg', 4],
   ['videos/showroom/reel-luxurious-modern.mp4', 'images/posters/reel-luxurious-modern.jpg', 2],
+  ['videos/showroom/commercial-1.mp4', 'images/posters/commercial-1.jpg', 2],
 ]
 
 mkdirSync('public/images/posters', { recursive: true })

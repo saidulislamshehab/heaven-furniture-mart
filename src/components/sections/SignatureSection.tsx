@@ -34,7 +34,9 @@ export function SignatureSection() {
         </div>
         <Reveal delay={0.2} className="flex flex-col items-start gap-4 md:items-end">
           <p className="max-w-xs text-[0.98rem] leading-relaxed text-brand-stone md:text-right">
-            The strip drifts on its own — drag to explore, hover a frame to open it. Every piece can be re-sized, re-covered and re-finished for your room.
+            <span className="sm:hidden">Tap a piece to request details. </span>
+            <span className="hidden sm:inline">The strip drifts on its own — drag to explore, hover a frame to open it. </span>
+            Every piece can be re-sized, re-covered and re-finished for your room.
           </p>
           <Button asChild variant="text-link">
             <Link to="/shop">

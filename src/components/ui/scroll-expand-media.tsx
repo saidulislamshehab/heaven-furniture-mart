@@ -10,6 +10,8 @@ gsap.registerPlugin(ScrollTrigger)
 
 export interface ScrollExpandMediaProps {
   media: VideoAsset
+  /** Optional second film that cross-fades in once the frame is full-bleed. */
+  mediaSecond?: VideoAsset
   /** Two-part title; halves slide apart as the media grows. */
   title: [string, string]
   eyebrow?: string
@@ -34,6 +36,7 @@ export interface ScrollExpandMediaProps {
  */
 export default function ScrollExpandMedia({
   media,
+  mediaSecond,
   title,
   eyebrow,
   scrollHint = 'Scroll to expand',
@@ -55,7 +58,7 @@ export default function ScrollExpandMedia({
       const stage = el.querySelector<HTMLElement>('[data-stage]')
       const frame = el.querySelector<HTMLElement>('[data-frame]')
       const shade = el.querySelector<HTMLElement>('[data-shade]')
-      const veil = el.querySelector<HTMLElement>('[data-veil]')
+      const second = el.querySelector<HTMLElement>('[data-media-second]')
       const left = el.querySelector<HTMLElement>('[data-title-left]')
       const right = el.querySelector<HTMLElement>('[data-title-right]')
       const hint = el.querySelector<HTMLElement>('[data-hint]')
@@ -92,13 +95,13 @@ export default function ScrollExpandMedia({
         { width: stageW, height: stageH, duration: 1, ease: 'power1.inOut' },
         0
       )
-        .fromTo(shade, { opacity: veil ? 0.1 : 0.35 }, { opacity: 0.6, duration: 1 }, 0)
+        .fromTo(shade, { opacity: 0.35 }, { opacity: 0.6, duration: 1 }, 0)
         .to(left, { xPercent: -60, opacity: 0, duration: 0.9, ease: 'power1.in' }, 0.05)
         .to(right, { xPercent: 60, opacity: 0, duration: 0.9, ease: 'power1.in' }, 0.05)
         .to(hint, { opacity: 0, duration: 0.3 }, 0)
         .to(eyebrowEl, { opacity: 0, duration: 0.3 }, 0.2)
-      // Light tone: the small frame is frosted so dark type reads over it; the veil lifts with the title.
-      if (veil) tl.fromTo(veil, { opacity: 0.72 }, { opacity: 0, duration: 0.85, ease: 'power2.in' }, 0.05)
+      // Second film dissolves in as the frame reaches full-bleed, so the reveal plays over fresh footage.
+      if (second) tl.fromTo(second, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: 'power1.inOut' }, 0.85)
 
       // Act II — reveal content (1 → 2)
       tl.fromTo(content, { opacity: 0 }, { opacity: 1, duration: 0.2 }, 1)
@@ -160,8 +163,12 @@ export default function ScrollExpandMedia({
           style={{ width: 'min(62vw, 420px)', height: 'min(42vh, 520px)' }}
         >
           <SmartVideo asset={media} />
-          <div data-shade className="absolute inset-0 bg-brand-ink" style={{ opacity: light ? 0.1 : 0.35 }} />
-          {light && <div data-veil className="absolute inset-0 bg-brand-ivory" style={{ opacity: 0.72 }} />}
+          {mediaSecond && (
+            <div data-media-second className="absolute inset-0 opacity-0">
+              <SmartVideo asset={mediaSecond} />
+            </div>
+          )}
+          <div data-shade className="absolute inset-0 bg-brand-ink" style={{ opacity: 0.35 }} />
         </div>
 
         {/* Split title */}

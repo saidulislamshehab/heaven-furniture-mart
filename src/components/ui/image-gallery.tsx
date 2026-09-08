@@ -1,5 +1,6 @@
-import { useRef, useState, type CSSProperties, type MouseEvent, type PointerEvent, type ReactNode } from 'react'
+import { useRef, useState, type CSSProperties, type MouseEvent, type PointerEvent, type ReactNode, type RefObject } from 'react'
 import { srcSetFor } from '@/lib/images'
+import { useMediaQuery } from '@/lib/useMediaQuery'
 import { cn } from '@/lib/utils'
 
 const DRAG_THRESHOLD = 6
@@ -23,23 +24,18 @@ interface ImageGalleryProps {
 }
 
 /**
- * Endless strip of frames drifting left → right. Hovering a frame expands that piece while the
- * strip keeps moving; the rest stay as slivers. Static for reduced-motion users.
+ * Pointer-drag for a doubled marquee track: the offset wraps on one item-set width so the loop
+ * stays seamless, the CSS animation pauses mid-drag, and the click that ends a drag is swallowed.
  */
-export default function ImageGallery({ items, onSelect, action, duration = 55, className }: ImageGalleryProps) {
-  const [active, setActive] = useState<string | null>(null)
+function useDragTrack(trackRef: RefObject<HTMLUListElement | null>) {
   const [offset, setOffset] = useState(0)
   const [dragging, setDragging] = useState(false)
-  const trackRef = useRef<HTMLUListElement>(null)
   const drag = useRef<{ startX: number; startOffset: number; moved: boolean } | null>(null)
-  const loop = [...items, ...items]
 
-  // Drag offset wraps on one item-set width so the doubled strip stays seamless; kept in (-half, 0].
   const wrap = (x: number) => {
     const half = (trackRef.current?.scrollWidth ?? 0) / 2
     return half ? x - Math.ceil(x / half) * half : x
   }
-
   const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
     if (e.pointerType === 'mouse' && e.button !== 0) return
     drag.current = { startX: e.clientX, startOffset: offset, moved: false }
@@ -60,7 +56,6 @@ export default function ImageGallery({ items, onSelect, action, duration = 55, c
     drag.current = null
     setDragging(false)
   }
-  // Swallow the click that follows a drag so frames don't open/select.
   const onClickCapture = (e: MouseEvent) => {
     if (dragging) {
       e.preventDefault()
@@ -68,16 +63,119 @@ export default function ImageGallery({ items, onSelect, action, duration = 55, c
     }
   }
 
+  return {
+    offset,
+    dragging,
+    handlers: { onPointerDown, onPointerMove, onPointerUp, onPointerCancel: onPointerUp, onClickCapture },
+  }
+}
+
+/**
+ * Endless strip of frames drifting left → right. Hovering a frame expands that piece while the
+ * strip keeps moving; the rest stay as slivers. Static for reduced-motion users.
+ * Phones get two counter-drifting rows (top → right, bottom → left) with tap-to-select frames.
+ */
+export default function ImageGallery({ items, onSelect, action, duration = 55, className }: ImageGalleryProps) {
+  const smUp = useMediaQuery('(min-width: 640px)')
+  if (!smUp) return <PhoneRows items={items} onSelect={onSelect} action={action} className={className} />
+  return <DriftStrip items={items} onSelect={onSelect} action={action} duration={duration} className={className} />
+}
+
+/** Phones: two marquee rows moving in opposite directions, each draggable. Rows are doubled so the loop is seamless. */
+function PhoneRows({ items, onSelect, action, className }: Omit<ImageGalleryProps, 'duration'>) {
+  const half = Math.ceil(items.length / 2)
+  return (
+    <div className={cn('flex flex-col gap-3', className)} role="list" aria-label="Signature pieces">
+      <PhoneRow items={items.slice(0, half)} dir="ltr" indexOffset={0} onSelect={onSelect} action={action} />
+      <PhoneRow items={items.slice(half)} dir="rtl" indexOffset={half} onSelect={onSelect} action={action} />
+    </div>
+  )
+}
+
+function PhoneRow({
+  items,
+  dir,
+  indexOffset,
+  onSelect,
+  action,
+}: Pick<ImageGalleryProps, 'items' | 'onSelect' | 'action'> & { dir: 'ltr' | 'rtl'; indexOffset: number }) {
+  const trackRef = useRef<HTMLUListElement>(null)
+  const { offset, dragging, handlers } = useDragTrack(trackRef)
+  const loop = [...items, ...items]
+  return (
+    <div
+      role="listitem"
+      className={cn('w-full overflow-hidden select-none', dragging ? 'cursor-grabbing' : 'cursor-grab')}
+      style={{ touchAction: 'pan-y' }}
+      {...handlers}
+    >
+      <div style={{ transform: `translateX(${offset}px)` }} className="w-max will-change-transform">
+        <ul
+          ref={trackRef}
+          className={cn(
+            'flex w-max gap-3 will-change-transform',
+            dir === 'ltr' ? 'motion-safe:animate-[gallery-ltr_var(--dur)_linear_infinite]' : 'motion-safe:animate-[gallery-rtl_var(--dur)_linear_infinite]'
+          )}
+          style={{ '--dur': `${items.length * 6}s`, animationPlayState: dragging ? 'paused' : undefined } as CSSProperties}
+        >
+          {loop.map((it, i) => {
+            const clone = i >= items.length
+            const index = String(indexOffset + (i % items.length) + 1).padStart(2, '0')
+            return (
+              <li
+                key={`${it.id}-${i}`}
+                aria-hidden={clone || undefined}
+                className="relative aspect-[4/5] w-[42vw] max-w-[13rem] shrink-0 overflow-hidden rounded-sm bg-brand-ivory-deep"
+              >
+                <button
+                  type="button"
+                  tabIndex={clone ? -1 : 0}
+                  onClick={() => onSelect?.(it)}
+                  aria-label={`Request details for ${it.title}`}
+                  className="absolute inset-0 block h-full w-full text-left focus-visible:outline-offset-[-4px]"
+                >
+                  <img
+                    src={it.src}
+                    srcSet={srcSetFor(it.src)}
+                    sizes="42vw"
+                    alt={it.alt}
+                    /* Marquee frames enter from off-screen; lazy loading would leave them blank. */
+                    loading="eager"
+                    decoding="async"
+                    draggable={false}
+                    className="h-full w-full object-cover"
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-brand-ink/75 via-brand-ink/10 to-transparent" />
+                  <span className="absolute inset-x-0 bottom-0 flex flex-col gap-1 p-3 text-brand-ivory">
+                    <span className="eyebrow text-[0.6rem] text-brand-gold">
+                      {index}
+                      {it.meta ? ` / ${it.meta}` : ''}
+                    </span>
+                    <span className="block truncate font-serif text-lg leading-tight">{it.title}</span>
+                    {action && <span className="eyebrow mt-1 inline-flex items-center gap-1 text-[0.6rem] text-brand-ivory/80">{action}</span>}
+                  </span>
+                </button>
+              </li>
+            )
+          })}
+        </ul>
+      </div>
+    </div>
+  )
+}
+
+function DriftStrip({ items, onSelect, action, duration = 55, className }: ImageGalleryProps) {
+  const [active, setActive] = useState<string | null>(null)
+  const trackRef = useRef<HTMLUListElement>(null)
+  const { offset, dragging, handlers } = useDragTrack(trackRef)
+  const loop = [...items, ...items]
+
   return (
     <div
       className={cn('relative w-full overflow-hidden select-none', dragging ? 'cursor-grabbing' : 'cursor-grab', className)}
       style={{ touchAction: 'pan-y' }}
       onMouseLeave={() => setActive(null)}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-      onPointerCancel={onPointerUp}
-      onClickCapture={onClickCapture}
+      {...handlers}
     >
       <div style={{ transform: `translateX(${offset}px)` }} className="w-max will-change-transform">
       <ul

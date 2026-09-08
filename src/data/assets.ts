@@ -46,7 +46,9 @@ export const showroomVideos = {
   blueChairs: { src: '/videos/showroom/showroom-blue-chairs.mp4', poster: '/images/posters/showroom-blue-chairs.jpg', orientation: 'portrait', durationSec: 22 } satisfies VideoAsset,
   oliveSofaDetail: { src: '/videos/showroom/detail-olive-sofa.mp4', poster: '/images/posters/detail-olive-sofa.jpg', orientation: 'portrait', durationSec: 40 } satisfies VideoAsset,
   sofaFabricDetail: { src: '/videos/showroom/detail-sofa-fabric.mp4', poster: '/images/posters/detail-sofa-fabric.jpg', orientation: 'landscape', durationSec: 10 } satisfies VideoAsset,
+  emeraldBedDetail: { src: '/videos/showroom/detail-emerald-bed.mp4', poster: '/images/posters/detail-emerald-bed.jpg', orientation: 'landscape', durationSec: 10 } satisfies VideoAsset,
   luxuriousModernReel: { src: '/videos/showroom/reel-luxurious-modern.mp4', poster: '/images/posters/reel-luxurious-modern.jpg', orientation: 'portrait', durationSec: 12 } satisfies VideoAsset,
+  commercial: { src: '/videos/showroom/commercial-1.mp4', poster: '/images/posters/commercial-1.jpg', orientation: 'landscape', durationSec: 10 } satisfies VideoAsset,
 }
 
 export const brandImages = {

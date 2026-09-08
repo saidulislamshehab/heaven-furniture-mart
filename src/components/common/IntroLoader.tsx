@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useLocation } from 'react-router'
 import { AnimatePresence, motion, stagger, useAnimate, useReducedMotion } from 'motion/react'
 
 /**
@@ -33,12 +32,11 @@ const LEFT_COUNT = 3 // H E A from the left, V E N from the right
 const martLetters = 'FURNITURE MART'.split('')
 const MART_LEFT_COUNT = 7 // "FURNITU" from the left, "RE MART" from the right
 
-/** `done` is true only for the route the intro has already finished on; a new pathname re-arms it. */
+/** Plays once per full page load (reload / first visit); client-side route changes never re-arm it. */
 export function useIntroDone() {
-  const { pathname } = useLocation()
-  const [doneFor, setDoneFor] = useState<string | null>(null)
-  const markDone = useCallback(() => setDoneFor(pathname), [pathname])
-  return [doneFor === pathname, markDone] as const
+  const [done, setDone] = useState(false)
+  const markDone = useCallback(() => setDone(true), [])
+  return [done, markDone] as const
 }
 
 interface IntroLoaderProps {

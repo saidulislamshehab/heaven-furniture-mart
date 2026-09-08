@@ -83,6 +83,7 @@ export function VisitPage() {
         image={brandImages.showroomExterior}
         imageAlt="Heaven Furniture Mart showroom on Agrabad Access Road"
         imagePosition="object-[50%_85%] sm:object-center"
+        fullscreen
       >
         <div className="flex flex-col gap-3 sm:flex-row">
           <Button asChild variant="gold" size="pill">

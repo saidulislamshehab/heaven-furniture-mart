@@ -16,6 +16,7 @@ export function WhyHeavenSection() {
       </h2>
       <ScrollExpandMedia
         media={film}
+        mediaSecond={showroomVideos.emeraldBedDetail}
         eyebrow="06 — Why Heaven"
         title={['Why homeowners', 'choose Heaven.']}
         scrollHint="Scroll to open the showroom"
