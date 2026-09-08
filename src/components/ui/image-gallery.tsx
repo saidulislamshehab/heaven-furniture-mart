@@ -102,18 +102,18 @@ function useDragTrack(trackRef: RefObject<HTMLUListElement | null>) {
  */
 export default function ImageGallery({ items, onSelect, action, duration = 55, className }: ImageGalleryProps) {
   const smUp = useMediaQuery('(min-width: 640px)')
-  if (!smUp) return <PhoneRows items={items} onSelect={onSelect} action={action} className={className} />
+  if (!smUp) return <PhoneRows items={items} onSelect={onSelect} className={className} />
   return <DriftStrip items={items} onSelect={onSelect} action={action} duration={duration} className={className} />
 }
 
 /** Phones: two marquee rows moving in opposite directions, each draggable. Rows are doubled so the loop is seamless. */
-function PhoneRows({ items, onSelect, action, className }: Omit<ImageGalleryProps, 'duration'>) {
+function PhoneRows({ items, onSelect, className }: Omit<ImageGalleryProps, 'duration' | 'action'>) {
   const half = Math.ceil(items.length / 2)
   const [ref, near] = useNearViewport<HTMLDivElement>()
   return (
     <div ref={ref} className={cn('flex flex-col gap-3', className)} role="list" aria-label="Signature pieces">
-      <PhoneRow items={items.slice(0, half)} dir="ltr" indexOffset={0} onSelect={onSelect} action={action} near={near} />
-      <PhoneRow items={items.slice(half)} dir="rtl" indexOffset={half} onSelect={onSelect} action={action} near={near} />
+      <PhoneRow items={items.slice(0, half)} dir="ltr" onSelect={onSelect} near={near} />
+      <PhoneRow items={items.slice(half)} dir="rtl" onSelect={onSelect} near={near} />
     </div>
   )
 }
@@ -121,11 +121,9 @@ function PhoneRows({ items, onSelect, action, className }: Omit<ImageGalleryProp
 function PhoneRow({
   items,
   dir,
-  indexOffset,
   onSelect,
-  action,
   near,
-}: Pick<ImageGalleryProps, 'items' | 'onSelect' | 'action'> & { dir: 'ltr' | 'rtl'; indexOffset: number; near: boolean }) {
+}: Pick<ImageGalleryProps, 'items' | 'onSelect'> & { dir: 'ltr' | 'rtl'; near: boolean }) {
   const trackRef = useRef<HTMLUListElement>(null)
   const { offset, dragging, handlers } = useDragTrack(trackRef)
   const loop = [...items, ...items]
@@ -147,7 +145,6 @@ function PhoneRow({
         >
           {loop.map((it, i) => {
             const clone = i >= items.length
-            const index = String(indexOffset + (i % items.length) + 1).padStart(2, '0')
             return (
               <li
                 key={`${it.id}-${i}`}
@@ -173,12 +170,7 @@ function PhoneRow({
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-brand-ink/75 via-brand-ink/10 to-transparent" />
                   <span className="absolute inset-x-0 bottom-0 flex flex-col gap-1 p-3 text-brand-ivory">
-                    <span className="eyebrow text-[0.6rem] text-brand-gold">
-                      {index}
-                      {it.meta ? ` / ${it.meta}` : ''}
-                    </span>
-                    <span className="block truncate font-serif text-lg leading-tight">{it.title}</span>
-                    {action && <span className="eyebrow mt-1 inline-flex items-center gap-1 text-[0.6rem] text-brand-ivory/80">{action}</span>}
+                    <span className="block font-serif text-base leading-snug text-balance">{it.title}</span>
                   </span>
                 </button>
               </li>
