@@ -20,6 +20,7 @@
 @custom-variant dark (&:is(.dark *));
 /* Short viewports (landscape phones, small handsets): tighten vertical rhythm */
 @custom-variant short (@media (max-height: 720px));
+@custom-variant xshort (@media (max-height: 600px));
 
 :root {
   /* Brand Specific Colors */

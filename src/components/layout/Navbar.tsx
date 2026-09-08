@@ -183,7 +183,7 @@ export function Navbar() {
                         transition={{ duration: 0.65, ease: luxuryEase }}
                       >
                         <DialogPrimitive.Title className="sr-only">Menu</DialogPrimitive.Title>
-                        <div className="container-x mx-auto flex w-full max-w-[1600px] shrink-0 items-center justify-between border-b border-brand-brown/10 py-5 short:py-3 sm:py-6">
+                        <div className="container-x mx-auto flex w-full max-w-[1600px] shrink-0 items-center justify-between border-b border-brand-brown/10 py-5 short:py-3 xshort:py-2 sm:py-6">
                           <Wordmark
                             dark
                             onHome={(e) => {
@@ -202,10 +202,10 @@ export function Navbar() {
                           </DialogPrimitive.Close>
                         </div>
 
-                        <div className="container-x mx-auto flex w-full max-w-[1600px] flex-1 flex-col md:grid md:grid-cols-[1.25fr_1fr] md:items-center md:gap-x-12 md:py-10 lg:gap-x-20">
+                        <div className="container-x mx-auto flex w-full max-w-[1600px] flex-1 flex-col md:grid md:grid-cols-[1.25fr_1fr] md:items-center md:gap-x-12 md:py-10 lg:gap-x-20 short:sm:grid short:sm:grid-cols-[1.25fr_1fr] short:sm:items-center short:sm:gap-x-8 short:sm:py-3">
                           <nav aria-label="Mobile" className="flex flex-1 flex-col justify-center py-6 short:py-3 md:py-0">
-                            <p className="eyebrow text-brand-stone">Index</p>
-                            <ul className="mt-4 short:mt-2">
+                            <p className="eyebrow text-brand-stone xshort:hidden">Index</p>
+                            <ul className="mt-4 short:mt-2 xshort:mt-0">
                             {navLinks.map((l, i) => (
                               <motion.li
                                 key={l.to}

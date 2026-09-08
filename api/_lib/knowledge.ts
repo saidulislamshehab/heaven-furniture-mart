@@ -60,6 +60,13 @@ export const KNOWLEDGE = `
 - Office & Study — executive tables, bookshelves, workstations (/shop?category=office-study)
 - Bespoke / Custom — anything built to a customer's own space, size and taste (/shop?category=bespoke)
 
+## Product → category lookup (use the matching link whenever a visitor names one of these)
+- sofa, couch, loveseat, chaise, armchair, lounge set, salon set, egg chair, coffee table, TV unit, console → /shop?category=living-room
+- bed, headboard, bedroom set, wardrobe, almirah, dressing table, vanity, bedside table → /shop?category=bedroom
+- dining table, dining chair, dining set, sideboard, display cabinet, crockery cabinet → /shop?category=dining
+- office chair, executive chair, ergonomic chair, mesh chair, desk, director desk, workstation, bookshelf, meeting table → /shop?category=office-study
+- custom size, own fabric, own design, made-to-measure, anything not in the catalogue → /shop?category=bespoke (plus a free consultation)
+
 ## Pieces currently shown in the online catalogue (/shop) — names and short notes only; NO prices or specs are published
 - Living Room: Royal Blue Salon Set (carved frame, velvet upholstery); Cream Tufted Lounge Set (button-tufted, gilt detailing); Blue Brocade Loveseat; Grey Floral Sofa (embroidered velvet); Carved Armchair Pair (dark timber, striped upholstery); Navy Velvet Sofa (gold trim); Classic Lounge Suite (timber frame, neutral linen); Cream Modern Sofa; Blue Modern Sofa (channel stitching); Green Velvet Set (olive velvet, silver-leaf frame); Woven Hanging Egg Chair (rattan, steel stand); Royal Blue Chaise (gilt frame); Silver Tufted Sofa (carved crest); Grey Damask Armchair.
 - Bedroom: Emerald Channel Bed (channel-stitched velvet headboard); Teal Carved Bed (carved timber, teal upholstery); Modern Bedroom Set (upholstered bed with side tables); Vanity Dressing Table (lit mirror, lacquered drawers).

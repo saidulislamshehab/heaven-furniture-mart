@@ -30,6 +30,35 @@ const DISC = 48
 const LIFT = DISC + 12
 const SPRING: Transition = { type: 'spring', stiffness: 300, damping: 30 }
 
+/* sessionStorage: lives for the tab (page changes, reloads), cleared when the visitor leaves the site. */
+const STORAGE_KEY = 'hfm-assistant-chat'
+
+function loadMessages(): Message[] {
+  try {
+    const raw = window.sessionStorage.getItem(STORAGE_KEY)
+    if (!raw) return []
+    const parsed: unknown = JSON.parse(raw)
+    if (!Array.isArray(parsed)) return []
+    return parsed
+      .filter(
+        (m): m is Message =>
+          !!m && typeof m === 'object' && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string' && typeof m.id === 'number'
+      )
+      .slice(-40)
+  } catch {
+    return []
+  }
+}
+
+function saveMessages(messages: Message[]) {
+  try {
+    if (messages.length === 0) window.sessionStorage.removeItem(STORAGE_KEY)
+    else window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(messages.filter((m) => !m.error).slice(-40)))
+  } catch {
+    /* storage unavailable (private mode / quota) — chat still works for this page view */
+  }
+}
+
 let nextId = 1
 
 export function AssistantWidget() {
@@ -37,7 +66,11 @@ export function AssistantWidget() {
   const [revealed, setRevealed] = useState(false)
   const [morphing, setMorphing] = useState(false)
   const [dims, setDims] = useState({ width: 384, height: 560 })
-  const [messages, setMessages] = useState<Message[]>([])
+  const [messages, setMessages] = useState<Message[]>(() => {
+    const saved = loadMessages()
+    if (saved.length) nextId = Math.max(...saved.map((m) => m.id)) + 1
+    return saved
+  })
   const [input, setInput] = useState('')
   const [pending, setPending] = useState(false)
   const reduce = useReducedMotion()
@@ -96,6 +129,10 @@ export function AssistantWidget() {
     const el = logRef.current
     if (el) el.scrollTo({ top: el.scrollHeight, behavior: reduce ? 'auto' : 'smooth' })
   }, [messages, pending, reduce])
+
+  useEffect(() => {
+    saveMessages(messages)
+  }, [messages])
 
   useEffect(() => () => abortRef.current?.abort(), [])
 

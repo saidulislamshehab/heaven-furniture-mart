@@ -132,6 +132,8 @@ export function IntroLoader({ show, onDone }: IntroLoaderProps) {
                 style={{
                   fontSize: 'clamp(3rem, 17vw, 14rem)',
                   letterSpacing: reduce ? '-0.01em' : '0.03em',
+                  // letter-spacing trails the last glyph; pad the left by the same amount so the word is centred
+                  paddingLeft: reduce ? undefined : '0.03em',
                 }}
               >
                 {letters.map((l, i) => {
@@ -153,7 +155,7 @@ export function IntroLoader({ show, onDone }: IntroLoaderProps) {
               <span
                 aria-hidden
                 className="mt-4 flex font-mono text-[1rem] font-medium uppercase text-brand-teal-deep/75 sm:mt-6 sm:text-[1.35rem] lg:text-[1.6rem]"
-                style={{ letterSpacing: 'clamp(0.2em, 1.6vw, 0.45em)' }}
+                style={{ letterSpacing: 'clamp(0.2em, 1.6vw, 0.45em)', paddingLeft: 'clamp(0.2em, 1.6vw, 0.45em)' }}
               >
                 {martLetters.map((l, i) => {
                   const side = i < MART_LEFT_COUNT ? 'left' : 'right'

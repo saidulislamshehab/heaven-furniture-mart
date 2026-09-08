@@ -33,7 +33,7 @@ interface FormState {
 const emptyForm: FormState = { name: '', phone: '', room: categories[0].name, message: '' }
 
 const fieldClass =
-  'h-11 rounded-none border-0 border-b border-brand-brown/20 bg-transparent px-0 text-base text-brand-brown placeholder:text-brand-stone/55 focus-visible:border-brand-gold focus-visible:ring-0 md:text-[0.95rem]'
+  'h-10 rounded-none border-0 border-b border-brand-brown/20 bg-transparent px-0 text-base text-brand-brown placeholder:text-brand-stone/55 focus-visible:border-brand-gold focus-visible:ring-0 sm:h-11 md:text-[0.95rem]'
 
 function buildMessage(f: FormState) {
   const lines = [
@@ -51,7 +51,7 @@ export function ConsultationDialog({ open, onOpenChange, prefill }: Consultation
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton
-        className="max-h-[92dvh] w-[calc(100%-1.5rem)] max-w-lg overflow-y-auto rounded-sm border border-brand-gold/25 bg-brand-ivory p-5 text-brand-brown shadow-2xl sm:max-w-lg sm:p-10 [&>button]:text-brand-brown/50 [&>button:hover]:text-brand-brown"
+        className="max-h-[calc(100dvh-1rem)] w-[calc(100%-1rem)] max-w-lg overflow-y-auto rounded-sm border border-brand-gold/25 bg-brand-ivory p-4 text-brand-brown shadow-2xl sm:max-w-lg sm:p-8 md:p-10 [&>button]:text-brand-brown/50 [&>button:hover]:text-brand-brown"
       >
         <ConsultationBody prefill={prefill} />
       </DialogContent>
@@ -118,19 +118,20 @@ function ConsultationBody({ prefill }: { prefill?: ConsultationPrefill }) {
           </div>
         ) : (
           <>
-            <DialogHeader className="space-y-3 text-left">
+            <DialogHeader className="space-y-2 pr-8 text-left sm:space-y-3">
               <p className="eyebrow text-brand-gold">Free design consultation</p>
-              <DialogTitle className="font-serif text-3xl leading-tight sm:text-4xl">
+              <DialogTitle className="font-serif text-[clamp(1.5rem,6vw,2.25rem)] leading-tight text-balance">
                 Tell us about your room.
               </DialogTitle>
-              <DialogDescription className="text-[0.95rem] leading-relaxed text-brand-stone">
+              {/* Hidden on short phones so the whole form fits without scrolling; still read by AT. */}
+              <DialogDescription className="text-sm leading-relaxed text-brand-stone max-sm:[@media(max-height:760px)]:sr-only sm:text-[0.95rem]">
                 A few details and we'll continue on WhatsApp — measurements, references and ideas
                 are all welcome.
               </DialogDescription>
             </DialogHeader>
 
-            <form onSubmit={handleSubmit} noValidate className="mt-6 space-y-6">
-              <div className="grid gap-6 sm:grid-cols-2">
+            <form onSubmit={handleSubmit} noValidate className="mt-4 space-y-4 sm:mt-6 sm:space-y-6">
+              <div className="grid grid-cols-2 gap-4 sm:gap-6">
                 <div className="space-y-1.5">
                   <label htmlFor={`${id}-name`} className="eyebrow text-brand-stone">
                     Name
@@ -183,7 +184,7 @@ function ConsultationBody({ prefill }: { prefill?: ConsultationPrefill }) {
                   id={`${id}-room`}
                   value={form.room}
                   onChange={(e) => update('room')(e.target.value)}
-                  className="h-11 w-full appearance-none border-0 border-b border-brand-brown/20 bg-transparent px-0 text-[0.95rem] text-brand-brown outline-none focus-visible:border-brand-gold"
+                  className="h-10 w-full appearance-none border-0 border-b border-brand-brown/20 bg-transparent px-0 text-base text-brand-brown outline-none focus-visible:border-brand-gold sm:h-11 sm:text-[0.95rem]"
                 >
                   {categories.map((c) => (
                     <option key={c.id} value={c.name} className="bg-brand-ivory text-brand-brown">
@@ -202,24 +203,24 @@ function ConsultationBody({ prefill }: { prefill?: ConsultationPrefill }) {
                 </label>
                 <textarea
                   id={`${id}-msg`}
-                  rows={3}
+                  rows={2}
                   value={form.message}
                   onChange={(e) => update('message')(e.target.value)}
                   placeholder="Room size, the piece you have in mind, a finish you love…"
-                  className="w-full resize-none border-0 border-b border-brand-brown/20 bg-transparent px-0 py-2 text-[0.95rem] leading-relaxed text-brand-brown outline-none placeholder:text-brand-stone/55 focus-visible:border-brand-gold"
+                  className="w-full resize-none border-0 border-b border-brand-brown/20 bg-transparent px-0 py-2 text-base leading-relaxed text-brand-brown outline-none placeholder:text-brand-stone/55 focus-visible:border-brand-gold sm:text-[0.95rem]"
                 />
               </div>
 
-              <div className="flex flex-col gap-4 pt-1 sm:flex-row sm:items-center sm:justify-between">
-                <div className="text-xs text-brand-stone">
-                  <span className="block leading-snug">Prefer to talk?</span>
+              <div className="flex flex-col-reverse gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                <p className="text-xs text-brand-stone max-sm:text-center">
+                  Prefer to talk?{' '}
                   <a
                     href={`tel:${site.phoneE164}`}
-                    className="mt-0.5 block font-medium text-brand-brown underline-offset-4 hover:text-brand-gold hover:underline whitespace-nowrap transition-colors"
+                    className="font-medium text-brand-brown underline-offset-4 hover:text-brand-gold hover:underline whitespace-nowrap transition-colors sm:mt-0.5 sm:block"
                   >
                     {site.phoneDisplay}
                   </a>
-                </div>
+                </p>
                 <Button type="submit" variant="gold" size="pill" className="w-full sm:w-auto">
                   Continue on WhatsApp <ArrowUpRight />
                 </Button>

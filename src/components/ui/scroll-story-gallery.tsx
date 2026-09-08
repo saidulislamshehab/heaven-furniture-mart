@@ -126,18 +126,29 @@ function Layer({
       )}
 
       {scene.display && (
-        <div className="absolute inset-x-0 top-0 flex px-5 pt-6 sm:px-8 sm:pt-8 lg:inset-y-0 lg:right-auto lg:w-[52%] lg:items-center lg:px-12 lg:pt-0">
+        <div
+          className={cn(
+            'absolute inset-x-0 top-0 flex px-5 pt-6 sm:px-8 sm:pt-8 lg:inset-y-0 lg:right-auto lg:w-[52%] lg:items-center lg:px-12 lg:pt-0',
+            '[@media(max-height:500px)_and_(orientation:landscape)]:inset-y-0 [@media(max-height:500px)_and_(orientation:landscape)]:right-auto [@media(max-height:500px)_and_(orientation:landscape)]:w-[46%] [@media(max-height:500px)_and_(orientation:landscape)]:items-center [@media(max-height:500px)_and_(orientation:landscape)]:pt-0'
+          )}
+        >
           <motion.p
             aria-hidden
             className={cn(
-              'font-serif font-bold leading-[0.85] tracking-[-0.04em] text-[length:clamp(5rem,18vw,15rem)] lg:whitespace-nowrap lg:text-[length:clamp(6rem,11vw,11.5rem)]',
+              // Size scales with character count (--n) so long labels like "2024–25" never wrap or spill
+              'font-serif font-bold leading-[0.85] tracking-[-0.04em] whitespace-nowrap',
+              'text-[length:clamp(3rem,min(18vw,calc(105vw/var(--n))),15rem)]',
+              '[@media(max-height:640px)_and_(orientation:portrait)]:text-[length:clamp(2.5rem,min(13vw,calc(80vw/var(--n))),5rem)]',
+              '[@media(max-height:500px)_and_(orientation:landscape)]:text-[length:clamp(1.75rem,min(9vw,calc(36vw/var(--n))),5rem)]',
+              'lg:text-[length:clamp(4.5rem,min(11vw,calc(46vw/var(--n))),11.5rem)]',
               surface.fg
             )}
-            style={
-              reduce
+            style={{
+              ['--n' as string]: Math.max(scene.display.length, 4),
+              ...(reduce
                 ? { opacity: displayOpacity }
-                : { y: displayY, opacity: displayOpacity, scale: displayScale, transformOrigin: 'left center' }
-            }
+                : { y: displayY, opacity: displayOpacity, scale: displayScale, transformOrigin: 'left center' }),
+            }}
           >
             {scene.display}
           </motion.p>
@@ -157,7 +168,10 @@ function Layer({
             'absolute inset-x-0 bottom-0 flex flex-col justify-end p-5 pr-20 pb-8 sm:p-8 sm:pr-28 sm:pb-10',
             scene.src
               ? 'lg:max-w-2xl lg:p-12 lg:pr-32'
-              : 'lg:inset-y-0 lg:left-auto lg:w-[48%] lg:justify-center lg:p-12 lg:pr-28',
+              : cn(
+                  'lg:inset-y-0 lg:left-auto lg:w-[48%] lg:justify-center lg:p-12 lg:pr-28',
+                  '[@media(max-height:500px)_and_(orientation:landscape)]:inset-y-0 [@media(max-height:500px)_and_(orientation:landscape)]:left-auto [@media(max-height:500px)_and_(orientation:landscape)]:w-[54%] [@media(max-height:500px)_and_(orientation:landscape)]:justify-center [@media(max-height:500px)_and_(orientation:landscape)]:pb-5'
+                ),
             surface.fg
           )}
           style={reduce ? undefined : { y: captionY }}
@@ -165,12 +179,12 @@ function Layer({
           {scene.eyebrow && <p className="eyebrow text-brand-gold">{scene.eyebrow}</p>}
           {scene.display && <span className="sr-only">{scene.display}</span>}
           {scene.title && (
-            <h3 className="mt-2 font-serif text-[length:clamp(2rem,4.5vw,4rem)] leading-[0.95] tracking-tight text-balance">
+            <h3 className="mt-2 font-serif text-[length:clamp(2rem,4.5vw,4rem)] leading-[0.95] tracking-tight text-balance [@media(max-height:640px)]:text-2xl">
               {scene.title}
             </h3>
           )}
           {scene.description && (
-            <p className={cn('mt-4 max-w-xl font-serif text-[length:clamp(1.15rem,1.9vw,1.75rem)] leading-snug text-pretty', surface.muted)}>
+            <p className={cn('mt-4 max-w-xl font-serif text-[length:clamp(1.15rem,1.9vw,1.75rem)] leading-snug text-pretty [@media(max-height:640px)]:mt-2 [@media(max-height:640px)]:line-clamp-4 [@media(max-height:640px)]:text-base', surface.muted)}>
               {scene.description}
             </p>
           )}
