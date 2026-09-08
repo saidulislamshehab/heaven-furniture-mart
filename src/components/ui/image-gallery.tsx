@@ -1,4 +1,5 @@
 import { useRef, useState, type CSSProperties, type MouseEvent, type PointerEvent, type ReactNode } from 'react'
+import { srcSetFor } from '@/lib/images'
 import { cn } from '@/lib/utils'
 
 const DRAG_THRESHOLD = 6
@@ -109,8 +110,11 @@ export default function ImageGallery({ items, onSelect, action, duration = 55, c
               >
                 <img
                   src={it.src}
+                  srcSet={srcSetFor(it.src)}
+                  sizes="(min-width:1024px) 38rem, 80vw"
                   alt={it.alt}
-                  loading="lazy"
+                  /* The track is a CSS marquee — lazy frames entering from the edge often never fire. Clones hit cache. */
+                  loading="eager"
                   decoding="async"
                   draggable={false}
                   className={cn(

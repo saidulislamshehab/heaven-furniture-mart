@@ -1,5 +1,6 @@
 import { Fragment, useState, type ReactNode } from 'react'
 import { motion, useReducedMotion, type HTMLMotionProps } from 'motion/react'
+import { srcSetFor } from '@/lib/images'
 
 export const luxuryEase = [0.16, 1, 0.3, 1] as const
 
@@ -61,10 +62,12 @@ export function RevealImage({ src, alt, className, imgClassName, delay = 0, prio
     >
       <motion.img
         src={src}
+        srcSet={srcSetFor(src)}
         alt={alt}
         loading={priority ? 'eager' : 'lazy'}
+        fetchPriority={priority ? 'high' : undefined}
         decoding="async"
-        sizes={sizes}
+        sizes={sizes ?? '100vw'}
         className={imgClassName ?? 'h-full w-full object-cover'}
         initial={reduce ? false : { scale: 1.12 }}
         whileInView={{ scale: 1 }}

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type VideoHTMLAttributes } from 'react'
 import { cn } from '@/lib/utils'
+import { videoSrcFor } from '@/lib/images'
 import type { VideoAsset } from '@/data/assets'
 
 interface SmartVideoProps extends Omit<VideoHTMLAttributes<HTMLVideoElement>, 'src' | 'poster'> {
@@ -40,6 +41,17 @@ export function SmartVideo({
   useEffect(() => {
     const el = ref.current
     if (!el || still) return
+    // Buffer one viewport ahead so the film is ready before it appears…
+    const prefetch = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setAttached(true)
+          prefetch.disconnect()
+        }
+      },
+      { rootMargin: '100% 0px' }
+    )
+    // …but only play/pause on actual visibility.
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -54,10 +66,14 @@ export function SmartVideo({
           el.pause()
         }
       },
-      { rootMargin: '25% 0px' }
+      { rootMargin: '10% 0px' }
     )
+    prefetch.observe(el)
     io.observe(el)
-    return () => io.disconnect()
+    return () => {
+      prefetch.disconnect()
+      io.disconnect()
+    }
   }, [autoPlay, pauseOffscreen, still])
 
   if (still) {
@@ -77,7 +93,7 @@ export function SmartVideo({
     <video
       ref={ref}
       poster={asset.poster}
-      src={attached ? asset.src : undefined}
+      src={attached ? videoSrcFor(asset.src) : undefined}
       muted={muted}
       playsInline
       loop

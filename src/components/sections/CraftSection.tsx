@@ -49,7 +49,7 @@ function FilmPanel({ film }: { film: Film }) {
   return (
     <article className="group relative aspect-[9/16] w-full overflow-hidden bg-brand-teal sm:aspect-auto sm:h-[100svh] lg:h-[100vh]">
       <div className="absolute inset-0 [&_video]:transition-transform [&_video]:duration-[1600ms] [&_video]:ease-[var(--ease-luxury)] group-hover:[&_video]:scale-[1.03]">
-        <SmartVideo asset={film.video} lazy={false} muted />
+        <SmartVideo asset={film.video} muted />
       </div>
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-brand-ink/80 via-brand-ink/10 to-brand-ink/55" />
 

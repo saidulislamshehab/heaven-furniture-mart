@@ -36,7 +36,7 @@ export function IntroSection() {
           </div>
 
           <div className="relative mb-12 lg:col-span-5 lg:mb-0">
-            <Reveal y={0} className="aspect-[4/5] w-[78%] overflow-hidden bg-brand-ivory-deep lg:ml-auto">
+            <Reveal y={0} className="aspect-[4/5] w-full overflow-hidden rounded-2xl bg-brand-ivory-deep sm:aspect-[3/4] lg:w-[78%] lg:ml-auto lg:rounded-none">
               <SmartVideo asset={showroomVideos.luxuriousModernReel} muted />
             </Reveal>
             <RevealImage

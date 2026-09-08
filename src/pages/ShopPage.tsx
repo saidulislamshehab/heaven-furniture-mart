@@ -15,6 +15,7 @@ import { categories, categoryById, products, type CategoryId, type Product } fro
 import { site } from '@/data/site'
 import { usePageMeta } from '@/lib/usePageMeta'
 import { cn } from '@/lib/utils'
+import { srcSetFor } from '@/lib/images'
 
 function ProductCard({ p, onOpen, index }: { p: Product; onOpen: () => void; index: number }) {
   const cat = categoryById(p.category)
@@ -24,6 +25,7 @@ function ProductCard({ p, onOpen, index }: { p: Product; onOpen: () => void; ind
         <div className="relative aspect-[5/4] overflow-hidden bg-brand-ivory-deep">
           <img
             src={p.image}
+            srcSet={srcSetFor(p.image)}
             alt={p.name}
             loading="lazy"
             decoding="async"
@@ -57,7 +59,7 @@ function QuickView({ product, onClose }: { product: Product | null; onClose: () 
         {product && (
           <div className="grid max-h-[90dvh] overflow-y-auto sm:grid-cols-2 sm:overflow-hidden">
             <div className="aspect-[5/4] bg-brand-ivory-deep sm:aspect-auto sm:max-h-[90dvh]">
-              <img src={product.image} alt={product.name} className="h-full w-full object-cover" />
+              <img src={product.image} srcSet={srcSetFor(product.image)} sizes="(min-width:640px) 50vw, 100vw" alt={product.name} className="h-full w-full object-cover" />
             </div>
             <div className="flex flex-col p-5 sm:p-10">
               <p className="eyebrow text-brand-gold">{cat?.name}</p>

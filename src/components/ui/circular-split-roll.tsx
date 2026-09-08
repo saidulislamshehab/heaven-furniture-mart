@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { cn } from '@/lib/utils'
+import { srcSetFor } from '@/lib/images'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -250,6 +251,8 @@ export default function CircularSplitRoll({
                     <div className={cn('relative h-full w-full overflow-hidden rounded-lg bg-brand-teal', cardShadow)}>
                       <img
                         src={it.image}
+                        srcSet={srcSetFor(it.image)}
+                        sizes="(min-width:1200px) 440px, 36vw"
                         alt={it.alt}
                         loading="lazy"
                         decoding="async"
@@ -278,7 +281,7 @@ export default function CircularSplitRoll({
           >
             <div className="sm:col-span-5">
               <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-brand-teal">
-                <img src={it.image} alt={it.alt} loading="lazy" decoding="async" className="h-full w-full object-cover" />
+                <img src={it.image} srcSet={srcSetFor(it.image)} sizes="(min-width:640px) 42vw, 100vw" alt={it.alt} loading="lazy" decoding="async" className="h-full w-full object-cover" />
                 <span className="eyebrow absolute bottom-4 left-4 text-brand-ivory/85">{it.index}</span>
               </div>
             </div>

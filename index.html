@@ -18,6 +18,8 @@
     <meta property="og:image" content="/images/posters/hero-sofa.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="preload" as="image" href="/images/posters/hero-egg-chair.jpg" fetchpriority="high" />
+    <!-- First hero film: fetch during the intro so it plays the instant the curtain lifts -->
+    <link rel="preload" as="video" type="video/mp4" href="/videos/hero/hero-egg-chair.mp4" />
     <!-- Pre-paint the intro's ivory backdrop so the dark body never flashes before React mounts -->
     <script>
       if (location.pathname === '/') {

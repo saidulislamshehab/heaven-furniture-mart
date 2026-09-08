@@ -48,8 +48,11 @@ export default function ScrollExpandMedia({
 
   useEffect(() => {
     if (!root.current || !pinned) return
+    // Mobile browsers resize the viewport as the URL bar collapses; recomputing the pin then makes it jump.
+    ScrollTrigger.config({ ignoreMobileResize: true })
     const ctx = gsap.context(() => {
       const el = root.current!
+      const stage = el.querySelector<HTMLElement>('[data-stage]')
       const frame = el.querySelector<HTMLElement>('[data-frame]')
       const shade = el.querySelector<HTMLElement>('[data-shade]')
       const left = el.querySelector<HTMLElement>('[data-title-left]')
@@ -58,15 +61,18 @@ export default function ScrollExpandMedia({
       const eyebrowEl = el.querySelector<HTMLElement>('[data-eyebrow]')
       const content = el.querySelector<HTMLElement>('[data-content]')
       const reveals = gsap.utils.toArray<HTMLElement>('[data-reveal]', el)
-      if (!frame || !left || !right || !content) return
+      if (!stage || !frame || !left || !right || !content) return
 
       const phone = () => window.innerWidth < 768
+      // The stage is 100svh, so every measurement is stable while the toolbar shows/hides.
+      const stageH = () => stage.clientHeight
+      const stageW = () => stage.clientWidth
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: el,
           start: 'top top',
           // Shorter travel on phones: less scroll to hijack, same three acts.
-          end: () => `+=${((phone() ? lengthVh * 0.7 : lengthVh) / 100) * window.innerHeight}`,
+          end: () => `+=${((phone() ? lengthVh * 0.7 : lengthVh) / 100) * stageH()}`,
           pin: true,
           scrub: phone() ? 1 : 1.6,
           anticipatePin: 1,
@@ -77,12 +83,12 @@ export default function ScrollExpandMedia({
       })
 
       // Act I — expand (0 → 1)
-      const startW = () => (phone() ? window.innerWidth * 0.62 : Math.min(window.innerWidth * 0.34, 420))
-      const startH = () => Math.min(window.innerHeight * (phone() ? 0.42 : 0.5), 520)
+      const startW = () => (phone() ? stageW() * 0.62 : Math.min(stageW() * 0.34, 420))
+      const startH = () => Math.min(stageH() * (phone() ? 0.42 : 0.5), 520)
       tl.fromTo(
         frame,
         { width: startW, height: startH },
-        { width: () => window.innerWidth, height: () => window.innerHeight, duration: 1, ease: 'power1.inOut' },
+        { width: stageW, height: stageH, duration: 1, ease: 'power1.inOut' },
         0
       )
         .fromTo(shade, { opacity: 0.35 }, { opacity: 0.6, duration: 1 }, 0)
@@ -100,6 +106,13 @@ export default function ScrollExpandMedia({
       })
       // Brief hold so the finished composition registers before the pin releases
       tl.to({}, { duration: 0.12 })
+
+      // Late layout shifts (fonts, lazy media, orientation) move the trigger; re-measure once they settle.
+      const refresh = () => ScrollTrigger.refresh()
+      const onOrientation = () => setTimeout(refresh, 250)
+      document.fonts?.ready.then(refresh)
+      window.addEventListener('orientationchange', onOrientation)
+      return () => window.removeEventListener('orientationchange', onOrientation)
     }, root)
     ScrollTrigger.refresh()
     return () => ctx.revert()
@@ -135,14 +148,15 @@ export default function ScrollExpandMedia({
 
   return (
     <div ref={root} className={cn('relative w-full', surface, className)}>
-      <div className="relative flex h-screen w-full items-center justify-center overflow-hidden">
+      {/* svh: stable height on mobile so the pin never overshoots behind the browser toolbar */}
+      <div data-stage className="relative flex h-[100svh] w-full items-center justify-center overflow-hidden">
         {/* Media frame */}
         <div
           data-frame
           className="relative z-0 overflow-hidden bg-brand-teal shadow-[0_40px_120px_-30px_rgba(13,20,19,0.9)]"
           style={{ width: 'min(62vw, 420px)', height: 'min(42vh, 520px)' }}
         >
-          <SmartVideo asset={media} lazy={false} />
+          <SmartVideo asset={media} />
           <div data-shade className="absolute inset-0 bg-brand-ink" style={{ opacity: 0.35 }} />
         </div>
 

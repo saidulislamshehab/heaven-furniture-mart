@@ -102,6 +102,8 @@ for (const vp of targetViewports) {
 
     test('consultation modal opens and is contained', async ({ page }) => {
       await page.goto('/');
+      // Intro curtain intercepts pointer events until it has lifted
+      await expect(page.locator('[data-curtain]')).toHaveCount(0, { timeout: 15_000 });
       await page.getByRole('button', { name: /start your design/i }).first().click();
 
       const dialog = page.getByRole('dialog');

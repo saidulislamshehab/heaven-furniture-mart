@@ -1,4 +1,4 @@
-import { useEffect, useState, type MouseEvent } from 'react'
+import { useEffect, useRef, useState, type MouseEvent } from 'react'
 import { Link, NavLink, useLocation } from 'react-router'
 import { Dialog as DialogPrimitive } from 'radix-ui'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
@@ -32,7 +32,7 @@ function Wordmark({ dark, onHome }: { dark: boolean; onHome?: (e: MouseEvent) =>
       <span
         aria-hidden
         className={cn(
-          'block h-7 aspect-[16/5] transition-colors duration-500 group-hover:bg-brand-gold sm:h-8',
+          'block h-7 aspect-[16/5] transition-colors duration-500 group-hover:bg-brand-gold sm:h-8 [@media(max-height:500px)]:h-6',
           // Light over the hero, dark once the bar turns ivory on scroll
           dark ? 'bg-brand-teal-deep' : 'bg-brand-ivory'
         )}
@@ -55,6 +55,7 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [hidden, setHidden] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const headerRef = useRef<HTMLElement>(null)
   const { open } = useConsultation()
   const reduce = useReducedMotion()
   const { pathname } = useLocation()
@@ -80,9 +81,18 @@ export function Navbar() {
     lockScroll(menuOpen)
   }, [menuOpen])
 
-  // Lets sticky elements (e.g. shop filters) sit flush when the bar slides away
+  // Lets sticky elements (e.g. shop filters) sit flush under the bar at its real, current height
   useEffect(() => {
-    document.documentElement.style.setProperty('--nav-offset', hidden && !menuOpen ? '0px' : '60px')
+    const el = headerRef.current
+    if (!el) return
+    const publish = () => {
+      const h = hidden && !menuOpen ? 0 : Math.round(el.getBoundingClientRect().height)
+      document.documentElement.style.setProperty('--nav-offset', `${h}px`)
+    }
+    publish()
+    const ro = new ResizeObserver(publish)
+    ro.observe(el)
+    return () => ro.disconnect()
   }, [hidden, menuOpen])
 
   const dark = scrolled
@@ -90,11 +100,12 @@ export function Navbar() {
   return (
     <>
       <header
+        ref={headerRef}
         className={cn(
           'fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow,padding,translate] duration-500 ease-[var(--ease-luxury)] will-change-transform motion-reduce:transition-none',
           dark
-            ? 'bg-brand-ivory/90 py-3 shadow-[0_1px_0_0_rgba(43,33,28,0.08)] backdrop-blur-md supports-backdrop-filter:bg-brand-ivory/80'
-            : 'bg-transparent py-5 sm:py-6',
+            ? 'bg-brand-ivory/90 py-3 shadow-[0_1px_0_0_rgba(43,33,28,0.08)] backdrop-blur-md supports-backdrop-filter:bg-brand-ivory/80 [@media(max-height:500px)]:py-2'
+            : 'bg-transparent py-5 sm:py-6 [@media(max-height:500px)]:py-2.5',
           hidden && !menuOpen ? '-translate-y-full' : 'translate-y-0'
         )}
       >
@@ -141,7 +152,7 @@ export function Navbar() {
                   type="button"
                   aria-label="Open menu"
                   className={cn(
-                    'flex size-11 items-center justify-center rounded-full border transition-colors lg:hidden',
+                    'flex size-11 items-center justify-center rounded-full border transition-colors lg:hidden [@media(max-height:500px)]:size-10',
                     dark
                       ? 'border-brand-teal-deep/20 text-brand-teal-deep hover:bg-brand-teal-deep/5'
                       : 'border-brand-ivory/30 text-brand-ivory hover:bg-brand-ivory/10'
@@ -172,7 +183,7 @@ export function Navbar() {
                         transition={{ duration: 0.65, ease: luxuryEase }}
                       >
                         <DialogPrimitive.Title className="sr-only">Menu</DialogPrimitive.Title>
-                        <div className="container-x mx-auto flex w-full max-w-[1600px] shrink-0 items-center justify-between border-b border-brand-brown/10 py-5 sm:py-6">
+                        <div className="container-x mx-auto flex w-full max-w-[1600px] shrink-0 items-center justify-between border-b border-brand-brown/10 py-5 short:py-3 sm:py-6">
                           <Wordmark
                             dark
                             onHome={(e) => {
@@ -192,9 +203,9 @@ export function Navbar() {
                         </div>
 
                         <div className="container-x mx-auto flex w-full max-w-[1600px] flex-1 flex-col md:grid md:grid-cols-[1.25fr_1fr] md:items-center md:gap-x-12 md:py-10 lg:gap-x-20">
-                          <nav aria-label="Mobile" className="flex flex-1 flex-col justify-center py-6 md:py-0">
+                          <nav aria-label="Mobile" className="flex flex-1 flex-col justify-center py-6 short:py-3 md:py-0">
                             <p className="eyebrow text-brand-stone">Index</p>
-                            <ul className="mt-4">
+                            <ul className="mt-4 short:mt-2">
                             {navLinks.map((l, i) => (
                               <motion.li
                                 key={l.to}
@@ -211,7 +222,7 @@ export function Navbar() {
                                   }}
                                   className={({ isActive }) =>
                                     cn(
-                                      'group/nav flex items-baseline gap-4 border-b border-brand-brown/10 py-3.5 transition-colors',
+                                      'group/nav flex items-baseline gap-4 border-b border-brand-brown/10 py-3.5 short:py-2 transition-colors',
                                       isActive ? 'text-brand-brown' : 'text-brand-brown/55 hover:text-brand-brown'
                                     )
                                   }
@@ -219,7 +230,7 @@ export function Navbar() {
                                   {({ isActive }) => (
                                     <>
                                       <span className="eyebrow w-6 shrink-0 text-[0.65rem] text-brand-gold">0{i + 1}</span>
-                                      <span className="flex-1 font-serif text-[length:clamp(1.85rem,min(7.5vw,9svh),3.25rem)] leading-none tracking-tight md:text-[length:clamp(2.75rem,min(6.75vw,11svh),4.5rem)]">
+                                      <span className="flex-1 font-serif text-[length:clamp(1.85rem,min(7.5vw,9svh),3.25rem)] leading-none tracking-tight short:text-[length:clamp(1.4rem,6svh,2.25rem)] md:text-[length:clamp(2.75rem,min(6.75vw,11svh),4.5rem)]">
                                         {l.label}
                                       </span>
                                       <ArrowUpRight
@@ -245,29 +256,29 @@ export function Navbar() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.7, delay: 0.5, ease: luxuryEase }}
                           >
-                          <div className="rounded-2xl bg-brand-teal-deep p-5 text-brand-ivory sm:p-6 lg:p-8">
+                          <div className="rounded-2xl bg-brand-teal-deep p-5 text-brand-ivory short:p-4 sm:p-6 lg:p-8">
                             <p className="eyebrow text-brand-ivory/45">Get in touch</p>
                             <a
                               href={`tel:${site.phoneE164}`}
-                              className="mt-3 block font-serif text-2xl leading-none text-brand-ivory transition-colors hover:text-brand-gold-soft lg:text-3xl"
+                              className="mt-3 block font-serif text-2xl leading-none text-brand-ivory transition-colors hover:text-brand-gold-soft short:mt-2 short:text-xl lg:text-3xl"
                             >
                               {site.phoneDisplay}
                             </a>
                             <a
                               href={`mailto:${site.email}`}
-                              className="mt-2 block break-all font-sans text-sm text-brand-ivory/70 transition-colors hover:text-brand-gold-soft"
+                              className="mt-2 block break-all font-sans text-sm text-brand-ivory/70 transition-colors hover:text-brand-gold-soft short:mt-1 short:text-xs"
                             >
                               {site.email}
                             </a>
 
-                            <ul className="mt-5 flex flex-wrap gap-2">
+                            <ul className="mt-5 flex flex-wrap gap-2 short:mt-3 short:gap-1.5">
                               {socialLinks.map((s) => (
                                 <li key={s.label}>
                                   <a
                                     href={s.href}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-brand-ivory/15 px-3.5 font-sans text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-brand-ivory/80 transition-colors hover:border-brand-gold hover:text-brand-gold-soft"
+                                    className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-brand-ivory/15 px-3.5 font-sans text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-brand-ivory/80 transition-colors hover:border-brand-gold hover:text-brand-gold-soft short:min-h-8 short:px-3 short:text-[0.6rem]"
                                   >
                                     {s.label}
                                     <ArrowUpRight className="size-3" />
@@ -279,7 +290,7 @@ export function Navbar() {
                             <Button
                               variant="gold"
                               size="pill"
-                              className="mt-6 w-full"
+                              className="mt-6 w-full short:mt-4 short:h-11"
                               onClick={() => {
                                 setMenuOpen(false)
                                 open()

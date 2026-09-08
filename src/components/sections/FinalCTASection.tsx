@@ -4,6 +4,7 @@ import { Reveal, SplitWords } from '@/components/common/Reveal'
 import { Button } from '@/components/ui/button'
 import { useConsultation } from '@/components/common/ConsultationProvider'
 import { img } from '@/data/assets'
+import { srcSetFor } from '@/lib/images'
 import { site, WHATSAPP_DEFAULT } from '@/data/site'
 
 interface FinalCTASectionProps {
@@ -26,6 +27,8 @@ export function FinalCTASection({
     <section className="relative isolate overflow-hidden bg-brand-ink text-brand-ivory">
       <motion.img
         src={image}
+        srcSet={srcSetFor(image)}
+        sizes="100vw"
         alt=""
         loading="lazy"
         decoding="async"

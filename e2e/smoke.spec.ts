@@ -15,6 +15,8 @@ for (const route of routes) {
 
 test('primary CTA opens the consultation dialog and validates', async ({ page }) => {
   await page.goto('/');
+  // Intro curtain intercepts pointer events until it has lifted
+  await expect(page.locator('[data-curtain]')).toHaveCount(0, { timeout: 15_000 });
   await page.getByRole('button', { name: /start your design|request a consultation/i }).first().click();
   const dialog = page.getByRole('dialog');
   await expect(dialog).toBeVisible();

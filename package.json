@@ -11,7 +11,10 @@
     "validate": "npm run lint && npm run build",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "optimize:images": "node scripts/optimize-images.mjs",
+    "optimize:videos": "node scripts/optimize-videos.mjs",
+    "optimize": "npm run optimize:images && npm run optimize:videos"
   },
   "dependencies": {
     "@fontsource-variable/figtree": "^5.3.0",
@@ -44,6 +47,7 @@
     "@types/three": "^0.185.4",
     "@vitejs/plugin-react": "^6.1.0",
     "oxlint": "^1.79.0",
+    "sharp": "^0.35.4",
     "typescript": "~6.0.2",
     "vite": "^8.2.2"
   }

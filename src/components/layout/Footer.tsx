@@ -36,8 +36,8 @@ export function Footer() {
               aria-label="Heaven Furniture Mart"
               className="block h-12 aspect-[2159/728] bg-brand-ivory transition-colors duration-500 hover:bg-brand-gold sm:h-14"
               style={{
-                maskImage: 'url(/heaven.png)',
-                WebkitMaskImage: 'url(/heaven.png)',
+                maskImage: 'url(/heaven.webp)',
+                WebkitMaskImage: 'url(/heaven.webp)',
                 maskRepeat: 'no-repeat',
                 WebkitMaskRepeat: 'no-repeat',
                 maskSize: 'contain',
@@ -139,7 +139,9 @@ export function Footer() {
       <div aria-hidden className="pointer-events-none flex justify-center select-none px-4 pb-6">
         <div className="w-full max-w-[1400px]">
           <img
-            src="/heaven.png"
+            src="/heaven.webp"
+            loading="lazy"
+            decoding="async"
             alt=""
             className="w-full [filter:brightness(0)_invert(1)] opacity-[0.06]"
           />

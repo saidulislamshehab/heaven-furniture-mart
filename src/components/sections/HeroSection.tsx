@@ -7,6 +7,7 @@ import { luxuryEase } from '@/components/common/Reveal'
 import { heroVideos } from '@/data/assets'
 import { site } from '@/data/site'
 import { scrollToHash } from '@/lib/scroll'
+import { videoSrcFor } from '@/lib/images'
 import { cn } from '@/lib/utils'
 
 interface HeroSectionProps {
@@ -22,13 +23,12 @@ function useStillMedia() {
   return still
 }
 
-/** Phones and slow links get a single looping film instead of the five-part rotation (~28 MB). */
+/** Slow links get a single looping film instead of the five-part rotation (~28 MB). */
 function useLiteFilm() {
   const [lite] = useState(() => {
     if (typeof window === 'undefined') return false
     const nav = navigator as Navigator & { connection?: { effectiveType?: string } }
-    const slow = /(^|-)2g$|^3g$/.test(nav.connection?.effectiveType ?? '')
-    return window.innerWidth < 768 || slow
+    return /(^|-)2g$|^3g$/.test(nav.connection?.effectiveType ?? '')
   })
   return lite
 }
@@ -66,18 +66,19 @@ function HeroFilm({ active, onAdvance }: { active: number; onAdvance: () => void
           ref={(el) => {
             refs.current[i] = el
           }}
-          src={v.src}
+          // Only the playing film and its successor ever get a src; the rest stay empty until reached
+          src={i === current || i === (current + 1) % list.length ? videoSrcFor(v.src) : undefined}
           poster={i === 0 ? v.poster : undefined}
           muted
           playsInline
           loop={list.length === 1}
           autoPlay={i === 0}
-          preload={i === current ? 'auto' : i === (current + 1) % list.length ? 'metadata' : 'none'}
+          preload={i === current ? 'auto' : 'metadata'}
           onEnded={list.length > 1 ? onAdvance : undefined}
           aria-hidden
           tabIndex={-1}
           className={cn(
-            'absolute inset-0 h-full w-full object-cover object-[60%_center] transition-opacity duration-[1400ms] ease-[var(--ease-luxury)] sm:object-center',
+            'absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-[1400ms] ease-[var(--ease-luxury)]',
             i === current ? 'opacity-100' : 'opacity-0'
           )}
         />
@@ -142,25 +143,28 @@ export function HeroSection({ introDone }: HeroSectionProps) {
 
       <motion.div
         style={{ y: textY, opacity: textOpacity }}
-        className="container-x mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-end pt-24 pb-10 sm:pt-32 sm:pb-14"
+        className="container-x mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-end pt-24 pb-[calc(1.5rem+env(safe-area-inset-bottom,0px))] sm:pt-32 sm:pb-14 [@media(max-height:500px)]:pt-20 [@media(max-height:500px)]:pb-6"
       >
-        <motion.p {...fade(0.1)} className="eyebrow flex items-center gap-3 text-brand-gold-soft">
+        <motion.p {...fade(0.1)} className="eyebrow flex items-center gap-3 text-brand-gold-soft sm:whitespace-nowrap">
           <motion.span
             aria-hidden
-            className="h-px w-8 origin-left bg-current"
+            className="h-px w-6 shrink-0 origin-left bg-current sm:w-8"
             initial={reduce ? false : { scaleX: 0 }}
             animate={ready ? { scaleX: 1 } : {}}
             transition={{ duration: 0.9, delay: 0.2, ease: luxuryEase }}
           />
-          Bespoke furniture &amp; interior styling<span className="hidden sm:inline"> · {site.address.city}</span>
+          <span className="sm:hidden">Bespoke furniture &amp; interiors</span>
+          <span className="hidden sm:inline">
+            Bespoke furniture &amp; interior styling · {site.address.city}
+          </span>
         </motion.p>
 
         {/* Layered headline: massive sans line + italic serif line, like a film title card */}
         <h1 className="mt-5 text-balance sm:mt-6" aria-label="Built around the way you live.">
-          <span className="block font-serif text-[length:clamp(2.1rem,6.2vw,5.5rem)] font-normal leading-[0.95] tracking-[-0.025em] text-brand-ivory">
+          <span className="block font-serif text-[length:clamp(2.75rem,11.5vw,3.5rem)] font-normal leading-[0.95] tracking-[-0.025em] text-brand-ivory sm:text-[length:clamp(2.1rem,6.2vw,5.5rem)]">
             <Letters text="Built around" ready={ready} delay={0.2} />
           </span>
-          <span className="mt-1 flex flex-wrap items-baseline gap-x-[0.28em] text-[length:clamp(2.1rem,6.2vw,5.5rem)] sm:mt-2">
+          <span className="mt-1.5 flex flex-wrap items-baseline gap-x-[0.28em] text-[length:clamp(2.75rem,11.5vw,3.5rem)] sm:mt-2 sm:text-[length:clamp(2.1rem,6.2vw,5.5rem)]">
             <span className="font-serif italic leading-[0.95] tracking-[-0.02em] text-brand-ivory/90">
               <Letters text="the way" ready={ready} delay={0.5} />
             </span>
@@ -177,20 +181,20 @@ export function HeroSection({ introDone }: HeroSectionProps) {
           </span>
         </h1>
 
-        <div className="mt-8 flex flex-col gap-8 md:mt-10 md:flex-row md:items-end md:justify-between">
-          <motion.p {...fade(1.15)} className="max-w-md text-[1.05rem] leading-relaxed text-brand-ivory/80 sm:text-lg">
+        <div className="mt-6 flex flex-col gap-6 sm:mt-8 sm:gap-8 lg:mt-10 lg:flex-row lg:items-end lg:justify-between">
+          <motion.p {...fade(1.15)} className="max-w-md text-[0.95rem] leading-relaxed text-brand-ivory/80 sm:text-lg">
             Premium bespoke furniture and interior styling from Chattogram — designed around your
             space, your taste and the way you live.
           </motion.p>
 
-          <motion.div {...fade(1.3)} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
-            <Button variant="ivory" size="pill" onClick={() => open()}>
+          <motion.div {...fade(1.3)} className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
+            <Button variant="ivory" size="pill" className="w-full sm:w-auto" onClick={() => open()}>
               Start Your Design <ArrowUpRight />
             </Button>
             <button
               type="button"
               onClick={() => scrollToHash('#collections')}
-              className="group eyebrow inline-flex items-center gap-2 self-start py-2 text-brand-ivory/80 transition-colors hover:text-brand-ivory sm:self-auto"
+              className="group eyebrow inline-flex min-h-11 items-center justify-center gap-2 self-center whitespace-nowrap py-2 text-brand-ivory/80 transition-colors hover:text-brand-ivory sm:min-h-0 sm:self-auto"
             >
               Browse the collections
               <ArrowDown className="size-3.5 transition-transform duration-500 group-hover:translate-y-1" />
@@ -200,7 +204,7 @@ export function HeroSection({ introDone }: HeroSectionProps) {
 
         <motion.div
           {...fade(1.5)}
-          className="mt-12 flex items-center justify-between border-t border-brand-ivory/15 pt-5 text-brand-ivory/55 sm:mt-16"
+          className="mt-8 flex items-center justify-between border-t border-brand-ivory/15 pt-4 text-brand-ivory/55 sm:mt-16 sm:pt-5"
         >
           <p className="eyebrow whitespace-nowrap">
             Est. {site.founded}

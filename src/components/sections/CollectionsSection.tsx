@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import StoryScroll, { FlowSection } from '@/components/ui/story-scroll'
 import { categories, type Category } from '@/data/catalog'
 import { cn } from '@/lib/utils'
+import { srcSetFor } from '@/lib/images'
 
 /* Alternating surfaces so each panel reads as a new room. */
 const surfaces = [
@@ -62,6 +63,7 @@ function CollectionPanel({ c, i }: { c: Category; i: number }) {
           <div className="relative aspect-[4/5] w-full overflow-hidden sm:aspect-[5/4] lg:aspect-auto lg:h-full">
             <img
               src={c.image}
+              srcSet={srcSetFor(c.image)}
               alt={`${c.name} furniture by Heaven Furniture Mart`}
               loading="lazy"
               decoding="async"
@@ -78,7 +80,7 @@ function CollectionPanel({ c, i }: { c: Category; i: number }) {
               s.bg.replace('bg-', 'border-')
             )}
           >
-            <img src={c.secondaryImage} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
+            <img src={c.secondaryImage} srcSet={srcSetFor(c.secondaryImage)} sizes="20vw" alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
           </div>
         </div>
       </div>

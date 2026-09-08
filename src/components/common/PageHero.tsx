@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
 import { luxuryEase } from '@/components/common/Reveal'
 import { cn } from '@/lib/utils'
+import { srcSetFor } from '@/lib/images'
 
 interface PageHeroProps {
   eyebrow: string
@@ -30,8 +31,11 @@ export function PageHero({ eyebrow, title, body, image, imageAlt = '', imagePosi
         <>
           <motion.img
             src={image}
+            srcSet={srcSetFor(image)}
+            sizes="100vw"
             alt={imageAlt}
             fetchPriority="high"
+            decoding="async"
             className={cn('absolute inset-0 -z-10 h-full w-full object-cover', imagePosition)}
             initial={reduce ? false : { scale: 1.1, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}

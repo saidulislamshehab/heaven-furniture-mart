@@ -9,6 +9,7 @@ import {
   type MotionValue,
 } from 'motion/react'
 import { cn } from '@/lib/utils'
+import { srcSetFor } from '@/lib/images'
 
 /** Solid-colour scene surface. Classes must come from the brand palette. */
 export interface StorySurface {
@@ -113,6 +114,7 @@ function Layer({
       {scene.src && (
         <motion.img
           src={scene.src}
+          srcSet={srcSetFor(scene.src)}
           alt={scene.alt ?? ''}
           loading={index === 0 ? 'eager' : 'lazy'}
           fetchPriority={index === 0 ? 'high' : undefined}
