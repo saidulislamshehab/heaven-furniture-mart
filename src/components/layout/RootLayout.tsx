@@ -23,7 +23,19 @@ function ScrollManager() {
 }
 
 function RouteFallback() {
-  return <div className="min-h-screen bg-brand-teal-deep" aria-busy="true" />
+  return (
+    <div
+      className="flex min-h-[75vh] w-full flex-col items-center justify-center bg-brand-teal-deep text-brand-ivory transition-opacity duration-300"
+      aria-busy="true"
+    >
+      <div className="flex flex-col items-center gap-4">
+        <span className="inline-block size-7 animate-spin rounded-full border-2 border-brand-gold border-t-transparent" />
+        <span className="eyebrow tracking-[0.2em] text-brand-gold-soft">
+          Loading Atelier…
+        </span>
+      </div>
+    </div>
+  )
 }
 
 export function RootLayout() {

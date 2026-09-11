@@ -102,12 +102,14 @@ export function IntroLoader({ show, onDone }: IntroLoaderProps) {
       finished = true
       document.documentElement.style.overflow = ''
       document.getElementById('intro-prepaint')?.remove()
+      document.getElementById('intro-premark')?.remove()
       onDone()
     })
     return () => {
       if (!finished) controls.stop()
       document.documentElement.style.overflow = ''
       document.getElementById('intro-prepaint')?.remove()
+      document.getElementById('intro-premark')?.remove()
     }
   }, [show, reduce, animate, onDone, travel])
 

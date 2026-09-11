@@ -147,6 +147,11 @@ export function AssistantWidget() {
     abortRef.current?.abort()
     const controller = new AbortController()
     abortRef.current = controller
+    let timedOut = false
+    const timeoutId = window.setTimeout(() => {
+      timedOut = true
+      controller.abort()
+    }, 25_000)
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
@@ -161,9 +166,18 @@ export function AssistantWidget() {
         setMessages((m) => [...m, { id: nextId++, role: 'assistant', content: data.answer! }])
       }
     } catch (err) {
-      if ((err as Error).name === 'AbortError') return
-      setMessages((m) => [...m, { id: nextId++, role: 'assistant', content: FALLBACK_ERROR, error: true }])
+      if ((err as Error).name === 'AbortError' && !timedOut) return
+      setMessages((m) => [
+        ...m,
+        {
+          id: nextId++,
+          role: 'assistant',
+          content: timedOut ? "The request took too long to respond. Please try again in a moment or call us at +880 1960-481983." : FALLBACK_ERROR,
+          error: true,
+        },
+      ])
     } finally {
+      window.clearTimeout(timeoutId)
       if (abortRef.current === controller) setPending(false)
     }
   }

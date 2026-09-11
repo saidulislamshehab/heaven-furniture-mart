@@ -25,6 +25,12 @@ const socialLinks = [
   { label: 'YouTube', href: site.social.youtube },
 ]
 
+function prefetchPage(to: string) {
+  if (to === '/shop') void import('@/pages/ShopPage')
+  else if (to === '/about') void import('@/pages/AboutPage')
+  else if (to === '/visit') void import('@/pages/VisitPage')
+}
+
 function Wordmark({ dark, onHome }: { dark: boolean; onHome?: (e: MouseEvent) => void }) {
   return (
     <Link to="/" onClick={onHome} className="group flex items-center" aria-label="Heaven Furniture Mart — home">
@@ -120,6 +126,8 @@ export function Navbar() {
                     to={l.to}
                     end={l.to === '/'}
                     onClick={l.to === '/' ? onHome : undefined}
+                    onMouseEnter={() => prefetchPage(l.to)}
+                    onFocus={() => prefetchPage(l.to)}
                     className={({ isActive }) =>
                       cn(
                         'eyebrow relative py-2 transition-colors duration-300',
@@ -216,6 +224,8 @@ export function Navbar() {
                                 <NavLink
                                   to={l.to}
                                   end={l.to === '/'}
+                                  onMouseEnter={() => prefetchPage(l.to)}
+                                  onTouchStart={() => prefetchPage(l.to)}
                                   onClick={(e) => {
                                     if (l.to === '/') scrollToTopIfSameRoute(e, pathname)
                                     setMenuOpen(false)

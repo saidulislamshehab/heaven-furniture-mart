@@ -199,7 +199,7 @@ async function askProviders(messages: ChatMessage[], signal?: AbortSignal): Prom
   throw lastError instanceof AssistantError ? lastError : new AssistantError('All providers failed', 502)
 }
 
-const PER_MODEL_TIMEOUT_MS = 14_000
+const PER_MODEL_TIMEOUT_MS = 8_000
 
 async function callModel(ep: Endpoint, model: string, messages: ChatMessage[], outer?: AbortSignal): Promise<string> {
   const signals = [AbortSignal.timeout(PER_MODEL_TIMEOUT_MS), ...(outer ? [outer] : [])]
